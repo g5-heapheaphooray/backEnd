@@ -3,7 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.model.Organization;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public class OrganizationRepository extends JpaRespository<Organization, String> {
+public interface OrganizationRepository extends JpaRespository<Organization, String> {
     
 }
 
