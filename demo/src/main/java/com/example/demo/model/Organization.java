@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -19,7 +21,7 @@ public class Organization {
     private String password;
 
     @Column(name = "events")
-    private List<Events> events;
+    private List<Event> events;
 
     @Column(name = "website")
     private String website;
@@ -71,11 +73,11 @@ public class Organization {
         this.password = password;
     }
 
-    public List<Events> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Events> events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 

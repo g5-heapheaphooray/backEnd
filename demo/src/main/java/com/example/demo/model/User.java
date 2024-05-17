@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.util.List;
 
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -44,7 +45,7 @@ public class User {
     @Column(name = "contact_no")
     private long contactNo;
 
-    public User{
+    public User(){
     }
 
     public User(String fullName, char gender, int age, String email, long contactNo, String password){
