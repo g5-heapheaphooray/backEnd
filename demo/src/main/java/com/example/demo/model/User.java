@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,7 +32,11 @@ public class User {
     @Column(name = "hours")
     private double hours;
 
-    @Column(name = "eventsPart")
+    @ManyToMany
+    @JoinTable(
+        name = "events_part",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> eventsPart;
 
     @Column(name = "complain_count")

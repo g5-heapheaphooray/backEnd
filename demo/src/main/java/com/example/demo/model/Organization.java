@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,7 +21,7 @@ public class Organization {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "events")
+    @OneToMany(mappedBy = "Organization")
     private List<Event> events;
 
     @Column(name = "website")
