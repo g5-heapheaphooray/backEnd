@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Event;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 
@@ -33,9 +37,8 @@ public class UserService {
     }
 
     public User getUser(String email) {
-        User user = userRepository.findById(email).orElse(null);
+        return userRepository.findById(email).orElse(null);
 
-        return user;
     }
 
     public User updateContactNo(String id, String contactNo){
@@ -65,10 +68,49 @@ public class UserService {
         if(updatedUser == null){
             return null;
         }
-        updatedUser.setFullName(fullName);
-        updatedUser.setContactNo(contactNo);
+        updatedUser.setHours(updatedUser.getHours() + hours);
         return userRepository.save(updatedUser);
 
+    }
+
+    public User updateComplainCount(String id, int complainCount){
+        User updatedUser = userRepository.findById(id).orElse(null);
+        if(updatedUser == null){
+            return null;
+        }
+        updatedUser.setComplainCount(updatedUser.getComplainCount() + complainCount);
+        return userRepository.save(updatedUser);
+
+    }
+
+    public User updatePoints(String id, int points){
+        User updatedUser = userRepository.findById(id).orElse(null);
+        if(updatedUser == null){
+            return null;
+        }
+        updatedUser.setPoints(updatedUser.getPoints() + points);
+        return userRepository.save(updatedUser);
+
+    }
+
+    public User updateEventsPart(String id, Event event){
+        User updatedUser = userRepository.findById(id).orElse(null);
+        if(updatedUser == null){
+            return null;
+        }
+        updatedUser.getEventsPart().add(event);
+        return userRepository.save(updatedUser);
+
+    }
+
+    public User deleteUser(String id){
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
+            return user.get();
+        }
+
+        return null;
     }
 
 }

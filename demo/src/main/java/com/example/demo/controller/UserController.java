@@ -39,4 +39,12 @@ public class UserController {
 //        return new ResponseEntity<>(user, HttpStatus.OK);
 //    }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<User> updateUserContactNo(@PathVariable String id, @RequestBody String contactNo){
+        User updatedUser = userService.updateContactNo(id, contactNo);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    
+
 }

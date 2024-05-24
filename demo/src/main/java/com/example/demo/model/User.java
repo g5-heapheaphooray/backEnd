@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.GenerationType;
@@ -55,7 +56,7 @@ public class User {
     public User(){
     }
 
-    public User(String fullName, char gender, int age, String email, String contactNo, String password, boolean admin, double hours, List<Event> eventsPart, int complainCount, int points){
+    public User(String fullName, char gender, int age, String email, String contactNo, String password, boolean admin, double hours, int complainCount, int points){
         this.fullName = fullName;
         this.gender = gender;
         this.age = age;
@@ -64,7 +65,7 @@ public class User {
         this.password = password;
         this.admin = admin;
         this.hours = hours;
-        this.eventsPart = eventsPart;
+        eventsPart = new ArrayList<>();
         this.complainCount = complainCount;
         this.points = points;
     }
