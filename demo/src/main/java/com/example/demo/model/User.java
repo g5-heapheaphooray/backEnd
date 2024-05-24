@@ -36,7 +36,7 @@ public class User {
     @ManyToMany
     @JoinTable(
         name = "events_part",
-        joinColumns = @JoinColumn(name = "user_id"),
+        joinColumns = @JoinColumn(name = "user_email"),
         inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> eventsPart;
 
@@ -50,18 +50,23 @@ public class User {
     private int points;
 
     @Column(name = "contact_no")
-    private long contactNo;
+    private String contactNo;
 
     public User(){
     }
 
-    public User(String fullName, char gender, int age, String email, long contactNo, String password){
+    public User(String fullName, char gender, int age, String email, String contactNo, String password, boolean admin, double hours, List<Event> eventsPart, int complainCount, int points){
         this.fullName = fullName;
         this.gender = gender;
         this.age = age;
         this.email = email;
         this.contactNo = contactNo;
         this.password = password;
+        this.admin = admin;
+        this.hours = hours;
+        this.eventsPart = eventsPart;
+        this.complainCount = complainCount;
+        this.points = points;
     }
 
     public String getEmail() {
@@ -144,11 +149,11 @@ public class User {
         this.points = points;
     }
 
-    public long getContactNo() {
+    public String getContactNo() {
         return contactNo;
     }
 
-    public void setContactNo(long contactNo) {
+    public void setContactNo(String contactNo) {
         this.contactNo = contactNo;
     }
 

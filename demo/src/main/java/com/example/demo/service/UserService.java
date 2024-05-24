@@ -19,4 +19,22 @@ public class UserService {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+
+    public User loginUser(String email, String password) {
+        User user = userRepository.findById(email).orElse(null);
+        if (user != null) {
+            String pw = user.getPassword();
+            if (pw.equals(password)) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+    public User getUser(String email) {
+        User user = userRepository.findById(email).orElse(null);
+
+        return user;
+    }
 }
