@@ -34,7 +34,7 @@ public class Event {
     @JoinColumn(name = "organization_id")
     private Organization organization;
 
-    @ManyToMany(mappedBy = "likedCourses")
+    @ManyToMany(mappedBy = "events_part")
     private List<User> participants;
 
     @Column(name = "over")
