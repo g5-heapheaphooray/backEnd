@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -26,15 +28,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody String email, @RequestBody String password) {
-        User user = userService.loginUser(email, password);
+    public ResponseEntity<User> loginUser(@RequestBody Map<String, String> payload) {
+        User user = userService.loginUser(payload.get("email"), payload.get("password"));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{email}")
-    public ResponseEntity<User> getUser(@PathVariable String email) {
-        User user = userService.getUser(email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
+//    @GetMapping("/find/{email}")
+//    public ResponseEntity<User> getUser(@PathVariable String email) {
+//        User user = userService.getUser(email);
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+//    }
 
 }

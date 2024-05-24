@@ -37,4 +37,38 @@ public class UserService {
 
         return user;
     }
+
+    public User updateContactNo(String id, String contactNo){
+        User updatedUser = userRepository.findById(id).orElse(null);
+        if(updatedUser == null) {
+            return null;
+        }
+
+        updatedUser.setContactNo(contactNo);
+        return userRepository.save(updatedUser);
+
+    }
+
+    public User updatePassword(String id, String password){
+        User updatedUser = userRepository.findById(id).orElse(null);
+        if(updatedUser == null){
+            return null;
+        }
+
+        updatedUser.setPassword(password);
+        return userRepository.save(updatedUser);
+
+    }
+
+    public User updateHours(String id, int hours){
+        User updatedUser = userRepository.findById(id).orElse(null);
+        if(updatedUser == null){
+            return null;
+        }
+        updatedUser.setFullName(fullName);
+        updatedUser.setContactNo(contactNo);
+        return userRepository.save(updatedUser);
+
+    }
+
 }

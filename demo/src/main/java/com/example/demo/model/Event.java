@@ -11,8 +11,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 @Entity
@@ -24,10 +26,12 @@ public class Event {
     private int id;
 
     @Column(name = "start_time")
-    private LocalDateTime startTime;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date startTime;
 
     @Column(name = "end_time")
-    private LocalDateTime endTime;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private Date endTime;
 
     @Column(name = "hours")
     private double hours;
@@ -39,8 +43,8 @@ public class Event {
     @ManyToMany(mappedBy = "eventsPart")
     private List<User> participants;
 
-    @Column(name = "over")
-    private boolean over;
+    @Column(name = "event_over")
+    private boolean eventOver;
 
     @Column(name = "manpower_count")
     private int manpowerCount;
@@ -57,7 +61,7 @@ public class Event {
     public Event(){
     }
 
-    public Event(LocalDateTime startTime, LocalDateTime endTime, Organization organization, double hours, int manpowerCount, String description, String type){
+    public Event(Date startTime, Date endTime, Organization organization, double hours, int manpowerCount, String description, String type){
         this.startTime = startTime;
         this.endTime = endTime;
         this.organization = organization;
@@ -65,6 +69,8 @@ public class Event {
         this.manpowerCount = manpowerCount;
         this.description = description;
         this.type = type;
+        this.eventOver = false;
+        this.participants = new ArrayList<>();
     }
 
     public int getId() {
@@ -75,19 +81,19 @@ public class Event {
         this.id = id;
     }
 
-    public LocalDateTime getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
@@ -115,12 +121,12 @@ public class Event {
         this.participants = participants;
     }
 
-    public boolean isOver() {
-        return over;
+    public boolean isEventOver() {
+        return eventOver;
     }
 
-    public void setOver(boolean over) {
-        this.over = over;
+    public void setEventOver(boolean eventOver) {
+        this.eventOver = eventOver;
     }
 
     public int getManpowerCount() {

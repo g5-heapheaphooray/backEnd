@@ -12,7 +12,7 @@ import com.example.demo.model.Event;
 import com.example.demo.service.EventService;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/event")
 public class EventController {
     
     private final EventService eventService;
