@@ -36,7 +36,7 @@ public class Event {
     @JoinColumn(name = "organization_id")
     private Organization organization;
 
-    @ManyToMany(mappedBy = "events_part")
+    @ManyToMany(mappedBy = "eventsPart")
     private List<User> participants;
 
     @Column(name = "over")

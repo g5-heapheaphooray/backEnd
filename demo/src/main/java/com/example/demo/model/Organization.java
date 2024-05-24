@@ -9,7 +9,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "Organization")
+@Table(name = "organization")
 public class Organization {
 
     @Id
@@ -21,7 +21,7 @@ public class Organization {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "Organization")
+    @OneToMany(mappedBy = "organization")
     private List<Event> events;
 
     @Column(name = "website")
