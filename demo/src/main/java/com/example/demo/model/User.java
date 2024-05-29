@@ -3,17 +3,14 @@ package com.example.demo.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="user_type",
+        discriminatorType = DiscriminatorType.CHAR)
+@DiscriminatorValue("U")
 public class User {
 
     @Id 
@@ -22,52 +19,42 @@ public class User {
     @Column(name = "full_name")
     private String fullName;
 
-    @Column(name = "gender")
-    private char gender;
-
-    @Column(name = "age")
-    private int age;
-
-    @Column(name = "admin")
-    private boolean admin;
-
-    @Column(name = "hours")
-    private double hours;
-
-    @ManyToMany
-    @JoinTable(
-        name = "events_part",
-        joinColumns = @JoinColumn(name = "user_email"),
-        inverseJoinColumns = @JoinColumn(name = "event_id"))
-    private List<Event> eventsPart;
-
-    @Column(name = "complain_count")
-    private int complainCount;
-
     @Column(name = "password")
     private String password;
 
-    @Column(name = "points")
-    private int points;
+    @Column(name = "complain_count")
+    // both volunteer and organisation will have but the limit diff ig
+    private int complainCount;
+
 
     @Column(name = "contact_no")
     private String contactNo;
 
+
+    @ManyToMany
+    @JoinTable(
+            name = "events_part",
+            joinColumns = @JoinColumn(name = "user_email"),
+            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    private List<Event> eventsPart;
+    // only applies to Volunteer subclass
+    // if Organisation subclass, this field should be null
+
+    @OneToMany(mappedBy = "organization")
+    private List<Event> eventsOrg;
+    // only applies to Organisation subclass
+    // if Volunteer subclass, this field should be null
+
     public User(){
     }
 
-    public User(String fullName, char gender, int age, String email, String contactNo, String password, boolean admin, double hours, int complainCount, int points){
+    public User(String fullName, String email, String contactNo, String password, List<Event> eventsPart, List<Event> eventsOrg){
         this.fullName = fullName;
-        this.gender = gender;
-        this.age = age;
         this.email = email;
         this.contactNo = contactNo;
         this.password = password;
-        this.admin = admin;
-        this.hours = hours;
-        eventsPart = new ArrayList<>();
-        this.complainCount = complainCount;
-        this.points = points;
+        this.eventsPart = eventsPart;
+        this.eventsOrg = eventsOrg;
     }
 
     public String getEmail() {
@@ -86,46 +73,6 @@ public class User {
         this.fullName = fullName;
     }
 
-    public char getGender() {
-        return gender;
-    }
-
-    public void setGender(char gender) {
-        this.gender = gender;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public boolean isAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(boolean admin) {
-        this.admin = admin;
-    }
-
-    public double getHours() {
-        return hours;
-    }
-
-    public void setHours(double hours) {
-        this.hours = hours;
-    }
-
-    public List<Event> getEventsPart() {
-        return eventsPart;
-    }
-
-    public void setEventsPart(List<Event> eventsPart) {
-        this.eventsPart = eventsPart;
-    }
-
     public int getComplainCount() {
         return complainCount;
     }
@@ -142,14 +89,6 @@ public class User {
         this.password = password;
     }
 
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
     public String getContactNo() {
         return contactNo;
     }
@@ -158,6 +97,19 @@ public class User {
         this.contactNo = contactNo;
     }
 
-    
-    
+    public List<Event> getEventsPart() {
+        return eventsPart;
+    }
+
+    public void setEventsPart(List<Event> eventsPart) {
+        this.eventsPart = eventsPart;
+    }
+
+    public List<Event> getEventsOrg() {
+        return eventsOrg;
+    }
+
+    public void setEventsOrg(List<Event> eventsOrg) {
+        this.eventsOrg = eventsOrg;
+    }
 }

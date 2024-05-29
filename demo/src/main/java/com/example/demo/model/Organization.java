@@ -1,34 +1,28 @@
 package com.example.demo.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "organization")
-public class Organization {
+@DiscriminatorValue("O")
+public class Organization extends User {
 
-    @Id
-    private String email;
+//    @Id
+//    private String email;
 
-    @Column(name = "name")
-    private String name;
+//    @Column(name = "name")
+//    private String name;
 
-    @Column(name = "password")
-    private String password;
+//    @Column(name = "password")
+//    private String password;
 
-    @OneToMany(mappedBy = "organization")
-    private List<Event> events;
+//    @Column(name = "contact_no")
+//    private String contactNo;
+
 
     @Column(name = "website")
     private String website;
-
-    @Column(name = "contact_no")
-    private long contactNo;
 
     @Column(name = "description")
     private String description;
@@ -39,47 +33,10 @@ public class Organization {
     public Organization(){
     }
 
-    public Organization(String email, String name, String password, String website, long contactNo, String description){
-
-        this.email = email;
-        this.name = name;
-        this.password = password;
+    public Organization(String email, String name, String password, String contactNo, String website, String description){
+        super(email, name, password, contactNo, null, new ArrayList<>());
         this.website = website;
-        this.contactNo = contactNo;
         this.description = description;
-
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
     }
 
     public String getWebsite() {
@@ -88,14 +45,6 @@ public class Organization {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public long getContactNo() {
-        return contactNo;
-    }
-
-    public void setContactNo(long contactNo) {
-        this.contactNo = contactNo;
     }
 
     public String getDescription() {
