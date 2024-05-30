@@ -12,7 +12,7 @@ import com.example.demo.service.UserService;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 @RequestMapping("/api/v1/user")
 public class UserController {
     
@@ -37,6 +37,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<User> loginUser(@RequestBody Map<String, String> payload) {
+        System.out.println(payload);
         User user = userService.loginUser(payload.get("email"), payload.get("password"));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

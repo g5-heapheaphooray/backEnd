@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        String plaintextpw = user.getPassword();
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
+        String encodedPassword = bCryptPasswordEncoder.encode(plainPassword);
         return userRepository.save(user);
     }
 
