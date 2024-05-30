@@ -12,6 +12,7 @@ import com.example.demo.service.VolunteerService;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/volunteer")
 public class VolunteerController {
 

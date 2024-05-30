@@ -12,6 +12,7 @@ import com.example.demo.service.UserService;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/user")
 public class UserController {
     

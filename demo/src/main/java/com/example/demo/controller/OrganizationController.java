@@ -12,6 +12,7 @@ import com.example.demo.service.OrganizationService;
 import java.util.Map;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/organization")
 public class OrganizationController {
     
