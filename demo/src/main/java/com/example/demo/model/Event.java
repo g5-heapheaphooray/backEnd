@@ -25,6 +25,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "start_time")
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date startTime;
@@ -33,8 +36,9 @@ public class Event {
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date endTime;
 
-    @Column(name = "hours")
-    private double hours;
+    // technically dont need cos can calculate from start and end time
+//    @Column(name = "hours")
+//    private double hours;
 
     @ManyToOne
     @JoinColumn(name = "organization_id")
@@ -65,7 +69,7 @@ public class Event {
         this.startTime = startTime;
         this.endTime = endTime;
         this.organization = organization;
-        this.hours = hours;
+//        this.hours = hours;
         this.manpowerCount = manpowerCount;
         this.description = description;
         this.type = type;
@@ -97,13 +101,13 @@ public class Event {
         this.endTime = endTime;
     }
 
-    public double getHours() {
-        return hours;
-    }
-
-    public void setHours(double hours) {
-        this.hours = hours;
-    }
+//    public double getHours() {
+//        return hours;
+//    }
+//
+//    public void setHours(double hours) {
+//        this.hours = hours;
+//    }
 
     public Organization getOrganization() {
         return organization;
