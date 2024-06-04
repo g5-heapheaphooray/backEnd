@@ -40,6 +40,7 @@ public class OrganizationService {
         }
         o.setContactNo(payload.get("contactNo"));
         o.setFullName(payload.get("fullName"));
+        o.setLocation(payload.get("location"));
         o.setWebsite(payload.get("website"));
         o.setDescription(payload.get("description"));
         return organizationRepository.save(o);

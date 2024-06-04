@@ -20,6 +20,8 @@ public class Organization extends User {
 //    @Column(name = "contact_no")
 //    private String contactNo;
 
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "website")
     private String website;
@@ -33,10 +35,19 @@ public class Organization extends User {
     public Organization(){
     }
 
-    public Organization(String email, String name, String password, String contactNo, String website, String description){
+    public Organization(String email, String name, String password, String contactNo, String location, String website, String description){
         super(email, name, password, contactNo, null, new ArrayList<>());
+        this.location = location;
         this.website = website;
         this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getWebsite() {
