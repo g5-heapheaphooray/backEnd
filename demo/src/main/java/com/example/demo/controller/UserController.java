@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.AuthenticationDTO;
-import com.example.demo.dto.MessageResponse;
-import com.example.demo.dto.ResetPasswordDTO;
-import com.example.demo.dto.UserResponse;
+import com.example.demo.dto.*;
 import com.example.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,14 +25,31 @@ public class UserController {
     }
 
     @PostMapping("/register-volunteer")
-    public ResponseEntity<User> createVolunteer(@RequestBody Volunteer v) {
-        User newUser = userService.createUser(v);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    public ResponseEntity<MessageResponse> createVolunteer(@RequestBody RegisterVolunteerDTO v) {
+        User u = new Volunteer(v.getFullName(), v.getGender(), v.getAge(), v.getEmail(), v.getContactNo(), v.getPassword());
+        User newUser = userService.createUser(u);
+        MessageResponse res = null;
+        if (newUser == null) {
+            res = new MessageResponse("registration failed", 400);
+        } else {
+            res = new MessageResponse("registration success", 200);
+        }
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PostMapping("/register-organisation")
-    public ResponseEntity<User> createOrganisation(@RequestBody Organization o) {
-        User newUser = userService.createUser(o);
+    public ResponseEntity<User> createOrganisation(@RequestBody RegisterOrganisationDTO o) {
+        System.out.println(o.getEmail());
+        System.out.println(o.getFullName());
+        System.out.println(o.getPassword());
+        User u = new Organization(o.getEmail(), o.getFullName(), o.getPassword(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription());
+        User newUser = userService.createUser(u);
+        MessageResponse res = null;
+        if (newUser == null) {
+            res = new MessageResponse("registration failed", 400);
+        } else {
+            res = new MessageResponse("registration success", 200);
+        }
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 

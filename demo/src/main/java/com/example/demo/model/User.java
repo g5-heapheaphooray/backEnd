@@ -61,7 +61,7 @@ public class User {
                     password.getBytes(StandardCharsets.UTF_8));
             hash = bytesToHex(hashbytes);
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
         this.password = hash;
         this.eventsPart = eventsPart;
@@ -110,7 +110,16 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        String hash = null;
+        try {
+            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+            final byte[] hashbytes = digest.digest(
+                    password.getBytes(StandardCharsets.UTF_8));
+            hash = bytesToHex(hashbytes);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        this.password = hash;
     }
 
     public String getContactNo() {

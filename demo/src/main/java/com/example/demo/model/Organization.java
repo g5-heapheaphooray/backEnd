@@ -7,19 +7,6 @@ import jakarta.persistence.*;
 @Entity
 @DiscriminatorValue("O")
 public class Organization extends User {
-
-//    @Id
-//    private String email;
-
-//    @Column(name = "name")
-//    private String name;
-
-//    @Column(name = "password")
-//    private String password;
-
-//    @Column(name = "contact_no")
-//    private String contactNo;
-
     @Column(name = "location")
     private String location;
 
@@ -36,7 +23,7 @@ public class Organization extends User {
     }
 
     public Organization(String email, String name, String password, String contactNo, String location, String website, String description){
-        super(email, name, password, contactNo, null, new ArrayList<>());
+        super(name, email, contactNo, password, null, new ArrayList<>());
         this.location = location;
         this.website = website;
         this.description = description;

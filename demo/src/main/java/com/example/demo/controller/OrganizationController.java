@@ -34,4 +34,10 @@ public class OrganizationController {
         Organization o = organizationService.updateDetails(payload.get("email"), payload);
         return new ResponseEntity<>(o, HttpStatus.OK);
     }
+
+    @GetMapping("/getOrganisation")
+    public ResponseEntity<Organization> getOrg(String email) {
+        Organization o = organizationService.getOrg(email);
+        return  new ResponseEntity<>(o, HttpStatus.OK);
+    }
 }

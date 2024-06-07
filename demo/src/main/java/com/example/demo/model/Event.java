@@ -11,8 +11,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -22,23 +23,24 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+    private String id;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "start_time")
+    @Column(name = "date")
     @JsonFormat(pattern="yyyy-MM-dd")
-    private Date startTime;
+    private LocalDate date;
+
+    @Column(name = "start_time")
+    @JsonFormat(pattern="HH:mm")
+    private LocalTime startTime;
 
     @Column(name = "end_time")
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private Date endTime;
-
-    // technically dont need cos can calculate from start and end time
-//    @Column(name = "hours")
-//    private double hours;
+    @JsonFormat(pattern="HH:mm")
+    private LocalTime endTime;
 
     @ManyToOne
     @JoinColumn(name = "organization_id")
@@ -65,11 +67,13 @@ public class Event {
     public Event(){
     }
 
-    public Event(Date startTime, Date endTime, Organization organization, double hours, int manpowerCount, String description, String type){
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organization organization, int manpowerCount, String location, String description, String type){
+        this.id = String.format("%s-%s", organization.getEmail(), name);
+        this.name = name;
+        this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.organization = organization;
-//        this.hours = hours;
         this.manpowerCount = manpowerCount;
         this.description = description;
         this.type = type;
@@ -77,37 +81,45 @@ public class Event {
         this.participants = new ArrayList<>();
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Date getStartTime() {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
-
-//    public double getHours() {
-//        return hours;
-//    }
-//
-//    public void setHours(double hours) {
-//        this.hours = hours;
-//    }
 
     public Organization getOrganization() {
         return organization;

@@ -46,4 +46,9 @@ public class OrganizationService {
         return organizationRepository.save(o);
     }
 
+    public Organization getOrg(String email) {
+        Organization o = organizationRepository.findById(email).orElse(null);
+        return o;
+    }
+
 }
