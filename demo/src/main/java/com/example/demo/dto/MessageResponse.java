@@ -9,6 +9,9 @@ public class MessageResponse {
         this.code = code;
     }
 
+    public MessageResponse() {
+    }
+
     public String getMessage() {
         return message;
     }

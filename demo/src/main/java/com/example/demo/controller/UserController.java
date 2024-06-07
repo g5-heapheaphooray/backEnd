@@ -1,5 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AuthenticationDTO;
+import com.example.demo.dto.MessageResponse;
+import com.example.demo.dto.ResetPasswordDTO;
+import com.example.demo.dto.UserResponse;
 import com.example.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,27 +40,39 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody Map<String, String> payload) {
-        System.out.println(payload);
-        User user = userService.loginUser(payload.get("email"), payload.get("password"));
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<MessageResponse> loginUser(@RequestBody AuthenticationDTO authenticationDTO) {
+//        System.out.println(payload);
+        User user = userService.authenticateUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
+        MessageResponse response = null;
+        if (user != null) {
+            char userType = 'A';
+            if (user instanceof Organization) {
+                userType = 'O';
+            } else if (user instanceof Volunteer) {
+                userType = 'V';
+            }
+            response = new UserResponse("login success", 200, user, userType);
+        } else {
+            response = new MessageResponse("login failure", 400);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<User> changePassword(@RequestBody Map<String, String> payload) {
-        User user = userService.updatePassword(payload.get("email"), payload.get("currentPassword"), payload.get("newPassword"));
+    public ResponseEntity<User> changePassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        User user = userService.updatePassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getOldPassword(), resetPasswordDTO.getNewPassword());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/forget-password")
-    public ResponseEntity<User> forgetPassword(@RequestBody Map<String, String> payload) {
-        User user = userService.updatePassword(payload.get("email"), payload.get("currentPassword"), payload.get("newPassword"));
+    public ResponseEntity<User> forgetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        User user = userService.updatePassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getOldPassword(), resetPasswordDTO.getNewPassword());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<User> deleteUser(@RequestBody Map<String, String> payload) {
-        User user = userService.deleteUser(payload.get("email"), payload.get("password"));
+    public ResponseEntity<User> deleteUser(@RequestBody AuthenticationDTO authenticationDTO) {
+        User user = userService.deleteUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

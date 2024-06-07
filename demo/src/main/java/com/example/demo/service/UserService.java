@@ -1,16 +1,15 @@
 package com.example.demo.service;
 
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.Optional;
-
-import com.example.demo.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Event;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
+import static com.example.demo.model.User.bytesToHex;
 
 @Service
 public class UserService {
@@ -29,11 +28,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User loginUser(String email, String password) {
+    public User authenticateUser(String email, String password) {
         User user = userRepository.findById(email).orElse(null);
         if (user != null) {
             String pw = user.getPassword();
-            if (pw.equals(password)) {
+            String hash = null;
+            try {
+                final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+                final byte[] hashbytes = digest.digest(
+                        password.getBytes(StandardCharsets.UTF_8));
+                hash = bytesToHex(hashbytes);
+            } catch (Exception e) {
+
+            }
+            if (pw.equals(hash)) {
                 return user;
             }
         }
@@ -51,7 +59,7 @@ public class UserService {
         if(updatedUser == null){
             return null;
         }
-        User verifiedUser = loginUser(id, currentPassword);
+        User verifiedUser = authenticateUser(id, currentPassword);
         if (verifiedUser == null) {
             return null;
         }
@@ -71,7 +79,7 @@ public class UserService {
     }
 
     public User deleteUser(String id, String password){
-        User user = loginUser(id, password);
+        User user = authenticateUser(id, password);
         if (user == null) {
             return null;
         }
