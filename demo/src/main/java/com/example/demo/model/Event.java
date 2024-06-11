@@ -1,12 +1,9 @@
 package com.example.demo.model;
 
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -52,8 +49,11 @@ public class Event {
     @Column(name = "event_over")
     private boolean eventOver;
 
-    @Column(name = "manpower_count")
-    private int manpowerCount;
+    @Column(name = "needed_manpower_count")
+    private int neededManpowerCount;
+
+    @Column(name = "current_manpower_count")
+    private int currentManpowerCount;
 
     @Column(name = "location")
     private String location;
@@ -67,17 +67,18 @@ public class Event {
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organization organization, int manpowerCount, String location, String description, String type){
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organization organization, int neededManpowerCount, String location, String description, String type){
         this.id = String.format("%s-%s", organization.getEmail(), name);
         this.name = name;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.organization = organization;
-        this.manpowerCount = manpowerCount;
+        this.neededManpowerCount = neededManpowerCount;
         this.description = description;
         this.type = type;
         this.eventOver = false;
+        this.location = location;
         this.participants = new ArrayList<>();
     }
 
@@ -145,12 +146,12 @@ public class Event {
         this.eventOver = eventOver;
     }
 
-    public int getManpowerCount() {
-        return manpowerCount;
+    public int getNeededManpowerCount() {
+        return neededManpowerCount;
     }
 
-    public void setManpowerCount(int manpowerCount) {
-        this.manpowerCount = manpowerCount;
+    public void setNeededManpowerCount(int manpowerCount) {
+        this.neededManpowerCount = manpowerCount;
     }
 
     public String getLocation() {
@@ -177,6 +178,20 @@ public class Event {
         this.type = type;
     }
 
-    
-    
+    public int getCurrentManpowerCount() {
+        return currentManpowerCount;
+    }
+
+    public void setCurrentManpowerCount(int currentManpowerCount) {
+        this.currentManpowerCount = currentManpowerCount;
+    }
+
+    public boolean addParticipant(User u) {
+        if (getCurrentManpowerCount() < getNeededManpowerCount()) {
+            participants.add(u);
+            setCurrentManpowerCount(participants.size());
+            return true;
+        }
+        return false;
+    }
 }

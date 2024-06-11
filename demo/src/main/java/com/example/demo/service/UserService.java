@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Event;
+import com.example.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +10,7 @@ import com.example.demo.repository.UserRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.List;
 
 import static com.example.demo.model.User.bytesToHex;
 
@@ -15,10 +18,12 @@ import static com.example.demo.model.User.bytesToHex;
 public class UserService {
     
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, EventRepository eventRepository) {
         this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
     }
 
     public User createUser(User user) {
@@ -85,6 +90,15 @@ public class UserService {
         }
         userRepository.delete(user);
         return user;
+    }
+
+    public boolean registerEvent(String event_id, String user_id) {
+        Event event = eventRepository.findById(event_id).orElse(null);
+        User user = userRepository.findById(user_id).orElse(null);
+        if (event != null && user != null) {
+            return event.addParticipant(user);
+        }
+        return false;
     }
 
 }

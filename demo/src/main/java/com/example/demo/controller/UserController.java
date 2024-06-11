@@ -90,6 +90,15 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PostMapping("/{eventId}/register-event")
+    public ResponseEntity<MessageResponse> registerEvent(@PathVariable String eventId, @RequestBody JwtDTO jwtDTO) {
+        boolean registerSuccess = userService.registerEvent(eventId, jwtDTO.getToken());
+        if (registerSuccess) {
+            return new ResponseEntity<>(new MessageResponse("register success", 200), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new MessageResponse("register failure", 400), HttpStatus.OK);
+    }
+
 
 //    @GetMapping("/find/{email}")
 //    public ResponseEntity<User> getUser(@PathVariable String email) {
