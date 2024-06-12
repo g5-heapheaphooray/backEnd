@@ -17,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -41,9 +42,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        System.out.println(request);
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//
+//        if (headerNames != null) {
+//            while (headerNames.hasMoreElements()) {
+//                String name = headerNames.nextElement();
+//                System.out.println("name: " + name);
+//                System.out.println("Header: " + request.getHeader(name));
+//            }
+//        }
+//        System.out.println(request);
         final String authHeader = request.getHeader("Authorization");
-        System.out.println(authHeader);
+//        System.out.println(authHeader);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);

@@ -12,7 +12,7 @@ import com.example.demo.model.User;
 import com.example.demo.service.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
 

@@ -15,7 +15,7 @@ import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:3000",maxAge = 3600, allowedHeaders = "*", methods = "*")
 @RequestMapping("/api/v1/user")
 public class UserController {
     
