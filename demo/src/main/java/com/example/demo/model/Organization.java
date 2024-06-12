@@ -22,8 +22,8 @@ public class Organization extends User {
     public Organization(){
     }
 
-    public Organization(String email, String name, String password, String contactNo, String location, String website, String description){
-        super(name, email, contactNo, password, null, new ArrayList<>());
+    public Organization(String email, String name, String password, String contactNo, String location, String website, String description, Role role){
+        super(name, email, contactNo, password, null, new ArrayList<>(), role);
         this.location = location;
         this.website = website;
         this.description = description;
@@ -61,6 +61,9 @@ public class Organization extends User {
         this.verified = verified;
     }
 
-    
+    @Override
+    public boolean isEnabled() { // verified
+        return verified;
+    }
     
 }

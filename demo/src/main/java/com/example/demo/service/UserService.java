@@ -1,57 +1,96 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.RegisterOrganisationDTO;
+import com.example.demo.dto.RegisterVolunteerDTO;
 import com.example.demo.model.Event;
+import com.example.demo.model.Organization;
+import com.example.demo.model.Volunteer;
 import com.example.demo.repository.EventRepository;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.model.User;
+import com.example.demo.model.Role;
+import com.example.demo.model.RoleEnum;
+import com.example.demo.repository.UserRepository;
+
+import java.util.Optional;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import static com.example.demo.model.User.bytesToHex;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.List;
-
-import static com.example.demo.model.User.bytesToHex;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
     
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, EventRepository eventRepository) {
+    public UserService(UserRepository userRepository, EventRepository eventRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
-    public User createUser(User user) {
-//        String plaintextpw = user.getPassword();
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
-//        String encodedPassword = bCryptPasswordEncoder.encode(plainPassword);
-        return userRepository.save(user);
+    public User createVolunteer(RegisterVolunteerDTO v) {
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.VOLUNTEER);
+        if (optionalRole.isEmpty()) {
+            return null;
+        }
+
+        User u = new Volunteer(v.getFullName(), v.getGender(), v.getDob(), v.getEmail(), v.getContactNo(), v.getPassword(), optionalRole.get());
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        return userRepository.save(u);
+    }
+
+    public User createOrganisation(RegisterOrganisationDTO o) {
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ORGANIZATION);
+        if (optionalRole.isEmpty()) {
+            return null;
+        }
+
+        User u = new Organization(o.getEmail(), o.getFullName(), o.getPassword(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), optionalRole.get());
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        return userRepository.save(u);
     }
 
     public User authenticateUser(String email, String password) {
-        User user = userRepository.findById(email).orElse(null);
-        if (user != null) {
-            String pw = user.getPassword();
-            String hash = null;
-            try {
-                final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-                final byte[] hashbytes = digest.digest(
-                        password.getBytes(StandardCharsets.UTF_8));
-                hash = bytesToHex(hashbytes);
-            } catch (Exception e) {
+        System.out.println(password);
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(email, password)
+        );
 
-            }
-            if (pw.equals(hash)) {
-                return user;
-            }
-        }
-
-        return null;
+        return userRepository.findById(email).orElse(null);
+//        User user = userRepository.findById(email).orElse(null);
+//        if (user != null) {
+//            String pw = user.getPassword();
+//            String hash = null;
+//            try {
+//                final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+//                final byte[] hashbytes = digest.digest(
+//                        password.getBytes(StandardCharsets.UTF_8));
+//                hash = bytesToHex(hashbytes);
+//            } catch (Exception e) {
+//
+//            }
+//            if (pw.equals(hash)) {
+//                return user;
+//            }
+//        }
+//
+//        return null;
     }
 
     public User getUser(String email) {

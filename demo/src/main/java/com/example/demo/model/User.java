@@ -2,10 +2,14 @@ package com.example.demo.model;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "user")
@@ -13,7 +17,7 @@ import jakarta.persistence.*;
 @DiscriminatorColumn(name="user_type",
         discriminatorType = DiscriminatorType.CHAR)
 @DiscriminatorValue("U")
-public class User {
+public class User implements UserDetails {
 
     @Id 
     private String email;
@@ -47,25 +51,41 @@ public class User {
     // only applies to Organisation subclass
     // if Volunteer subclass, this field should be null
 
+    @CreationTimestamp
+    @Column(updatable = false, name = "created_at")
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @Column(name = "locked")
+    private boolean locked;
+
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    private Role role;
+
     public User(){
     }
 
-    public User(String fullName, String email, String contactNo, String password, List<Event> eventsPart, List<Event> eventsOrg){
+    public User(String fullName, String email, String contactNo, String password, List<Event> eventsPart, List<Event> eventsOrg, Role role){
         this.fullName = fullName;
         this.email = email;
         this.contactNo = contactNo;
-        String hash = null;
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-            final byte[] hashbytes = digest.digest(
-                    password.getBytes(StandardCharsets.UTF_8));
-            hash = bytesToHex(hashbytes);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        this.password = hash;
+//        String hash = null;
+//        try {
+//            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+//            final byte[] hashbytes = digest.digest(
+//                    password.getBytes(StandardCharsets.UTF_8));
+//            hash = bytesToHex(hashbytes);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+        this.password = password;
         this.eventsPart = eventsPart;
         this.eventsOrg = eventsOrg;
+        this.role = role;
     }
 
     public static String bytesToHex(byte[] hash) {
@@ -110,16 +130,16 @@ public class User {
     }
 
     public void setPassword(String password) {
-        String hash = null;
-        try {
-            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-            final byte[] hashbytes = digest.digest(
-                    password.getBytes(StandardCharsets.UTF_8));
-            hash = bytesToHex(hashbytes);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        this.password = hash;
+//        String hash = null;
+//        try {
+//            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
+//            final byte[] hashbytes = digest.digest(
+//                    password.getBytes(StandardCharsets.UTF_8));
+//            hash = bytesToHex(hashbytes);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+        this.password = password;
     }
 
     public String getContactNo() {
@@ -144,5 +164,51 @@ public class User {
 
     public void setEventsOrg(List<Event> eventsOrg) {
         this.eventsOrg = eventsOrg;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role.getName().toString());
+
+        return List.of(authority);
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !(this.locked);
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public User setRole(Role role) {
+        this.role = role;
+
+        return this;
     }
 }

@@ -2,8 +2,11 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.demo.model.RoleEnum;
+import com.example.demo.repository.RoleRepository;
 
 @Entity
 @DiscriminatorValue("V")
@@ -11,8 +14,8 @@ public class Volunteer extends User {
     @Column(name = "gender")
     private char gender;
 
-    @Column(name = "age")
-    private int age;
+    @Column(name = "dob")
+    private LocalDate dob;
 
     @Column(name = "hours")
     private double hours;
@@ -29,10 +32,11 @@ public class Volunteer extends User {
 
     public Volunteer() {}
 
-    public Volunteer(String fullName, char gender, int age, String email, String contactNo, String password){
-        super(fullName, email, contactNo, password, new ArrayList<>(), null);
+    public Volunteer(String fullName, char gender, LocalDate dob, String email, String contactNo, String password, Role role){
+//        super(fullName, email, contactNo, password, new ArrayList<>(), null, roleRepository.findByName(RoleEnum.VOLUNTEER));
+        super(fullName, email, contactNo, password, new ArrayList<>(), null, role);
         this.gender = gender;
-        this.age = age;
+        this.dob = dob;
     }
 
     public char getGender() {
@@ -43,12 +47,12 @@ public class Volunteer extends User {
         this.gender = gender;
     }
 
-    public int getAge() {
-        return age;
+    public LocalDate getDob() {
+        return dob;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
     }
 
     public double getHours() {

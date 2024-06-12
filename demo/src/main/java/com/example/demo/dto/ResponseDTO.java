@@ -1,15 +1,15 @@
 package com.example.demo.dto;
 
-public class MessageResponse {
+public class ResponseDTO {
     private String message;
     private int code;
 
-    public MessageResponse(String message, int code) {
+    public ResponseDTO(String message, int code) {
         this.message = message;
         this.code = code;
     }
 
-    public MessageResponse() {
+    public ResponseDTO() {
     }
 
     public String getMessage() {

@@ -17,18 +17,18 @@ public class CreateOppDTO {
     @JsonFormat(pattern="HH:mm")
     private LocalTime endTime;
 
-    private String organizationEmail;
+//    private String organizationEmail; // retrieve from token
     private int manpowerCount;
     private String location;
     private String description;
     private String type;
 
-    public CreateOppDTO(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organizationEmail, int manpowerCount, String location, String description, String type) {
+    public CreateOppDTO(String name, LocalDate date, LocalTime startTime, LocalTime endTime, int manpowerCount, String location, String description, String type) {
         this.name = name;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.organizationEmail = organizationEmail;
+//        this.organizationEmail = organizationEmail;
         this.manpowerCount = manpowerCount;
         this.location = location;
         this.description = description;
@@ -65,14 +65,6 @@ public class CreateOppDTO {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
-    }
-
-    public String getOrganizationEmail() {
-        return organizationEmail;
-    }
-
-    public void setOrganizationEmail(String organizationEmail) {
-        this.organizationEmail = organizationEmail;
     }
 
     public int getManpowerCount() {
@@ -114,7 +106,6 @@ public class CreateOppDTO {
                 ", date=" + date +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", organizationEmail='" + organizationEmail + '\'' +
                 ", manpowerCount=" + manpowerCount +
                 ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
