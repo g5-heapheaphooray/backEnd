@@ -1,15 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.RegisterAdminDTO;
 import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.RegisterVolunteerDTO;
-import com.example.demo.model.Event;
-import com.example.demo.model.Organization;
-import com.example.demo.model.Volunteer;
+import com.example.demo.model.*;
 import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.RoleRepository;
-import com.example.demo.model.User;
-import com.example.demo.model.Role;
-import com.example.demo.model.RoleEnum;
 import com.example.demo.repository.UserRepository;
 
 import java.util.Optional;
@@ -66,8 +62,19 @@ public class UserService {
         return userRepository.save(u);
     }
 
+    public User createAdmin(RegisterAdminDTO a) {
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ADMIN);
+        if (optionalRole.isEmpty()) {
+            return null;
+        }
+
+        User u = new Admin(a.getFullName(), a.getEmail(), a.getContactNo(), a.getPassword(), optionalRole.get());
+        u.setPassword(passwordEncoder.encode(u.getPassword()));
+        return userRepository.save(u);
+    }
+
     public User authenticateUser(String email, String password) {
-        System.out.println(password);
+        System.out.println(email);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );

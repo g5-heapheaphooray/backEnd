@@ -17,7 +17,7 @@ public class CreateOppDTO {
     @JsonFormat(pattern="HH:mm")
     private LocalTime endTime;
 
-//    private String organizationEmail; // retrieve from token
+//    private String token; // retrieve from token
     private int manpowerCount;
     private String location;
     private String description;

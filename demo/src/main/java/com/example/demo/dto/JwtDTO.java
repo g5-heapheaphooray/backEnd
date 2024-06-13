@@ -5,11 +5,13 @@ import com.example.demo.model.User;
 public class JwtDTO extends ResponseDTO {
     private String token;
     private long expiresIn;
+    private char userType;
 
-    public JwtDTO(String message, int code, String token, long expiresIn) {
+    public JwtDTO(String message, int code, String token, long expiresIn, char userType) {
         super(message, code);
         this.token = token;
         this.expiresIn = expiresIn;
+        this.userType = userType;
     }
 
     public String getToken() {

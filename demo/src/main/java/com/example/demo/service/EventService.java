@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Organization;
+import com.example.demo.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,18 @@ import java.util.List;
 public class EventService {
     
     private final EventRepository eventRepository;
+    private final OrganizationRepository organizationRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, OrganizationRepository organizationRepository) {
         this.eventRepository = eventRepository;
+        this.organizationRepository = organizationRepository;
     }
 
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event, Organization o) {
+//        o.addEventOrg(event);
+//        organizationRepository.save(o);
+        System.out.println("hello creating event");
         return eventRepository.save(event);
     }
 

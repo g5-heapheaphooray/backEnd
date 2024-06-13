@@ -7,6 +7,7 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -75,6 +76,7 @@ public class UserController {
 //    }
 
     @GetMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResponseDTO> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
@@ -86,9 +88,7 @@ public class UserController {
             } else if (user instanceof Organization) {
                 res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organization) user).getLocation(), ((Organization) user).getWebsite(), ((Organization) user).getDescription(), 'O');
             }
-
         }
-
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

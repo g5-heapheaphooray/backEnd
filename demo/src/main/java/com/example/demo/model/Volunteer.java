@@ -79,4 +79,19 @@ public class Volunteer extends User {
         this.points = points;
     }
 
+    public boolean addEventPart(Event e) {
+        if (!isAccountNonLocked() || getEventsPart() == null) {
+            return false;
+        }
+        for (Event event : getEventsPart()) {
+            if (event.getDate().equals(e.getDate())) {
+                return false;
+            }
+        }
+        List<Event> currentE = getEventsPart();
+        currentE.add(e);
+        setEventsPart(currentE);
+        return true;
+    }
+
 }

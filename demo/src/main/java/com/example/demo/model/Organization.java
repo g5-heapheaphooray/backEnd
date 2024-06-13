@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -65,5 +66,16 @@ public class Organization extends User {
     public boolean isEnabled() { // verified
         return verified;
     }
+
+    public boolean addEventOrg(Event e) {
+        if (!isAccountNonLocked() || getEventsOrg() == null) {
+            return false;
+        }
+        List<Event> currentE = getEventsOrg();
+        currentE.add(e);
+        setEventsOrg(currentE);
+        return true;
+    }
+
     
 }

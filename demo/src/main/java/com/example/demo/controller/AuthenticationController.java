@@ -49,20 +49,34 @@ public class AuthenticationController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
+    @PostMapping("/register-admin")
+    public ResponseEntity<User> createAdmin(@RequestBody RegisterAdminDTO a) {
+        User newUser = userService.createAdmin(a);
+        ResponseDTO res = null;
+        if (newUser == null) {
+            res = new ResponseDTO("registration failed", 400);
+        } else {
+            res = new ResponseDTO("registration success", 200);
+        }
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> loginUser(@RequestBody AuthenticationDTO authenticationDTO) {
         User user = userService.authenticateUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
         ResponseDTO response = null;
+        System.out.println(user);
         if (user != null) {
             String jwtToken = jwtService.generateToken(user);
-//            char userType = 'A';
-//            if (user instanceof Organization) {
-//                userType = 'O';
-//            } else if (user instanceof Volunteer) {
-//                userType = 'V';
-//            }
+            System.out.println(jwtToken);
+            char userType = 'A';
+            if (user instanceof Organization) {
+                userType = 'O';
+            } else if (user instanceof Volunteer) {
+                userType = 'V';
+            }
 //            response = new UserResponse("login success", 200, user, userType)
-            response = new JwtDTO("login success", 200, jwtToken, jwtService.getExpirationTime());
+            response = new JwtDTO("login success", 200, jwtToken, jwtService.getExpirationTime(), userType);
         } else {
             response = new ResponseDTO("login failure", 400);
         }
