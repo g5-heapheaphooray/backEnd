@@ -30,13 +30,13 @@ public class EventService {
 
     @Transactional
     public Event createEvent(Event event, User o) {
-        System.out.println("creating event now");
-        System.out.println(o.getUsername());
+        // System.out.println("creating event now");
+        // System.out.println(o.getUsername());
         o.getEventsOrg().add(event);
-        System.out.println(o.getEventsOrg());
+        // System.out.println(o.getEventsOrg());
 //        o.addEventOrg(event);
-        userRepository.save(o);
-        System.out.println("hello creating event");
+        // userRepository.save(o);
+        // System.out.println("hello creating event");
         return eventRepository.save(event);
     }
 

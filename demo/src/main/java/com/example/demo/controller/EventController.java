@@ -59,6 +59,7 @@ public class EventController {
     }
 
     @GetMapping("/all")
+    @Pre
     public ResponseEntity<EventsListDTO> allEvents() {
         List<Event> events = eventService.getAllEvents();
         EventsListDTO res = new EventsListDTO(events);

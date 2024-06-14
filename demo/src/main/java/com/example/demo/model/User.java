@@ -44,10 +44,10 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> eventsPart;
 
-    @ElementCollection(targetClass = Event.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "events_org", joinColumns = @JoinColumn(name = "event_id"))
-    @Column(name = "event_org", nullable = true)
-    private List<Event> eventsOrg;
+    // @ElementCollection(targetClass = Event.class, fetch = FetchType.EAGER)
+    // @CollectionTable(name = "events_org", joinColumns = @JoinColumn(name = "event_id"))
+    // @Column(name = "event_org", nullable = true)
+    // private List<Event> eventsOrg;
     // only applies to Volunteer subclass
     // if Organisation subclass, this field should be null
 
@@ -58,8 +58,9 @@ public class User implements UserDetails {
 //            inverseJoinColumns = @JoinColumn(name = "event_id"))
 //    private List<Event> eventsOrg;
 
-//    @OneToMany(mappedBy = "organization")
-//    private List<Event> eventsOrg;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private List<Event> eventsOrg;
     // only applies to Organisation subclass
     // if Volunteer subclass, this field should be null
 
