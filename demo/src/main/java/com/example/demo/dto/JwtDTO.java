@@ -7,6 +7,7 @@ public class JwtDTO extends ResponseDTO {
     private long expiresIn;
     private char userType;
 
+
     public JwtDTO(String message, int code, String token, long expiresIn, char userType) {
         super(message, code);
         this.token = token;
@@ -28,5 +29,13 @@ public class JwtDTO extends ResponseDTO {
 
     public void setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
+    }
+
+    public char getUserType() {
+        return userType;
+    }
+
+    public void setUserType(char userType) {
+        this.userType = userType;
     }
 }

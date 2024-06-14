@@ -67,15 +67,5 @@ public class Organization extends User {
         return verified;
     }
 
-    public boolean addEventOrg(Event e) {
-        if (!isAccountNonLocked() || getEventsOrg() == null) {
-            return false;
-        }
-        List<Event> currentE = getEventsOrg();
-        currentE.add(e);
-        setEventsOrg(currentE);
-        return true;
-    }
-
     
 }

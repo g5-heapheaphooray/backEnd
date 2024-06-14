@@ -42,9 +42,10 @@ public class EventController {
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("event creation unsucessful", 400);
         if (user instanceof Organization) {
-            Organization o = (Organization) user;
-            Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
-            Event newEvent = eventService.createEvent(e, o);
+//            Organization o = (Organization) user;
+            Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), (Organization) user, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
+            System.out.println(e.getName());
+            Event newEvent = eventService.createEvent(e, user);
             if (newEvent != null) {
                 res = new ResponseDTO("event creation sucessful", 200);
             }

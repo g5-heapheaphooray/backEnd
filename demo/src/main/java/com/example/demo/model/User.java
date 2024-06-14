@@ -43,11 +43,23 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_email"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> eventsPart;
+
+    @ElementCollection(targetClass = Event.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "events_org", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "event_org", nullable = true)
+    private List<Event> eventsOrg;
     // only applies to Volunteer subclass
     // if Organisation subclass, this field should be null
 
-    @OneToMany(mappedBy = "organization")
-    private List<Event> eventsOrg;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "events_org",
+//            joinColumns = @JoinColumn(name = "user_email"),
+//            inverseJoinColumns = @JoinColumn(name = "event_id"))
+//    private List<Event> eventsOrg;
+
+//    @OneToMany(mappedBy = "organization")
+//    private List<Event> eventsOrg;
     // only applies to Organisation subclass
     // if Volunteer subclass, this field should be null
 
@@ -210,5 +222,18 @@ public class User implements UserDetails {
         this.role = role;
 
         return this;
+    }
+
+    public boolean addEventOrg(Event e) {
+        System.out.println(getEventsOrg());
+//        if (!isAccountNonLocked() || getEventsOrg() == null) {
+//            return false;
+//        }
+        List<Event> currentE = getEventsOrg();
+        currentE.add(e);
+        setEventsOrg(currentE);
+        System.out.println(currentE);
+        System.out.println(getEventsOrg());
+        return true;
     }
 }
