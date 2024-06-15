@@ -39,9 +39,8 @@ public class Event {
     @JsonFormat(pattern="HH:mm")
     private LocalTime endTime;
 
-    @ManyToOne
-    @JoinColumn(name = "organization_id")
-    private Organization organization;
+    @Column(name = "organization_id")
+    private String organization;
 
     @ManyToMany(mappedBy = "eventsPart")
     private List<User> participants;
@@ -67,8 +66,8 @@ public class Event {
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organization organization, int neededManpowerCount, String location, String description, String type){
-        this.id = String.format("%s-%s", organization.getEmail(), name);
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organization, int neededManpowerCount, String location, String description, String type){
+        this.id = String.format("%s-%s", organization, name);
         this.name = name;
         this.date = date;
         this.startTime = startTime;
@@ -122,11 +121,11 @@ public class Event {
         this.endTime = endTime;
     }
 
-    public Organization getOrganization() {
+    public String getOrganization() {
         return organization;
     }
 
-    public void setOrganization(Organization organization) {
+    public void setOrganization(String organization) {
         this.organization = organization;
     }
 
