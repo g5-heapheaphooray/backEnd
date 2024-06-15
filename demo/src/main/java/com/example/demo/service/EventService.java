@@ -2,8 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.model.User;
 import com.example.demo.model.Organization;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.repository.OrganizationRepository;
+// import com.example.demo.repository.UserRepository;
+// import com.example.demo.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,12 @@ import java.util.List;
 public class EventService {
     
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
-    private final OrganizationRepository organizationRepository;
+    // private final UserRepository userRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UserRepository userRepository, OrganizationRepository organizationRepository) {
+    public EventService(EventRepository eventRepository/*, UserRepository userRepository*/) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
-        this.organizationRepository = organizationRepository;
+        // this.userRepository = userRepository;
     }
 
     @Transactional
