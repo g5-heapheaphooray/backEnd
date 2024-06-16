@@ -43,6 +43,8 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_email"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
     private List<Event> eventsPart;
+    // only applies to Organisation subclass
+    // if Volunteer subclass, this field should be null
 
     // @ElementCollection(targetClass = Event.class, fetch = FetchType.EAGER)
     // @CollectionTable(name = "events_org", joinColumns = @JoinColumn(name = "event_id"))
@@ -61,8 +63,6 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private List<Event> eventsOrg;
-    // only applies to Organisation subclass
-    // if Volunteer subclass, this field should be null
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")

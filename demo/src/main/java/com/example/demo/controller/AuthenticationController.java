@@ -38,7 +38,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-organisation")
-    public ResponseEntity<User> createOrganisation(@RequestBody RegisterOrganisationDTO o) {
+    public ResponseEntity<ResponseDTO> createOrganisation(@RequestBody RegisterOrganisationDTO o) {
         User newUser = userService.createOrganisation(o);
         ResponseDTO res = null;
         if (newUser == null) {
@@ -46,11 +46,11 @@ public class AuthenticationController {
         } else {
             res = new ResponseDTO("registration success", 200);
         }
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PostMapping("/register-admin")
-    public ResponseEntity<User> createAdmin(@RequestBody RegisterAdminDTO a) {
+    public ResponseEntity<ResponseDTO> createAdmin(@RequestBody RegisterAdminDTO a) {
         User newUser = userService.createAdmin(a);
         ResponseDTO res = null;
         if (newUser == null) {
@@ -58,7 +58,7 @@ public class AuthenticationController {
         } else {
             res = new ResponseDTO("registration success", 200);
         }
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

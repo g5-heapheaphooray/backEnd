@@ -2,10 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.dto.EventsListDTO;
+import com.example.demo.dto.RegisterForEventDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.model.Organization;
 import com.example.demo.model.User;
+import com.example.demo.model.Volunteer;
 import com.example.demo.service.OrganizationService;
+import com.example.demo.service.UserService;
+
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,11 +32,13 @@ public class EventController {
     
     private final EventService eventService;
     private final OrganizationService organizationService;
+    private final UserService userService;
 
     @Autowired
-    public EventController(EventService eventService, OrganizationService organizationService) {
+    public EventController(EventService eventService, OrganizationService organizationService, UserService userService) {
         this.eventService = eventService;
         this.organizationService = organizationService;
+        this.userService = userService;
     }
 
     @PostMapping("/create")
@@ -70,6 +76,28 @@ public class EventController {
         Organization o = organizationService.getOrg(orgId);
         List<Event> events = eventService.getOrgEvents(o);
         EventsListDTO res = new EventsListDTO(events);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/{eventId}")
+    @PreAuthorize("hasRole('ORGANIZATION')")
+    public ResponseEntity<Event> getEvent(@PathVariable String eventId) {
+        Event event = eventService.getEvent(eventId);
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{eventId}")
+    @PreAuthorize("hasRole('ORGANIZATION')")
+    public ResponseEntity<ResponseDTO> updateEvent(@PathVariable String eventId, @RequestBody CreateOppDTO dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        ResponseDTO res = new ResponseDTO("event update unsucessful", 400);
+        if (user instanceof Organization) {
+            Event event = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
+            eventService.updateEvent(event, eventId);
+            res = new ResponseDTO("event update sucessful", 200);
+        }
+
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

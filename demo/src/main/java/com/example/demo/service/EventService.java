@@ -5,7 +5,6 @@ import com.example.demo.model.Organization;
 // import com.example.demo.repository.UserRepository;
 // import com.example.demo.repository.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Event;
@@ -26,7 +25,25 @@ public class EventService {
         // this.userRepository = userRepository;
     }
 
-    @Transactional
+    public Event updateEvent(Event event, String eventId) {
+        Event currentEvent = eventRepository.findById(eventId).orElse(null);
+        
+        if (currentEvent == null) {
+            return null;
+        }
+
+        currentEvent.setName(event.getName());
+        currentEvent.setDate(event.getDate());
+        currentEvent.setStartTime(event.getStartTime());
+        currentEvent.setEndTime(event.getEndTime());
+        currentEvent.setNeededManpowerCount(event.getNeededManpowerCount());
+        currentEvent.setLocation(event.getLocation());
+        currentEvent.setDescription(event.getDescription());
+        currentEvent.setType(event.getType());
+
+        return eventRepository.save(event);
+    }
+
     public Event createEvent(Event event, User o) {
         // System.out.println("creating event now");
         // System.out.println(o.getUsername());
@@ -36,6 +53,10 @@ public class EventService {
         // userRepository.save(o);
         // System.out.println("hello creating event");
         return eventRepository.save(event);
+    }
+
+    public Event getEvent(String eventId) {
+        return eventRepository.findById(eventId).orElse(null);
     }
 
     public List<Event> getAllEvents() {
@@ -50,6 +71,16 @@ public class EventService {
         return eventRepository.findByDateGreaterThanEqual(d);
     }
 
+    public Event updateEventParticipants(String eventId, User user) {
+        Event e = eventRepository.findById(eventId).orElse(null);
+        
+        if (e == null) {
+            return null;
+        }
 
+        e.getParticipants().add(user);
+        System.out.println(e.getParticipants());
+        return eventRepository.save(e);
+    }
 
 }
