@@ -100,4 +100,18 @@ public class EventController {
 
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{eventId}")
+    @PreAuthorize("hasRole('ORGANIZATION')")
+    public ResponseEntity<ResponseDTO> deleteEvent(@PathVariable String eventId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        ResponseDTO res = new ResponseDTO("event deletion unsucessful", 400);
+        if (user instanceof Organization) {
+            eventService.deleteEvent(eventId);
+            res = new ResponseDTO("event deletion sucessful", 200);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

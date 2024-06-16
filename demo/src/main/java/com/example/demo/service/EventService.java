@@ -59,6 +59,15 @@ public class EventService {
         return eventRepository.findById(eventId).orElse(null);
     }
 
+    public Event deleteEvent(String eventId) {
+        Event event = getEvent(eventId);
+        if (event == null) {
+            return null;
+        }
+        eventRepository.delete(event);
+        return event;
+    }
+
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
