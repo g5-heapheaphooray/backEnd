@@ -2,7 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 @Entity
 @DiscriminatorValue("A")
@@ -11,6 +11,6 @@ public class Admin extends User{
 
     }
     public Admin(String fullName, String email, String contactNo, String password, Role role){
-        super(fullName, email, contactNo, password, new ArrayList<>(), null, role);
+        super(fullName, email, contactNo, password, new HashSet<>(), null, role);
     }
 }

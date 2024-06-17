@@ -37,12 +37,12 @@ public class User implements UserDetails {
     private String contactNo;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "events_part",
-            joinColumns = @JoinColumn(name = "user_email"),
-            inverseJoinColumns = @JoinColumn(name = "event_id"))
-    private List<Event> eventsPart;
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "event_id") })
+    private Set<Event> eventsPart;
     // only applies to Organisation subclass
     // if Volunteer subclass, this field should be null
 
@@ -82,7 +82,7 @@ public class User implements UserDetails {
     public User(){
     }
 
-    public User(String fullName, String email, String contactNo, String password, List<Event> eventsPart, List<Event> eventsOrg, Role role){
+    public User(String fullName, String email, String contactNo, String password, Set<Event> eventsPart, List<Event> eventsOrg, Role role){
         this.fullName = fullName;
         this.email = email;
         this.contactNo = contactNo;
@@ -163,11 +163,11 @@ public class User implements UserDetails {
         this.contactNo = contactNo;
     }
 
-    public List<Event> getEventsPart() {
+    public Set<Event> getEventsPart() {
         return eventsPart;
     }
 
-    public void setEventsPart(List<Event> eventsPart) {
+    public void setEventsPart(Set<Event> eventsPart) {
         this.eventsPart = eventsPart;
     }
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import com.example.demo.model.RoleEnum;
 import com.example.demo.repository.RoleRepository;
@@ -34,7 +35,7 @@ public class Volunteer extends User {
 
     public Volunteer(String fullName, char gender, LocalDate dob, String email, String contactNo, String password, Role role){
 //        super(fullName, email, contactNo, password, new ArrayList<>(), null, roleRepository.findByName(RoleEnum.VOLUNTEER));
-        super(fullName, email, contactNo, password, new ArrayList<>(), null, role);
+        super(fullName, email, contactNo, password, new HashSet<>(), null, role);
         this.gender = gender;
         this.dob = dob;
     }
@@ -79,19 +80,19 @@ public class Volunteer extends User {
         this.points = points;
     }
 
-    public boolean addEventPart(Event e) {
-        if (!isAccountNonLocked() || getEventsPart() == null) {
-            return false;
-        }
-        for (Event event : getEventsPart()) {
-            if (event.getDate().equals(e.getDate())) {
-                return false;
-            }
-        }
-        List<Event> currentE = getEventsPart();
-        currentE.add(e);
-        setEventsPart(currentE);
-        return true;
-    }
+    // public boolean addEventPart(Event e) {
+    //     if (!isAccountNonLocked() || getEventsPart() == null) {
+    //         return false;
+    //     }
+    //     for (Event event : getEventsPart()) {
+    //         if (event.getDate().equals(e.getDate())) {
+    //             return false;
+    //         }
+    //     }
+    //     List<Event> currentE = getEventsPart();
+    //     currentE.add(e);
+    //     setEventsPart(currentE);
+    //     return true;
+    // }
 
 }

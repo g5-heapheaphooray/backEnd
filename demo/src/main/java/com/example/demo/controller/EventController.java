@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.dto.EventsListDTO;
-// import com.example.demo.dto.RegisterForEventDTO;
+import com.example.demo.dto.RegisterForEventDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.model.Organization;
 import com.example.demo.model.User;

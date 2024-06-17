@@ -45,17 +45,17 @@ public class VolunteerService {
         return volunteerRepository.save(v);
     }
 
-    public Volunteer updateEventsPart(String id, Event event){
-        Volunteer v = volunteerRepository.findById(id).orElse(null);
-        if(v == null){
-            return null;
-        }
-        List<Event> eventPart = v.getEventsPart();
-        eventPart.add(event);
-        v.setEventsPart(eventPart);
-        return volunteerRepository.save(v);
+    // public Volunteer updateEventsPart(String id, Event event){
+    //     Volunteer v = volunteerRepository.findById(id).orElse(null);
+    //     if(v == null){
+    //         return null;
+    //     }
+    //     List<Event> eventPart = v.getEventsPart();
+    //     eventPart.add(event);
+    //     v.setEventsPart(eventPart);
+    //     return volunteerRepository.save(v);
 
-    }
+    // }
 
     public Volunteer updateDetails(String id, Map<String, String> payload) {
         Volunteer v = volunteerRepository.findById(id).orElse(null);

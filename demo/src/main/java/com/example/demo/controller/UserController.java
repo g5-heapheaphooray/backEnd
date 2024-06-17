@@ -14,6 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000",maxAge = 3600, allowedHeaders = "*", methods = "*")
@@ -75,6 +78,14 @@ public class UserController {
 //        return new ResponseEntity<>(response, HttpStatus.OK);
 //    }
 
+    @GetMapping("/{userid}")
+    public ResponseEntity<User> getUser(@PathVariable String userid) {
+        User user = userService.getUser(userid);
+        System.out.println(user.getEventsPart());
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+    
+
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResponseDTO> getUser() {
@@ -135,6 +146,19 @@ public class UserController {
 //    }
 
 
-    
+    @PostMapping("/register-event")
+    @PreAuthorize("hasRole('VOLUNTEER')")
+    public ResponseEntity<ResponseDTO> registerEvent(@RequestBody RegisterForEventDTO registerForEventDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
+        if (user instanceof Volunteer) {
+            //update volunteer's event list
+            userService.updateEventsParticipated(registerForEventDTO.getEventId(), registerForEventDTO.getUserId());
+            res = new ResponseDTO("event registration sucessful", 200);
+        }
+
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
+    }
 
 }

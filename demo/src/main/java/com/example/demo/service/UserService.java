@@ -8,7 +8,9 @@ import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import static com.example.demo.model.User.bytesToHex;
@@ -148,15 +150,17 @@ public class UserService {
         return false;
     }
 
-    public boolean updateEventsParticipated(String eventid, User user) {
+    public User updateEventsParticipated(String eventid, String userid) {
         Event event = eventRepository.findById(eventid).orElse(null);
-        // User user = userRepository.findById(userid).orElse(null);
-        if (event != null && user != null) {
-            user.getEventsPart().add(event);
-            userRepository.save(user);
-            return true;
+        User user = userRepository.findById(userid).orElse(null);
+        if (event == null || user == null) {
+            return null;
         }
-        return false;
+
+        Set<Event> eventList = user.getEventsPart();
+        eventList.add(event);
+        user.setEventsPart(eventList);
+        return userRepository.save(user);
     }
 
 }
