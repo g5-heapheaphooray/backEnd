@@ -14,8 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -121,14 +119,14 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/{eventId}/register-event")
-    public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId, @RequestBody JwtDTO jwtDTO) {
-        boolean registerSuccess = userService.registerEvent(eventId, jwtDTO.getToken());
-        if (registerSuccess) {
-            return new ResponseEntity<>(new ResponseDTO("register success", 200), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(new ResponseDTO("register failure", 400), HttpStatus.OK);
-    }
+    // @PostMapping("/{eventId}/register-event")
+    // public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId, @RequestBody JwtDTO jwtDTO) {
+    //     boolean registerSuccess = userService.registerEvent(eventId, jwtDTO.getToken());
+    //     if (registerSuccess) {
+    //         return new ResponseEntity<>(new ResponseDTO("register success", 200), HttpStatus.OK);
+    //     }
+    //     return new ResponseEntity<>(new ResponseDTO("register failure", 400), HttpStatus.OK);
+    // }
 
 
 //    @GetMapping("/find/{email}")
@@ -146,15 +144,30 @@ public class UserController {
 //    }
 
 
-    @PostMapping("/register-event")
+    // @PostMapping("/register-event")
+    // @PreAuthorize("hasRole('VOLUNTEER')")
+    // public ResponseEntity<ResponseDTO> registerEvent(@RequestBody RegisterForEventDTO registerForEventDTO) {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     User user = (User) authentication.getPrincipal();
+    //     ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
+    //     if (user instanceof Volunteer) {
+    //         //update volunteer's event list
+    //         userService.updateEventsParticipated(registerForEventDTO.getEventId(), registerForEventDTO.getUserId());
+    //         res = new ResponseDTO("event registration sucessful", 200);
+    //     }
+
+    //     return new ResponseEntity<>(res, HttpStatus.CREATED);
+    // }
+
+    @PostMapping("/register/event/{eventId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
-    public ResponseEntity<ResponseDTO> registerEvent(@RequestBody RegisterForEventDTO registerForEventDTO) {
+    public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId, @RequestBody String userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
         if (user instanceof Volunteer) {
             //update volunteer's event list
-            userService.updateEventsParticipated(registerForEventDTO.getEventId(), registerForEventDTO.getUserId());
+            userService.updateEventsParticipated(eventId, userId);
             res = new ResponseDTO("event registration sucessful", 200);
         }
 

@@ -46,6 +46,8 @@ public class EventController {
     public ResponseEntity<ResponseDTO> createEvent(@RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+        System.out.println(user.getFullName());
+        System.out.println("name" + dto.getName());
         ResponseDTO res = new ResponseDTO("event creation unsucessful", 400);
         if (user instanceof Organization) {
 //            Organization o = (Organization) user;
@@ -64,6 +66,7 @@ public class EventController {
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
+
     @GetMapping("/all")
     public ResponseEntity<EventsListDTO> allEvents() {
         List<Event> events = eventService.getAllEvents();
@@ -80,9 +83,12 @@ public class EventController {
     }
 
     @GetMapping("/get/{eventId}")
-    @PreAuthorize("hasRole('ORGANIZATION')")
+    @PreAuthorize("hasAnyRole('ORGANIZATION', 'VOLUNTEER')")
     public ResponseEntity<Event> getEvent(@PathVariable String eventId) {
         Event event = eventService.getEvent(eventId);
+        if (event == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
