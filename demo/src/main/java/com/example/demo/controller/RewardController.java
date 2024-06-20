@@ -1,10 +1,14 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.dto.CreateRewardDTO;
 import com.example.demo.model.Reward;
 import com.example.demo.service.RewardService;
 
@@ -21,8 +25,37 @@ public class RewardController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Reward> createReward(@RequestBody Reward reward) {
-        Reward newReward = rewardService.createReward(reward);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Reward> createReward(@RequestBody CreateRewardDTO r) {
+        Reward newReward = rewardService.createReward(r);
         return new ResponseEntity<>(newReward, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<Reward>> allRewards() {
+        List<Reward> rewards = rewardService.getAllRewards();
+        return new ResponseEntity<>(rewards, HttpStatus.OK);
+    }
+
+    @GetMapping("/get/{rewardId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Reward> getReward(@PathVariable int rewardId) {
+        Reward reward = rewardService.getReward(rewardId);
+        return new ResponseEntity<>(reward, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{rewardId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Reward> updateReward(@PathVariable int rewardId, @RequestBody CreateRewardDTO r) {
+        Reward updatedReward = rewardService.updateReward(r, rewardId);
+        return new ResponseEntity<>(updatedReward, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{rewardId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Reward> deleteReward(@PathVariable int rewardId) {
+        Reward deletedReward = rewardService.deleteReward(rewardId);
+        return new ResponseEntity<>(deletedReward, HttpStatus.OK);
     }
 }

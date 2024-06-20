@@ -7,6 +7,7 @@ import com.example.demo.model.Organization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.model.Event;
 import com.example.demo.repository.EventRepository;
 
@@ -25,23 +26,23 @@ public class EventService {
         // this.userRepository = userRepository;
     }
 
-    public Event updateEvent(Event event, String eventId) {
+    public Event updateEvent(CreateOppDTO dto, String eventId) {
         Event currentEvent = eventRepository.findById(eventId).orElse(null);
         
         if (currentEvent == null) {
             return null;
         }
 
-        currentEvent.setName(event.getName());
-        currentEvent.setDate(event.getDate());
-        currentEvent.setStartTime(event.getStartTime());
-        currentEvent.setEndTime(event.getEndTime());
-        currentEvent.setNeededManpowerCount(event.getNeededManpowerCount());
-        currentEvent.setLocation(event.getLocation());
-        currentEvent.setDescription(event.getDescription());
-        currentEvent.setType(event.getType());
+        currentEvent.setName(dto.getName());
+        currentEvent.setDate(dto.getDate());
+        currentEvent.setStartTime(dto.getStartTime());
+        currentEvent.setEndTime(dto.getEndTime());
+        currentEvent.setNeededManpowerCount(dto.getManpowerCount());
+        currentEvent.setLocation(dto.getLocation());
+        currentEvent.setDescription(dto.getDescription());
+        currentEvent.setType(dto.getType());
 
-        return eventRepository.save(event);
+        return eventRepository.save(currentEvent);
     }
 
     public Event createEvent(Event event, User o) {
@@ -80,16 +81,16 @@ public class EventService {
         return eventRepository.findByDateGreaterThanEqual(d);
     }
 
-    public Event updateEventParticipants(String eventId, User user) {
-        Event e = eventRepository.findById(eventId).orElse(null);
+    // public Event updateEventParticipants(String eventId, User user) {
+    //     Event e = eventRepository.findById(eventId).orElse(null);
         
-        if (e == null) {
-            return null;
-        }
+    //     if (e == null) {
+    //         return null;
+    //     }
 
-        e.getParticipants().add(user);
-        System.out.println(e.getParticipants());
-        return eventRepository.save(e);
-    }
+    //     e.getParticipants().add(user);
+    //     System.out.println(e.getParticipants());
+    //     return eventRepository.save(e);
+    // }
 
 }

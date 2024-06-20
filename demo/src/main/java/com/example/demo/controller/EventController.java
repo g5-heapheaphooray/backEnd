@@ -99,8 +99,8 @@ public class EventController {
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("event update unsucessful", 400);
         if (user instanceof Organization) {
-            Event event = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
-            eventService.updateEvent(event, eventId);
+            // Event event = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
+            eventService.updateEvent(dto, eventId);
             res = new ResponseDTO("event update sucessful", 200);
         }
 

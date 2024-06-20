@@ -188,12 +188,12 @@ public class Event {
         this.currentManpowerCount = currentManpowerCount;
     }
 
-    public boolean addParticipant(User u) {
-        if (getCurrentManpowerCount() < getNeededManpowerCount()) {
-            participants.add(u);
-            setCurrentManpowerCount(participants.size());
-            return true;
-        }
-        return false;
-    }
+    // public boolean addParticipant(User u) {
+    //     if (getCurrentManpowerCount() < getNeededManpowerCount()) {
+    //         participants.add(u);
+    //         setCurrentManpowerCount(participants.size());
+    //         return true;
+    //     }
+    //     return false;
+    // }
 }

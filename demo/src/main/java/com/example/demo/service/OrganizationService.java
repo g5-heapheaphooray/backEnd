@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.example.demo.model.Volunteer;
@@ -47,8 +48,10 @@ public class OrganizationService {
     }
 
     public Organization getOrg(String email) {
-        Organization o = organizationRepository.findById(email).orElse(null);
-        return o;
+        return organizationRepository.findById(email).orElse(null);
     }
 
+    public List<Organization> getAllOrg() {
+        return organizationRepository.findAll();
+    }
 }

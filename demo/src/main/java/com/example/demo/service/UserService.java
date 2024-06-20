@@ -141,14 +141,14 @@ public class UserService {
     }
 
 
-    public boolean registerEvent(String eventid, String userid) {
-        Event event = eventRepository.findById(eventid).orElse(null);
-        User user = userRepository.findById(userid).orElse(null);
-        if (event != null && user != null) {
-            return event.addParticipant(user);
-        }
-        return false;
-    }
+    // public boolean registerEvent(String eventid, String userid) {
+    //     Event event = eventRepository.findById(eventid).orElse(null);
+    //     User user = userRepository.findById(userid).orElse(null);
+    //     if (event != null && user != null) {
+    //         return event.addParticipant(user);
+    //     }
+    //     return false;
+    // }
 
     // public User updateEventsParticipated(String eventid, String userid) {
     //     Event event = eventRepository.findById(eventid).orElse(null);

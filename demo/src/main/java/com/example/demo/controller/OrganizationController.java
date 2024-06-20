@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.Organization;
 import com.example.demo.service.OrganizationService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -30,15 +31,20 @@ public class OrganizationController {
 //    }
 
     @PutMapping("/updateDetails")
+    @PreAuthorize("hasRole('ORGANIZATION')")
     public ResponseEntity<Organization> updateVolunteer(@RequestBody Map<String, String> payload) {
         Organization o = organizationService.updateDetails(payload.get("email"), payload);
         return new ResponseEntity<>(o, HttpStatus.OK);
     }
 
-    @GetMapping("/getOrganisation")
-    @PreAuthorize("hasRole('ORGANIZATION')")
-    public ResponseEntity<Organization> getOrg(@RequestBody String email) {
-        Organization u = organizationService.getOrg(email);
+    @GetMapping("/get/{orgId}")
+    public ResponseEntity<Organization> getOrg(@PathVariable String orgId) {
+        Organization u = organizationService.getOrg(orgId);
         return  new ResponseEntity<>(u, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Organization>> getAllOrg() {
+        return new ResponseEntity<>(organizationService.getAllOrg(), HttpStatus.OK);
     }
 }
