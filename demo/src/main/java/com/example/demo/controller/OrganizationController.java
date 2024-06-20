@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.Organization;
@@ -36,8 +36,9 @@ public class OrganizationController {
     }
 
     @GetMapping("/getOrganisation")
-    public ResponseEntity<Organization> getOrg(String email) {
-        Organization o = organizationService.getOrg(email);
-        return  new ResponseEntity<>(o, HttpStatus.OK);
+    @PreAuthorize("hasRole('ORGANIZATION')")
+    public ResponseEntity<Organization> getOrg(@RequestBody String email) {
+        Organization u = organizationService.getOrg(email);
+        return  new ResponseEntity<>(u, HttpStatus.OK);
     }
 }
