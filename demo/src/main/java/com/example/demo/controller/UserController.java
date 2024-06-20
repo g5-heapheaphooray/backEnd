@@ -159,19 +159,19 @@ public class UserController {
     //     return new ResponseEntity<>(res, HttpStatus.CREATED);
     // }
 
-    @PostMapping("/register/event/{eventId}")
-    @PreAuthorize("hasRole('VOLUNTEER')")
-    public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId, @RequestBody String userId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
-        if (user instanceof Volunteer) {
-            //update volunteer's event list
-            userService.updateEventsParticipated(eventId, userId);
-            res = new ResponseDTO("event registration sucessful", 200);
-        }
+    // @PostMapping("/register/event/{eventId}")
+    // @PreAuthorize("hasRole('VOLUNTEER')")
+    // public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId, @RequestBody String userId) {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     User user = (User) authentication.getPrincipal();
+    //     ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
+    //     if (user instanceof Volunteer) {
+    //         //update volunteer's event list
+    //         userService.updateEventsParticipated(eventId, userId);
+    //         res = new ResponseDTO("event registration sucessful", 200);
+    //     }
 
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
-    }
+    //     return new ResponseEntity<>(res, HttpStatus.CREATED);
+    // }
 
 }

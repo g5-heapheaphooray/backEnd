@@ -150,17 +150,17 @@ public class UserService {
         return false;
     }
 
-    public User updateEventsParticipated(String eventid, String userid) {
-        Event event = eventRepository.findById(eventid).orElse(null);
-        User user = userRepository.findById(userid).orElse(null);
-        if (event == null || user == null) {
-            return null;
-        }
+    // public User updateEventsParticipated(String eventid, String userid) {
+    //     Event event = eventRepository.findById(eventid).orElse(null);
+    //     User user = userRepository.findById(userid).orElse(null);
+    //     if (event == null || user == null) {
+    //         return null;
+    //     }
 
-        Set<Event> eventList = user.getEventsPart();
-        eventList.add(event);
-        user.setEventsPart(eventList);
-        return userRepository.save(user);
-    }
+    //     Set<Event> eventList = user.getEventsPart();
+    //     eventList.add(event);
+    //     user.setEventsPart(eventList);
+    //     return userRepository.save(user);
+    // }
 
 }

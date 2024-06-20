@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.example.demo.model.User;
 import com.example.demo.model.Volunteer;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Event;
 import com.example.demo.model.Volunteer;
+import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.VolunteerRepository;
 
@@ -18,10 +20,12 @@ import com.example.demo.repository.VolunteerRepository;
 public class VolunteerService {
 
     private final VolunteerRepository volunteerRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public VolunteerService(VolunteerRepository volunteerRepository) {
+    public VolunteerService(VolunteerRepository volunteerRepository, EventRepository eventRepository) {
         this.volunteerRepository = volunteerRepository;
+        this.eventRepository = eventRepository;
     }
 
     public Volunteer updateHours(String id, double hours){
@@ -64,6 +68,19 @@ public class VolunteerService {
         }
         v.setContactNo(payload.get("contactNo"));
         v.setFullName(payload.get("fullName"));
+        return volunteerRepository.save(v);
+    }
+
+    public Volunteer updateEventsParticipated(String eventid, String userid) {
+        Event event = eventRepository.findById(eventid).orElse(null);
+        Volunteer v = volunteerRepository.findById(userid).orElse(null);
+        if (event == null || v == null) {
+            return null;
+        }
+
+        Set<Event> eventList = v.getEventsPart();
+        eventList.add(event);
+        v.setEventsPart(eventList);
         return volunteerRepository.save(v);
     }
 
