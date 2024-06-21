@@ -4,10 +4,10 @@ import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.dto.EventsListDTO;
 import com.example.demo.dto.RegisterForEventDTO;
 import com.example.demo.dto.ResponseDTO;
-import com.example.demo.model.Organization;
+import com.example.demo.model.Organisation;
 import com.example.demo.model.User;
 import com.example.demo.model.Volunteer;
-import com.example.demo.service.OrganizationService;
+import com.example.demo.service.OrganisationService;
 import com.example.demo.service.UserService;
 
 import org.aspectj.weaver.ast.Or;
@@ -31,26 +31,26 @@ import java.util.List;
 public class EventController {
     
     private final EventService eventService;
-    private final OrganizationService organizationService;
+    private final OrganisationService organisationService;
     private final UserService userService;
 
     @Autowired
-    public EventController(EventService eventService, OrganizationService organizationService, UserService userService) {
+    public EventController(EventService eventService, OrganisationService organisationService, UserService userService) {
         this.eventService = eventService;
-        this.organizationService = organizationService;
+        this.organisationService = organisationService;
         this.userService = userService;
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ORGANIZATION')")
+    @PreAuthorize("hasRole('ORGANISATION')")
     public ResponseEntity<ResponseDTO> createEvent(@RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         System.out.println(user.getFullName());
         System.out.println("name" + dto.getName());
         ResponseDTO res = new ResponseDTO("event creation unsucessful", 400);
-        if (user instanceof Organization) {
-//            Organization o = (Organization) user;
+        if (user instanceof Organisation) {
+//            Organisation o = (Organisation) user;
             Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
             System.out.println(e.getName());
             Event newEvent = eventService.createEvent(e, user);
@@ -58,9 +58,9 @@ public class EventController {
                 res = new ResponseDTO("event creation sucessful", 200);
             }
         }
-//        System.out.println(dto.getOrganizationEmail());
+//        System.out.println(dto.getOrganisationEmail());
 //        System.out.println(dto);
-//        Organization o = organizationService.getOrg(dto.getOrganizationEmail());
+//        Organisation o = organisationService.getOrg(dto.getOrganisationEmail());
 //        Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
 //        Event newEvent = eventService.createEvent(e);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
@@ -76,14 +76,14 @@ public class EventController {
 
     @GetMapping("/{orgId}")
     public ResponseEntity<EventsListDTO> orgEvents(@PathVariable String orgId) {
-        Organization o = organizationService.getOrg(orgId);
-        List<Event> events = eventService.getOrgEvents(o);
+        Organisation o = organisationService.getOrg(orgId);
+        List<Event> events = eventService.getOrgEvents(orgId);
         EventsListDTO res = new EventsListDTO(events);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/get/{eventId}")
-    @PreAuthorize("hasAnyRole('ORGANIZATION', 'VOLUNTEER')")
+    @PreAuthorize("hasAnyRole('ORGANISATION', 'VOLUNTEER')")
     public ResponseEntity<Event> getEvent(@PathVariable String eventId) {
         Event event = eventService.getEvent(eventId);
         if (event == null) {
@@ -93,12 +93,12 @@ public class EventController {
     }
 
     @PutMapping("/update/{eventId}")
-    @PreAuthorize("hasRole('ORGANIZATION')")
+    @PreAuthorize("hasRole('ORGANISATION')")
     public ResponseEntity<ResponseDTO> updateEvent(@PathVariable String eventId, @RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("event update unsucessful", 400);
-        if (user instanceof Organization) {
+        if (user instanceof Organisation) {
             // Event event = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
             eventService.updateEvent(dto, eventId);
             res = new ResponseDTO("event update sucessful", 200);
@@ -108,12 +108,12 @@ public class EventController {
     }
 
     @DeleteMapping("/delete/{eventId}")
-    @PreAuthorize("hasRole('ORGANIZATION')")
+    @PreAuthorize("hasRole('ORGANISATION')")
     public ResponseEntity<ResponseDTO> deleteEvent(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("event deletion unsucessful", 400);
-        if (user instanceof Organization) {
+        if (user instanceof Organisation) {
             eventService.deleteEvent(eventId);
             res = new ResponseDTO("event deletion sucessful", 200);
         }

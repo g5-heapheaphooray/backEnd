@@ -13,33 +13,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminService {
 
-    private final OrganizationRepository organizationRepository;
+    private final OrganisationRepository organisationRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
     private final VolunteerRepository volunteerRepository;
     private final RoleRepository roleRepository;
 
     @Autowired
-    public AdminService(OrganizationRepository organizationRepository, UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, RoleRepository roleRepository) {
-        this.organizationRepository = organizationRepository;
+    public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, RoleRepository roleRepository) {
+        this.organisationRepository = organisationRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.volunteerRepository = volunteerRepository;
         this.roleRepository = roleRepository;
     }
 
-//    public Organization createOrganization(Organization organization) {
-//        return organizationRepository.save(organization);
+//    public Organisation createOrganisation(Organisation organisation) {
+//        return organisationRepository.save(organisation);
 //    }
 
-    public Organization updateVerified(String id) {
-        Organization o = organizationRepository.findById(id).orElse(null);
+    public Organisation updateVerified(String id) {
+        Organisation o = organisationRepository.findById(id).orElse(null);
         if(o == null){
             return null;
         }
         o.setVerified(true);
 
-        return organizationRepository.save(o);
+        return organisationRepository.save(o);
     }
 
 

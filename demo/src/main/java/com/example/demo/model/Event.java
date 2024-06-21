@@ -41,8 +41,8 @@ public class Event {
     @JsonFormat(pattern="HH:mm")
     private LocalTime endTime;
 
-    @Column(name = "organization_id")
-    private String organization;
+    @Column(name = "organisation_id")
+    private String organisation;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "eventsPart")
@@ -69,13 +69,13 @@ public class Event {
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organization, int neededManpowerCount, String location, String description, String type){
-        this.id = String.format("%s-%s", organization, name);
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation, int neededManpowerCount, String location, String description, String type){
+        this.id = String.format("%s-%s", organisation, name);
         this.name = name;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.organization = organization;
+        this.organisation = organisation;
         this.neededManpowerCount = neededManpowerCount;
         this.description = description;
         this.type = type;
@@ -124,12 +124,12 @@ public class Event {
         this.endTime = endTime;
     }
 
-    public String getOrganization() {
-        return organization;
+    public String getOrganisation() {
+        return organisation;
     }
 
-    public void setOrganization(String organization) {
-        this.organization = organization;
+    public void setOrganisation(String organisation) {
+        this.organisation = organisation;
     }
 
     public List<User> getParticipants() {

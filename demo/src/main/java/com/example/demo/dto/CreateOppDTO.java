@@ -28,7 +28,7 @@ public class CreateOppDTO {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-//        this.organizationEmail = organizationEmail;
+//        this.organisationEmail = organisationEmail;
         this.manpowerCount = manpowerCount;
         this.location = location;
         this.description = description;

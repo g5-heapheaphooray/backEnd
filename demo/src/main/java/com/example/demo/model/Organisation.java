@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @DiscriminatorValue("O")
-public class Organization extends User {
+public class Organisation extends User {
     @Column(name = "location")
     private String location;
 
@@ -20,10 +20,10 @@ public class Organization extends User {
     @Column(name = "verified")
     private boolean verified;
 
-    public Organization(){
+    public Organisation(){
     }
 
-    public Organization(String email, String name, String password, String contactNo, String location, String website, String description, Role role){
+    public Organisation(String email, String name, String password, String contactNo, String location, String website, String description, Role role){
         super(name, email, contactNo, password, null, new ArrayList<>(), role);
         this.location = location;
         this.website = website;

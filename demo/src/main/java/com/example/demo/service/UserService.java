@@ -54,12 +54,12 @@ public class UserService {
     }
 
     public User createOrganisation(RegisterOrganisationDTO o) {
-        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ORGANIZATION);
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ORGANISATION);
         if (optionalRole.isEmpty()) {
             return null;
         }
 
-        User u = new Organization(o.getEmail(), o.getFullName(), o.getPassword(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), optionalRole.get());
+        User u = new Organisation(o.getEmail(), o.getFullName(), o.getPassword(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), optionalRole.get());
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         return userRepository.save(u);
     }

@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
-import com.example.demo.model.Organization;
+import com.example.demo.model.Organisation;
 // import com.example.demo.repository.UserRepository;
-// import com.example.demo.repository.OrganizationRepository;
+// import com.example.demo.repository.OrganisationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +74,7 @@ public class EventService {
     }
 
     public List<Event> getOrgEvents(String orgId) {
-        return eventRepository.findByOrganization(orgId);
+        return eventRepository.findByOrganisation(orgId);
     }
 
     public List<Event> getEventsEqAftDate(LocalDate d) {

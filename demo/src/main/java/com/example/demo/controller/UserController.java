@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.model.Organization;
+import com.example.demo.model.Organisation;
 import com.example.demo.model.Volunteer;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class UserController {
 //        System.out.println(o.getEmail());
 //        System.out.println(o.getFullName());
 //        System.out.println(o.getPassword());
-//        User u = new Organization(o.getEmail(), o.getFullName(), o.getPassword(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription());
+//        User u = new Organisation(o.getEmail(), o.getFullName(), o.getPassword(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription());
 //        User newUser = userService.createUser(u);
 //        MessageResponse res = null;
 //        if (newUser == null) {
@@ -64,7 +64,7 @@ public class UserController {
 //        MessageResponse response = null;
 //        if (user != null) {
 //            char userType = 'A';
-//            if (user instanceof Organization) {
+//            if (user instanceof Organisation) {
 //                userType = 'O';
 //            } else if (user instanceof Volunteer) {
 //                userType = 'V';
@@ -94,8 +94,8 @@ public class UserController {
         if (user != null) {
             if (user instanceof Volunteer) {
                 res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Volunteer) user).getGender(), ((Volunteer) user).getDob(), ((Volunteer) user).getHours(), ((Volunteer) user).getPoints(), 'V');
-            } else if (user instanceof Organization) {
-                res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organization) user).getLocation(), ((Organization) user).getWebsite(), ((Organization) user).getDescription(), 'O');
+            } else if (user instanceof Organisation) {
+                res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organisation) user).getLocation(), ((Organisation) user).getWebsite(), ((Organisation) user).getDescription(), 'O');
             }
         }
         return new ResponseEntity<>(res, HttpStatus.OK);

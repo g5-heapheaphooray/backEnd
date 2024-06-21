@@ -70,7 +70,7 @@ public class AuthenticationController {
             String jwtToken = jwtService.generateToken(user);
             System.out.println(jwtToken);
             char userType = 'A';
-            if (user instanceof Organization) {
+            if (user instanceof Organisation) {
                 userType = 'O';
             } else if (user instanceof Volunteer) {
                 userType = 'V';

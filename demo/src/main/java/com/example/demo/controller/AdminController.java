@@ -2,10 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.*;
 import com.example.demo.model.Admin;
-import com.example.demo.model.Organization;
+import com.example.demo.model.Organisation;
 import com.example.demo.model.Volunteer;
 import com.example.demo.service.AdminService;
-import com.example.demo.service.OrganizationService;
+import com.example.demo.service.OrganisationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +23,12 @@ import com.example.demo.service.UserService;
 public class AdminController {
 
     private final AdminService adminService;
-    private final OrganizationService organizationService;
+    private final OrganisationService organisationService;
 
     @Autowired
-    public AdminController(AdminService adminService, OrganizationService organizationService) {
+    public AdminController(AdminService adminService, OrganisationService organisationService) {
         this.adminService = adminService;
-        this.organizationService = organizationService;
+        this.organisationService = organisationService;
     }
 
     @GetMapping("/verify/{orgId}")
@@ -38,7 +38,7 @@ public class AdminController {
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
         if (user instanceof Admin) {
-            Organization o = organizationService.updateVerified(orgId);
+            Organisation o = organisationService.updateVerified(orgId);
             if (o != null) {
                 res = new ResponseDTO("operation successful", 200);
             }
