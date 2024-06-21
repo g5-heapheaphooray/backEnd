@@ -73,8 +73,8 @@ public class EventService {
         return eventRepository.findAll();
     }
 
-    public List<Event> getOrgEvents(Organization o) {
-        return eventRepository.findByOrganization(o);
+    public List<Event> getOrgEvents(String orgId) {
+        return eventRepository.findByOrganization(orgId);
     }
 
     public List<Event> getEventsEqAftDate(LocalDate d) {

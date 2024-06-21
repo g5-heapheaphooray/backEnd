@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.Organization;
 import com.example.demo.service.OrganizationService;
+import com.example.demo.model.Event;
+import com.example.demo.service.EventService;
+import com.example.demo.dto.OrgListDTO;
+import com.example.demo.dto.EventsListDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -18,10 +22,12 @@ import java.util.Map;
 public class OrganizationController {
     
     private final OrganizationService organizationService;
+    private final EventService eventService;
 
     @Autowired
-    public OrganizationController(OrganizationService organizationService) {
+    public OrganizationController(OrganizationService organizationService, EventService eventService) {
         this.organizationService = organizationService;
+        this.eventService = eventService;
     }
 
 //    @PostMapping("/create")
@@ -44,7 +50,16 @@ public class OrganizationController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Organization>> getAllOrg() {
-        return new ResponseEntity<>(organizationService.getAllOrg(), HttpStatus.OK);
+    public ResponseEntity<OrgListDTO> getAllOrg() {
+        List<Organization> orgs = organizationService.getAllOrg();
+        OrgListDTO res = new OrgListDTO(orgs);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/events/{orgId}")
+    public ResponseEntity<EventsListDTO> orgEvents(@PathVariable String orgId) {
+        List<Event> events = eventService.getOrgEvents(orgId);
+        EventsListDTO res = new EventsListDTO(events);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

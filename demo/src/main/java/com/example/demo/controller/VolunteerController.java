@@ -39,6 +39,7 @@ public class VolunteerController {
 //    }
 
     @PutMapping("/updateDetails")
+    @PreAuthorize("hasRole('VOLUNTEER')")
     public ResponseEntity<Volunteer> updateVolunteer(@RequestBody Map<String, String> payload) {
         Volunteer v = volunteerService.updateDetails(payload.get("email"), payload);
         return new ResponseEntity<>(v , HttpStatus.OK);
@@ -49,6 +50,7 @@ public class VolunteerController {
     public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId, @RequestBody String userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+//        System.out.println(payload.get("userId"));
         ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
         if (user instanceof Volunteer) {
             //update volunteer's event list
