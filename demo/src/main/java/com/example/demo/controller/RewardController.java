@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.CreateRewardDTO;
+import com.example.demo.dto.RewardsListDTO;
 import com.example.demo.model.Reward;
 import com.example.demo.service.RewardService;
 
@@ -33,9 +34,10 @@ public class RewardController {
 
     @GetMapping("/all")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<Reward>> allRewards() {
+    public ResponseEntity<RewardsListDTO> allRewards() {
         List<Reward> rewards = rewardService.getAllRewards();
-        return new ResponseEntity<>(rewards, HttpStatus.OK);
+        RewardsListDTO res = new RewardsListDTO(rewards);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/get/{rewardId}")
