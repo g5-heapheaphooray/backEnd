@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.User;
 import com.example.demo.model.Organisation;
-// import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.UserRepository;
 // import com.example.demo.repository.OrganisationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,12 @@ import java.util.List;
 public class EventService {
     
     private final EventRepository eventRepository;
-    // private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository/*, UserRepository userRepository*/) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
-        // this.userRepository = userRepository;
+        this.userRepository = userRepository;
     }
 
     public Event updateEvent(CreateOppDTO dto, String eventId) {
@@ -65,6 +65,13 @@ public class EventService {
         if (event == null) {
             return null;
         }
+
+        List<User> participants = event.getParticipants();
+        for (User participant : participants) {
+            participant.getEventsPart().remove(event);
+            userRepository.save(participant); 
+        }
+
         eventRepository.delete(event);
         return event;
     }
