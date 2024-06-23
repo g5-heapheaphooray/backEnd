@@ -10,8 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, String> {
-    @Query("SELECT e FROM Event e WHERE e.organisation = :orgId")
-    List<Event> findByOrganisation(@Param("orgId") String orgId);
+    List<Event> findByOrganisation(String orgId);
 
     List<Event> findByDateGreaterThanEqual(LocalDate d);
 
