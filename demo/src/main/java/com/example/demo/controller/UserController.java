@@ -96,7 +96,11 @@ public class UserController {
                 res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Volunteer) user).getGender(), ((Volunteer) user).getDob(), ((Volunteer) user).getHours(), ((Volunteer) user).getPoints(), 'V');
             } else if (user instanceof Organisation) {
                 res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organisation) user).getLocation(), ((Organisation) user).getWebsite(), ((Organisation) user).getDescription(), 'O');
+            } else {
+                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }
+        } else {
+            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

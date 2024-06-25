@@ -86,31 +86,10 @@ public class User implements UserDetails {
         this.fullName = fullName;
         this.email = email;
         this.contactNo = contactNo;
-//        String hash = null;
-//        try {
-//            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-//            final byte[] hashbytes = digest.digest(
-//                    password.getBytes(StandardCharsets.UTF_8));
-//            hash = bytesToHex(hashbytes);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
         this.password = password;
         this.eventsPart = eventsPart;
         this.eventsOrg = eventsOrg;
         this.role = role;
-    }
-
-    public static String bytesToHex(byte[] hash) {
-        StringBuilder hexString = new StringBuilder(2 * hash.length);
-        for (int i = 0; i < hash.length; i++) {
-            String hex = Integer.toHexString(0xff & hash[i]);
-            if(hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
     }
 
 
@@ -143,15 +122,6 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-//        String hash = null;
-//        try {
-//            final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-//            final byte[] hashbytes = digest.digest(
-//                    password.getBytes(StandardCharsets.UTF_8));
-//            hash = bytesToHex(hashbytes);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
         this.password = password;
     }
 

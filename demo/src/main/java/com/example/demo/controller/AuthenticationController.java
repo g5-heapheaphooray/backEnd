@@ -43,6 +43,7 @@ public class AuthenticationController {
         ResponseDTO res = null;
         if (newUser == null) {
             res = new ResponseDTO("registration failed", 400);
+            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         } else {
             res = new ResponseDTO("registration success", 200);
         }
@@ -55,6 +56,7 @@ public class AuthenticationController {
         ResponseDTO res = null;
         if (newUser == null) {
             res = new ResponseDTO("registration failed", 400);
+            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         } else {
             res = new ResponseDTO("registration success", 200);
         }
@@ -79,6 +81,7 @@ public class AuthenticationController {
             response = new JwtDTO("login success", 200, jwtToken, jwtService.getExpirationTime(), userType);
         } else {
             response = new ResponseDTO("login failure", 400);
+            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -56,6 +56,7 @@ public class EventController {
             Event newEvent = eventService.createEvent(e, user);
             if (newEvent != null) {
                 res = new ResponseDTO("event creation sucessful", 200);
+                return new ResponseEntity<>(res, HttpStatus.CREATED);
             }
         }
 //        System.out.println(dto.getOrganisationEmail());
@@ -63,7 +64,7 @@ public class EventController {
 //        Organisation o = organisationService.getOrg(dto.getOrganisationEmail());
 //        Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
 //        Event newEvent = eventService.createEvent(e);
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
 
 
@@ -102,9 +103,10 @@ public class EventController {
             // Event event = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
             eventService.updateEvent(dto, eventId);
             res = new ResponseDTO("event update sucessful", 200);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/delete/{eventId}")
@@ -116,8 +118,8 @@ public class EventController {
         if (user instanceof Organisation) {
             eventService.deleteEvent(eventId);
             res = new ResponseDTO("event deletion sucessful", 200);
+            return new ResponseEntity<>(res, HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
 }

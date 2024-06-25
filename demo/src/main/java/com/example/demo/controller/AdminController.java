@@ -41,10 +41,61 @@ public class AdminController {
             Organisation o = organisationService.updateVerified(orgId);
             if (o != null) {
                 res = new ResponseDTO("operation successful", 200);
+                return new ResponseEntity<>(res, HttpStatus.OK);
             }
         }
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/all-volunteers")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<VolListDTO> getAllVolunteers() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        List<Volunteer> volunteers = adminService.getAllVolunteers();
+        VolListDTO res = new VolListDTO(volunteers);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/all-organisation")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<OrgListDTO> getAllOrganisations() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        List<Organisation> orgs = organisationService.getAllOrg();
+        OrgListDTO res = new OrgListDTO(orgs);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/blacklist-volunteer")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> blacklistVol(@RequestBody BlacklistDTO dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
+        User u = adminService.blacklistUser(dto.getUserId());
+        if (u != null) {
+            res = new ResponseDTO("operation successful", 200);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/blacklist-organisation")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> blacklistOrg(@RequestBody BlacklistDTO dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
+        User u = adminService.blacklistUser(dto.getUserId());
+        if (u != null) {
+            res = new ResponseDTO("operation successful", 200);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+    }
+
+
 
 
 }

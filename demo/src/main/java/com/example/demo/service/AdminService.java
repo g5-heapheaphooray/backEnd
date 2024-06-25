@@ -42,6 +42,19 @@ public class AdminService {
         return organisationRepository.save(o);
     }
 
+    public List<Volunteer> getAllVolunteers() {
+        return volunteerRepository.findAll();
+    }
+
+    public User blacklistUser(String id) {
+        User u = this.userRepository.findById(id).orElse(null);
+        if (u == null) {
+            return null;
+        }
+        u.setLocked(true);
+        return userRepository.save(u);
+    }
+
 
 
 }

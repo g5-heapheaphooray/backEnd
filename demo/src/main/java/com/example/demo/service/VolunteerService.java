@@ -61,6 +61,14 @@ public class VolunteerService {
 
     // }
 
+    public List<Event> getRegisteredEvents(String id){
+        Volunteer v = volunteerRepository.findById(id).orElse(null);
+        if(v == null){
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(v.getEventsPart());
+    }
+
     public Volunteer updateDetails(String id, Map<String, String> payload) {
         Volunteer v = volunteerRepository.findById(id).orElse(null);
         if(v == null){
@@ -71,15 +79,28 @@ public class VolunteerService {
         return volunteerRepository.save(v);
     }
 
-    public Volunteer updateEventsParticipated(String eventid, String userid) {
-        Event event = eventRepository.findById(eventid).orElse(null);
-        Volunteer v = volunteerRepository.findById(userid).orElse(null);
+    public Volunteer updateEventsParticipated(String eventId, String userId) {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        Volunteer v = volunteerRepository.findById(userId).orElse(null);
         if (event == null || v == null) {
             return null;
         }
 
         Set<Event> eventList = v.getEventsPart();
         eventList.add(event);
+        v.setEventsPart(eventList);
+        return volunteerRepository.save(v);
+    }
+
+    public Volunteer unregisterEvent(String eventId, String userId) {
+        Event event = eventRepository.findById(eventId).orElse(null);
+        Volunteer v = volunteerRepository.findById(userId).orElse(null);
+        if (event == null || v == null) {
+            return null;
+        }
+
+        Set<Event> eventList = v.getEventsPart();
+        eventList.remove(event);
         v.setEventsPart(eventList);
         return volunteerRepository.save(v);
     }
