@@ -73,7 +73,7 @@ public class VolunteerController {
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("/unregister/event/{eventId}")
+    @PostMapping("/unregister/event/{eventId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
     public ResponseEntity<ResponseDTO> unregisterEvent(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
