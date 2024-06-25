@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import static com.example.demo.model.User.bytesToHex;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

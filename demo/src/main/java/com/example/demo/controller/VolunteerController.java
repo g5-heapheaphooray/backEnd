@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.EventsListDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.service.VolunteerService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -72,7 +74,7 @@ public class VolunteerController {
     }
 
     @PutMapping("/unregister/event/{eventId}")
-    @PreAuthorize("hasRole('VOLUNTEER")
+    @PreAuthorize("hasRole('VOLUNTEER')")
     public ResponseEntity<ResponseDTO> unregisterEvent(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
