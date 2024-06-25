@@ -100,9 +100,11 @@ public class VolunteerService {
             return null;
         }
 
+        System.out.println("in2");
         Set<Event> eventList = v.getEventsPart();
         eventList.remove(event);
         v.setEventsPart(eventList);
+        System.out.println("in3");
         return volunteerRepository.save(v);
     }
 
