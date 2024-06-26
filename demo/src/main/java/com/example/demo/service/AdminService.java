@@ -57,5 +57,15 @@ public class AdminService {
     }
 
 
+    public User deleteUser(String id){
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        userRepository.delete(user);
+        return user;
+    }
+
+
 
 }

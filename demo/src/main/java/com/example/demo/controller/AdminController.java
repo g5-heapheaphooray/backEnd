@@ -70,13 +70,13 @@ public class AdminController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/blacklist-volunteer")
+    @GetMapping("/blacklist/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> blacklistVol(@RequestBody BlacklistDTO dto) {
+    public ResponseEntity<ResponseDTO> blacklistUser(@PathVariable String id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
-        User u = adminService.blacklistUser(dto.getUserId());
+        User u = adminService.blacklistUser(id);
         if (u != null) {
             res = new ResponseDTO("operation successful", 200);
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -84,21 +84,19 @@ public class AdminController {
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/blacklist-organisation")
+    @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> blacklistOrg(@RequestBody BlacklistDTO dto) {
+    public ResponseEntity<ResponseDTO> deleteUser(@PathVariable String id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
-        User u = adminService.blacklistUser(dto.getUserId());
+        User u = adminService.deleteUser(id);
         if (u != null) {
             res = new ResponseDTO("operation successful", 200);
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
-
-
 
 
 }
