@@ -182,10 +182,12 @@ public class Event {
     }
 
     public void incCurrentManpowerCount() {
+        this.neededManpowerCount-=1;
         this.currentManpowerCount+=1;
     }
 
     public void decCurrentManpowerCount() {
+        this.neededManpowerCount+=1;
         this.currentManpowerCount-=1;
     }
 
