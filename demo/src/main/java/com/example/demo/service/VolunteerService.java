@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.example.demo.model.User;
-import com.example.demo.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,7 +79,7 @@ public class VolunteerService {
         return volunteerRepository.save(v);
     }
 
-    public Volunteer updateEventsParticipated(String eventId, String userId) {
+    public Volunteer registerEvent(String eventId, String userId) {
         Event event = eventRepository.findById(eventId).orElse(null);
         Volunteer v = volunteerRepository.findById(userId).orElse(null);
         if (event == null || v == null) {
@@ -90,6 +89,8 @@ public class VolunteerService {
         Set<Event> eventList = v.getEventsPart();
         eventList.add(event);
         v.setEventsPart(eventList);
+        event.incCurrentManpowerCount();
+        eventRepository.save(event);
         return volunteerRepository.save(v);
     }
 
@@ -102,6 +103,8 @@ public class VolunteerService {
         Set<Event> eventList = v.getEventsPart();
         eventList.remove(event);
         v.setEventsPart(eventList);
+        event.decCurrentManpowerCount();
+        eventRepository.save(event);
         return volunteerRepository.save(v);
     }
 

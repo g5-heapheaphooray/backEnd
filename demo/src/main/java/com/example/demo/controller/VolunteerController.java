@@ -65,7 +65,7 @@ public class VolunteerController {
         ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
         if (user instanceof Volunteer) {
             //update volunteer's event list
-            volunteerService.updateEventsParticipated(eventId, user.getEmail());
+            volunteerService.registerEvent(eventId, user.getEmail());
             res = new ResponseDTO("event registration sucessful", 200);
             return new ResponseEntity<>(res, HttpStatus.CREATED);
         }

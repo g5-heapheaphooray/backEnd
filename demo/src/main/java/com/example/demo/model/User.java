@@ -37,7 +37,9 @@ public class User implements UserDetails {
     private String contactNo;
 
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.DETACH})
+//    https://stackoverflow.com/questions/43235303/how-to-delete-a-row-in-join-table-with-jpa
+//    https://www.baeldung.com/jpa-cascade-types
     @JoinTable(
             name = "events_part",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -75,7 +77,7 @@ public class User implements UserDetails {
     @Column(name = "locked")
     private boolean locked;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
 

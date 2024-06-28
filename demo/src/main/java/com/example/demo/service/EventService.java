@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.User;
+import com.example.demo.model.Volunteer;
 import com.example.demo.model.Organisation;
 import com.example.demo.repository.UserRepository;
 // import com.example.demo.repository.OrganisationRepository;
@@ -12,7 +13,7 @@ import com.example.demo.model.Event;
 import com.example.demo.repository.EventRepository;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class EventService {
@@ -99,5 +100,17 @@ public class EventService {
     //     System.out.println(e.getParticipants());
     //     return eventRepository.save(e);
     // }
+
+    public List<Volunteer> getEventParticipants(String eventId) {
+        List<String> participantsEmail = eventRepository.findByIdWithParticipants(eventId);
+        List<Volunteer> participants = new ArrayList<>();
+        for (String pEmail : participantsEmail) {
+            Volunteer v = (Volunteer) userRepository.findById(pEmail).orElse(null);
+            if (v != null) {
+                participants.add(v);
+            }
+        }
+        return participants;
+    }
 
 }

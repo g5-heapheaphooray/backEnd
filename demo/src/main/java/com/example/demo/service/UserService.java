@@ -7,6 +7,8 @@ import com.example.demo.model.*;
 import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.VolunteerRepository;
+import com.example.demo.service.EventService;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,14 +33,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
+    private final EventService eventService;
+    private final VolunteerRepository volunteerRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, EventRepository eventRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, EventService eventService) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
+        this.volunteerRepository = volunteerRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.eventService = eventService;
     }
 
     public User createVolunteer(RegisterVolunteerDTO v) {
@@ -135,6 +141,15 @@ public class UserService {
         if (user == null) {
             return null;
         }
+
+        if (user instanceof Volunteer) {
+            // delete all events_part
+            // eventRepository.deleteParticipant(id);
+            for (Event event : user.getEventsPart()) {
+                event.getParticipants().remove(user); // Assuming `getParticipants` returns the list of users participating in the event
+                eventRepository.save(event); // Save the event entity after removing the user
+            }
+        } 
         userRepository.delete(user);
         return user;
     }

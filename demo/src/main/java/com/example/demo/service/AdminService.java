@@ -56,6 +56,15 @@ public class AdminService {
         return userRepository.save(u);
     }
 
+    public User whitelistUser(String id) {
+        User u = this.userRepository.findById(id).orElse(null);
+        if (u == null) {
+            return null;
+        }
+        u.setLocked(false);
+        return userRepository.save(u);
+    }
+
 
     public User deleteUser(String id){
         User user = userRepository.findById(id).orElse(null);

@@ -1,13 +1,6 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -45,7 +38,7 @@ public class Event {
     private String organisation;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "eventsPart")
+    @ManyToMany(mappedBy = "eventsPart", cascade={CascadeType.PERSIST, CascadeType.DETACH})
     private List<User> participants;
 
     @Column(name = "event_over")
@@ -186,6 +179,14 @@ public class Event {
 
     public void setCurrentManpowerCount(int currentManpowerCount) {
         this.currentManpowerCount = currentManpowerCount;
+    }
+
+    public void incCurrentManpowerCount() {
+        this.currentManpowerCount+=1;
+    }
+
+    public void decCurrentManpowerCount() {
+        this.currentManpowerCount-=1;
     }
 
     // public boolean addParticipant(User u) {

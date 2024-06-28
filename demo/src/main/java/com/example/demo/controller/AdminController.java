@@ -84,6 +84,20 @@ public class AdminController {
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/whitelist/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseDTO> whitelistUser(@PathVariable String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
+        User u = adminService.whitelistUser(id);
+        if (u != null) {
+            res = new ResponseDTO("operation successful", 200);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseDTO> deleteUser(@PathVariable String id) {

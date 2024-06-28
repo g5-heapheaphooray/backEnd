@@ -4,6 +4,7 @@ import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.dto.EventsListDTO;
 import com.example.demo.dto.RegisterForEventDTO;
 import com.example.demo.dto.ResponseDTO;
+import com.example.demo.dto.VolListDTO;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.User;
 import com.example.demo.model.Volunteer;
@@ -121,5 +122,39 @@ public class EventController {
             return new ResponseEntity<>(res, HttpStatus.OK);
         }
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+    }
+    
+    @GetMapping("/{eventId}/participants")
+    @PreAuthorize("hasRole('ORGANISATION')")
+    public ResponseEntity<VolListDTO> eventPartipants(@PathVariable String eventId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Event e = eventService.getEvent(eventId);
+        if (e == null || !e.getOrganisation().equals(user.getEmail())) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        List<Volunteer> participants = eventService.getEventParticipants(eventId);
+        VolListDTO res = new VolListDTO(participants);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/{eventId}/participants/attendance")
+    @PreAuthorize("hasRole('ORGANISATION')")
+    public ResponseEntity<VolListDTO> getEventAttendance(@PathVariable String eventId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        List<Volunteer> participants = eventService.getEventParticipants(eventId);
+        VolListDTO res = new VolListDTO(participants);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/{eventId}/participants/attendance")
+    @PreAuthorize("hasRole('ORGANISATION')")
+    public ResponseEntity<VolListDTO> setEventAttendance(@PathVariable String eventId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        List<Volunteer> participants = eventService.getEventParticipants(eventId);
+        VolListDTO res = new VolListDTO(participants);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

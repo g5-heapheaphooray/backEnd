@@ -117,9 +117,15 @@ public class UserController {
 //        return new ResponseEntity<>(user, HttpStatus.OK);
 //    }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAnyRole('VOLUNTEER', 'ORGANISATION')")
     public ResponseEntity<User> deleteUser(@RequestBody AuthenticationDTO authenticationDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userAuth = (User) authentication.getPrincipal();
         User user = userService.deleteUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
+        if (userAuth == null || user == null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
