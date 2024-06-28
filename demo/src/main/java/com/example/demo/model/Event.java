@@ -62,7 +62,7 @@ public class Event {
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation, int neededManpowerCount, String location, String description, String type){
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation, int neededManpowerCount, String location, String description, String type, String causes){
         this.id = String.format("%s-%s", organisation, name);
         this.name = name;
         this.date = date;

@@ -36,6 +36,9 @@ public class User implements UserDetails {
     @Column(name = "contact_no")
     private String contactNo;
 
+    @Column(name = "pfp")
+    private Media pfp;
+
 
     @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.DETACH})
 //    https://stackoverflow.com/questions/43235303/how-to-delete-a-row-in-join-table-with-jpa
@@ -92,6 +95,7 @@ public class User implements UserDetails {
         this.eventsPart = eventsPart;
         this.eventsOrg = eventsOrg;
         this.role = role;
+        this.pfp = new Media("default.png", "./media/pfp/default.png");
     }
 
 
@@ -209,4 +213,14 @@ public class User implements UserDetails {
         System.out.println(getEventsOrg());
         return true;
     }
+
+    public Media getPfp() {
+        return pfp;
+    }
+
+    public void setPfp(Media pfp) {
+        this.pfp = pfp;
+    }
+
+    
 }
