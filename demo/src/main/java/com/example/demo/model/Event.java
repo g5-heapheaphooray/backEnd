@@ -86,7 +86,7 @@ public class Event {
     }
 
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes){
-        this.id = String.format("%s-%s", organisation, name);
+        this.id = String.format("%s-%s", organisation.getEmail(), name);
         this.name = name;
         this.date = date;
         this.startTime = startTime;
