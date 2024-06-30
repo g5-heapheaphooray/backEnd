@@ -34,8 +34,12 @@ public class Event {
     @JsonFormat(pattern="HH:mm")
     private LocalTime endTime;
 
-    @Column(name = "organisation_id")
-    private String organisation;
+//    @Column(name = "organisation_id")
+//    private String organisation;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+    @JoinColumn(name="organisation_id", nullable=false)
+    private Organisation organisation;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "eventsPart", cascade={CascadeType.PERSIST, CascadeType.DETACH})
@@ -59,6 +63,10 @@ public class Event {
     @Column(name = "address")
     private String address;
 
+//    @Column(name = "photos")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    private List<EventMedia> photos;
+
     @ElementCollection
     @CollectionTable(
             name="event_skills",
@@ -77,7 +85,7 @@ public class Event {
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes){
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes){
         this.id = String.format("%s-%s", organisation, name);
         this.name = name;
         this.date = date;
@@ -134,11 +142,11 @@ public class Event {
         this.endTime = endTime;
     }
 
-    public String getOrganisation() {
+    public Organisation getOrganisation() {
         return organisation;
     }
 
-    public void setOrganisation(String organisation) {
+    public void setOrganisation(Organisation organisation) {
         this.organisation = organisation;
     }
 

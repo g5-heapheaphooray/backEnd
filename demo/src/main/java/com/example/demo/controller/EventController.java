@@ -51,8 +51,8 @@ public class EventController {
         System.out.println("name" + dto.getName());
         ResponseDTO res = new ResponseDTO("event creation unsucessful", 400);
         if (user instanceof Organisation) {
-//            Organisation o = (Organisation) user;
-            Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
+            Organisation o = (Organisation) user;
+            Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
             System.out.println(e.getName());
             Event newEvent = eventService.createEvent(e, user);
             if (newEvent != null) {
@@ -79,7 +79,7 @@ public class EventController {
     @GetMapping("/{orgId}")
     public ResponseEntity<EventsListDTO> orgEvents(@PathVariable String orgId) {
         Organisation o = organisationService.getOrg(orgId);
-        List<Event> events = eventService.getOrgEvents(orgId);
+        List<Event> events = eventService.getOrgEvents(o);
         EventsListDTO res = new EventsListDTO(events);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -130,7 +130,7 @@ public class EventController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event e = eventService.getEvent(eventId);
-        if (e == null || !e.getOrganisation().equals(user.getEmail())) {
+        if (e == null || !e.getOrganisation().equals((Organisation) user)) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         List<Volunteer> participants = eventService.getEventParticipants(eventId);

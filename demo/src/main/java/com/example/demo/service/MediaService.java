@@ -1,18 +1,19 @@
 package com.example.demo.service;
 
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.CreateRewardDTO;
-import com.example.demo.model.Media;
-import com.example.demo.model.Reward;
-import com.example.demo.model.User;
+import com.example.demo.model.*;
 import com.example.demo.repository.MediaRepository;
 import com.example.demo.repository.RewardRepository;
 import com.example.demo.repository.UserRepository;
@@ -22,7 +23,7 @@ public class MediaService {
     
     private final MediaRepository mediaRepository;
     private final UserRepository userRepository;
-    private final rootUploadDirectory = "./media/";
+    private final String rootUploadDirectory = "./media/";
 
     @Autowired
     public MediaService(MediaRepository mediaRepository, UserRepository userRepository) {
@@ -30,17 +31,23 @@ public class MediaService {
         this.userRepository = userRepository;
     }
 
-    public Media savePfpImage(MultipartFile multipartImage, User user) {
-        Media m = new Media();
-        m.setName(multipartImage.getName());
-        String filepath = saveImageToStorage("pfp", multipartImage);
-        if (filepath == null) {
-            return null
+    public PfpMedia savePfpImage(MultipartFile multipartImage, User user) {
+        PfpMedia pfp = new PfpMedia();
+        pfp.setFilename(multipartImage.getName());
+        pfp.setUser(user);
+        String filepath = null;
+        try {
+            filepath = saveImageToStorage("pfp", multipartImage);
+        } catch (Exception e) {
+            return null;
         }
-        m.setFilepath(filepath);
-        user.setPfp(m);
+        if (filepath == null) {
+            return null;
+        }
+        pfp.setFilepath(filepath);
+        user.setPfp(pfp);
         userRepository.save(user); 
-        return mediaRepository.save(m);
+        return mediaRepository.save(pfp);
     }
 
     public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile) throws IOException {
@@ -59,7 +66,7 @@ public class MediaService {
     }
 
     // To view an image
-    public byte[] getImage(String filepath) throws IOException {
+    public byte[] getMedia(String filepath) throws IOException {
         Path imagePath = Path.of(filepath);
 
         if (Files.exists(imagePath)) {
@@ -71,7 +78,7 @@ public class MediaService {
     }
 
     // Delete an image
-    public String deleteImage(String imageDirectory, String imageName) throws IOException {
+    public String deleteMedia(String imageDirectory, String imageName) throws IOException {
         Path imagePath = Path.of(imageDirectory, imageName);
 
         if (Files.exists(imagePath)) {

@@ -58,7 +58,8 @@ public class OrganisationController {
 
     @GetMapping("/events/{orgId}")
     public ResponseEntity<EventsListDTO> orgEvents(@PathVariable String orgId) {
-        List<Event> events = eventService.getOrgEvents(orgId);
+        Organisation o = organisationService.getOrg(orgId);
+        List<Event> events = eventService.getOrgEvents(o);
         EventsListDTO res = new EventsListDTO(events);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

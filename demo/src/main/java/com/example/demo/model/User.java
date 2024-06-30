@@ -36,9 +36,9 @@ public class User implements UserDetails {
     @Column(name = "contact_no")
     private String contactNo;
 
-    @Column(name = "pfp")
-    private Media pfp;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "media_id", referencedColumnName = "id")
+    private PfpMedia pfp;
 
     @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.DETACH})
 //    https://stackoverflow.com/questions/43235303/how-to-delete-a-row-in-join-table-with-jpa
@@ -61,12 +61,12 @@ public class User implements UserDetails {
 //    @ManyToMany
 //    @JoinTable(
 //            name = "events_org",
-//            joinColumns = @JoinColumn(name = "user_email"),
+//            joinColumns = @JoinColumn(name = "user_id"),
 //            inverseJoinColumns = @JoinColumn(name = "event_id"))
 //    private List<Event> eventsOrg;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "organisation")
+//    @JoinColumn(name = "user_id")
     private List<Event> eventsOrg;
 
     @CreationTimestamp
@@ -95,7 +95,7 @@ public class User implements UserDetails {
         this.eventsPart = eventsPart;
         this.eventsOrg = eventsOrg;
         this.role = role;
-        this.pfp = new Media("default.png", "./media/pfp/default.png");
+        this.pfp = new PfpMedia("default.png", "./media/pfp/default.png", this);
     }
 
 
@@ -214,11 +214,11 @@ public class User implements UserDetails {
         return true;
     }
 
-    public Media getPfp() {
+    public PfpMedia getPfp() {
         return pfp;
     }
 
-    public void setPfp(Media pfp) {
+    public void setPfp(PfpMedia pfp) {
         this.pfp = pfp;
     }
 

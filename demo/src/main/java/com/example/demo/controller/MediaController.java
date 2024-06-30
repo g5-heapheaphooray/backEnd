@@ -34,7 +34,7 @@ class MediaController {
     public ResponseEntity<ResponseDTO> uploadPfp(@RequestParam MultipartFile multipartImage) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Media m = mediaService.saveImage(multipartImage, user);
+        Media m = mediaService.savePfpImage(multipartImage, user);
         if (m == null) {
             return new ResponseEntity<>(new ResponseDTO("Image upload failed", 400), HttpStatus.BAD_REQUEST);
         }
@@ -46,7 +46,12 @@ class MediaController {
     public ResponseEntity<byte[]> getPfp() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        byte[] data = mediaService.getPfp(user.getPfp().getFilepath());
+        byte[] data = null;
+        try {
+            data = mediaService.getMedia(user.getPfp().getFilepath());
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         if (data == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

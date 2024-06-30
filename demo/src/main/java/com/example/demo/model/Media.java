@@ -2,7 +2,9 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
-@Entity
+//@Entity
+//@Table(name = "media")
+@MappedSuperclass
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +15,7 @@ public class Media {
 
     @Column(name = "filepath")
     private String filepath;
+
 
     public Media() {
     }
