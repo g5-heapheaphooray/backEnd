@@ -85,7 +85,7 @@ public class Event {
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes){
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes, List<EventMedia> photos){
         this.id = String.format("%s-%s", organisation.getEmail(), name);
         this.name = name;
         this.date = date;
@@ -100,6 +100,7 @@ public class Event {
         this.participants = new ArrayList<>();
         this.skills = skills;
         this.causes = causes;
+        this.photos = photos;
     }
 
     public String getId() {
@@ -230,5 +231,13 @@ public class Event {
 
     public void setCauses(List<String> causes) {
         this.causes = causes;
-    }  
+    }
+
+    public List<EventMedia> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<EventMedia> photos) {
+        this.photos = photos;
+    }
 }

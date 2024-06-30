@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +33,8 @@ public class MediaService {
     }
 
     public PfpMedia savePfpImage(MultipartFile multipartImage, User user) {
+        Path currentRelativePath = Paths.get("");
+        System.out.println(currentRelativePath.toAbsolutePath().toString());
         PfpMedia pfp = new PfpMedia();
         pfp.setFilename(multipartImage.getName());
         pfp.setUser(user);
@@ -67,6 +70,8 @@ public class MediaService {
 
     // To view an image
     public byte[] getMedia(String filepath) throws IOException {
+        Path currentRelativePath = Paths.get("");
+        System.out.println(currentRelativePath.toAbsolutePath().toString());
         Path imagePath = Path.of(filepath);
 
         if (Files.exists(imagePath)) {

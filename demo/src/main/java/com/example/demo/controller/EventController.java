@@ -52,7 +52,8 @@ public class EventController {
         ResponseDTO res = new ResponseDTO("event creation unsucessful", 400);
         if (user instanceof Organisation) {
             Organisation o = (Organisation) user;
-            Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
+            Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(),
+                    dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses(), null);
             System.out.println(e.getName());
             Event newEvent = eventService.createEvent(e, user);
             if (newEvent != null) {

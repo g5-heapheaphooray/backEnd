@@ -29,7 +29,7 @@ class MediaController {
         this.mediaService = mediaService;
     }
 
-    @PostMapping("/upload/pfp")
+    @PostMapping("/pfp/upload")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResponseDTO> uploadPfp(@RequestParam MultipartFile multipartImage) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,19 +41,20 @@ class MediaController {
         return new ResponseEntity<>(new ResponseDTO("Image uploaded successfully", 200), HttpStatus.OK);
     }
 
-    @GetMapping("/get/pfp")
+    @GetMapping("/pfp/get")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<byte[]> getPfp() {
+    public ResponseEntity<Object> getPfp() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         byte[] data = null;
         try {
+            System.out.println(user.getPfp().getFilepath());
             data = mediaService.getMedia(user.getPfp().getFilepath());
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("idk", HttpStatus.NOT_FOUND);
         }
         if (data == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("idk2", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
