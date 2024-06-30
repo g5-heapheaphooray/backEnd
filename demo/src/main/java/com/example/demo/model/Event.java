@@ -41,9 +41,6 @@ public class Event {
     @ManyToMany(mappedBy = "eventsPart", cascade={CascadeType.PERSIST, CascadeType.DETACH})
     private List<User> participants;
 
-    @Column(name = "event_over")
-    private boolean eventOver;
-
     @Column(name = "needed_manpower_count")
     private int neededManpowerCount;
 
@@ -59,10 +56,28 @@ public class Event {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "address")
+    private String address;
+
+    @ElementCollection
+    @CollectionTable(
+            name="event_skills",
+            joinColumns=@JoinColumn(name="event_id")
+    )
+    private List<String> skills;  
+
+    @ElementCollection
+    @CollectionTable(
+            name="event_causes",
+            joinColumns=@JoinColumn(name="event_id")
+    )
+    private List<String> causes;  
+
+
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation, int neededManpowerCount, String location, String description, String type, String causes){
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes){
         this.id = String.format("%s-%s", organisation, name);
         this.name = name;
         this.date = date;
@@ -72,9 +87,11 @@ public class Event {
         this.neededManpowerCount = neededManpowerCount;
         this.description = description;
         this.type = type;
-        this.eventOver = false;
         this.location = location;
+        this.address = address;
         this.participants = new ArrayList<>();
+        this.skills = skills;
+        this.causes = causes;
     }
 
     public String getId() {
@@ -133,14 +150,6 @@ public class Event {
         this.participants = participants;
     }
 
-    public boolean isEventOver() {
-        return eventOver;
-    }
-
-    public void setEventOver(boolean eventOver) {
-        this.eventOver = eventOver;
-    }
-
     public int getNeededManpowerCount() {
         return neededManpowerCount;
     }
@@ -173,6 +182,14 @@ public class Event {
         this.type = type;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public int getCurrentManpowerCount() {
         return currentManpowerCount;
     }
@@ -191,12 +208,19 @@ public class Event {
         this.currentManpowerCount-=1;
     }
 
-    // public boolean addParticipant(User u) {
-    //     if (getCurrentManpowerCount() < getNeededManpowerCount()) {
-    //         participants.add(u);
-    //         setCurrentManpowerCount(participants.size());
-    //         return true;
-    //     }
-    //     return false;
-    // }
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
+
+    public List<String> getCauses() {
+        return causes;
+    }
+
+    public void setCauses(List<String> causes) {
+        this.causes = causes;
+    }  
 }

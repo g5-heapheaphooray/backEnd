@@ -42,6 +42,9 @@ public class EventService {
         currentEvent.setLocation(dto.getLocation());
         currentEvent.setDescription(dto.getDescription());
         currentEvent.setType(dto.getType());
+        currentEvent.setAddress(dto.getAddress());
+        currentEvent.setSkills(dto.getSkills());
+        currentEvent.setCauses(dto.getCauses());
 
         return eventRepository.save(currentEvent);
     }

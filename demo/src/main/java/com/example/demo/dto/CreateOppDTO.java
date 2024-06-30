@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public class CreateOppDTO {
     private String name;
@@ -22,8 +23,11 @@ public class CreateOppDTO {
     private String location;
     private String description;
     private String type;
+    private String address;
+    private List<String> skills;
+    private List<String> causes;
 
-    public CreateOppDTO(String name, LocalDate date, LocalTime startTime, LocalTime endTime, int manpowerCount, String location, String description, String type) {
+    public CreateOppDTO(String name, LocalDate date, LocalTime startTime, LocalTime endTime, int manpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes) {
         this.name = name;
         this.date = date;
         this.startTime = startTime;
@@ -33,6 +37,9 @@ public class CreateOppDTO {
         this.location = location;
         this.description = description;
         this.type = type;
+        this.address = address;
+        this.skills = skills;
+        this.causes = causes;
     }
 
     public String getName() {
@@ -99,17 +106,27 @@ public class CreateOppDTO {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "CreateOppDTO{" +
-                "name='" + name + '\'' +
-                ", date=" + date +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", manpowerCount=" + manpowerCount +
-                ", location='" + location + '\'' +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                '}';
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
+
+    public List<String> getCauses() {
+        return causes;
+    }   
+
+    public void setCauses(List<String> causes) {
+        this.causes = causes;
     }
 }
