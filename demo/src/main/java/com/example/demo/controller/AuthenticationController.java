@@ -86,10 +86,23 @@ public class AuthenticationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/forget-password")
-    public ResponseEntity<User> forgetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
-        User user = userService.updatePassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getOldPassword(), resetPasswordDTO.getNewPassword());
-        return new ResponseEntity<>(user, HttpStatus.OK);
+//    @PostMapping("/forget-password")
+//    public ResponseEntity<User> forgetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+//        User user = userService.updatePassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getOldPassword(), resetPasswordDTO.getNewPassword());
+//        return new ResponseEntity<>(user, HttpStatus.OK);
+//    }
+
+    @GetMapping("/forget-password/{email}")
+    public ResponseEntity<String> forgetPassword(@PathVariable String email) {
+        System.out.println(email);
+        String res = userService.forgetPassword(email);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/reset-password/{token}")
+    public ResponseEntity<String> resetPassword(@PathVariable String token, @RequestBody ResetPasswordDTO resetPasswordDTO) {
+        String res = userService.resetPassword(token, resetPasswordDTO.getNewPassword());
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 

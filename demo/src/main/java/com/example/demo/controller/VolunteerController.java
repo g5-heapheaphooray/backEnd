@@ -2,7 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.EventsListDTO;
 import com.example.demo.dto.ResponseDTO;
+import com.example.demo.dto.models.CleanEventDTO;
 import com.example.demo.model.*;
+import com.example.demo.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.service.VolunteerService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +25,12 @@ import java.util.Map;
 public class VolunteerController {
 
     private final VolunteerService volunteerService;
+    private final EventService eventService;
 
     @Autowired
-    public VolunteerController(VolunteerService volunteerService) {
+    public VolunteerController(VolunteerService volunteerService, EventService eventService) {
         this.volunteerService = volunteerService;
+        this.eventService = eventService;
     }
 
 //    @GetMapping("/find/{email}")
@@ -45,8 +50,12 @@ public class VolunteerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         List<Event> events = volunteerService.getRegisteredEvents(user.getEmail());
-        EventsListDTO e = new EventsListDTO(events);
-        return new ResponseEntity<>(e, HttpStatus.OK);
+        List<CleanEventDTO> cleanEvents = new ArrayList<>();
+        for (Event e : events) {
+            cleanEvents.add(eventService.getCleanEvent(e));
+        }
+        EventsListDTO res = new EventsListDTO(cleanEvents);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PutMapping("/updateDetails")

@@ -64,14 +64,17 @@ class MediaController {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/event-photos/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResponseDTO> uploadEventPhotos(@RequestParam("eventPhotos") MultipartFile[] multipartImage, @RequestParam("eventId") String eventId) throws Exception {
+    @PostMapping(value = "/event-photos/upload/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ORGANISATION')")
+    public ResponseEntity<ResponseDTO> uploadEventPhotos(@RequestParam("eventPhotos") MultipartFile[] multipartImage, @PathVariable String eventId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Event e = eventService.getEvent(eventId);
+        Event event = eventService.getEvent(eventId);
+        if (!event.getOrganisation().getEmail().equals(user.getEmail())) {
+            return new ResponseEntity<>(new ResponseDTO("Unauthorised", 400), HttpStatus.UNAUTHORIZED);
+        }
         for (MultipartFile img : multipartImage) {
-            EventMedia m = mediaService.saveEventImages(img, e);
+            EventMedia m = mediaService.saveEventImages(img, event);
             if (m == null) {
                 return new ResponseEntity<>(new ResponseDTO("Image upload failed", 400), HttpStatus.BAD_REQUEST);
             }
@@ -80,11 +83,14 @@ class MediaController {
     }
 
     @GetMapping("/event-photos/get/{eventId}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ORGANISATION')")
     public ResponseEntity<Object> uploadEventPhotos(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event event = eventService.getEvent(eventId);
+        if (!event.getOrganisation().getEmail().equals(user.getEmail())) {
+            return new ResponseEntity<>(new ResponseDTO("Unauthorised", 400), HttpStatus.UNAUTHORIZED);
+        }
         List<EventMedia> ems = event.getPhotos();
         List<byte[]> res = new ArrayList<>();
         for (EventMedia em : ems) {

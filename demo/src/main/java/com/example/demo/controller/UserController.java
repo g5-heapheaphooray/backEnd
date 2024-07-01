@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.Volunteer;
-import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -106,16 +105,10 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<User> changePassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
-        User user = userService.updatePassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getOldPassword(), resetPasswordDTO.getNewPassword());
+    public ResponseEntity<User> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        User user = userService.updatePassword(changePasswordDTO.getEmail(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-
-//    @PostMapping("/forget-password")
-//    public ResponseEntity<User> forgetPassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
-//        User user = userService.updatePassword(resetPasswordDTO.getEmail(), resetPasswordDTO.getOldPassword(), resetPasswordDTO.getNewPassword());
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
 
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyRole('VOLUNTEER', 'ORGANISATION')")
@@ -128,6 +121,7 @@ public class UserController {
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
 
     // @PostMapping("/{eventId}/register-event")
     // public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId, @RequestBody JwtDTO jwtDTO) {

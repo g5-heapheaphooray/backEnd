@@ -84,6 +84,12 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
 
+    @Column(name = "verification_token")
+    private String verificationToken;
+
+    @Column(name = "verificiation_token_creation")
+    private Date verificationTokenCreatedAt;
+
     public User(){
     }
 
@@ -222,5 +228,28 @@ public class User implements UserDetails {
         this.pfp = pfp;
     }
 
-    
+    public String getVerificationToken() {
+        return verificationToken;
+    }
+
+    public void setVerificationToken(String verificationToken) {
+        this.verificationToken = verificationToken;
+        setVerificationTokenCreatedAt(new Date());
+    }
+
+    public Date getVerificationTokenCreatedAt() {
+        return verificationTokenCreatedAt;
+    }
+
+    public void setVerificationTokenCreatedAt(Date verificationTokenCreatedAt) {
+        this.verificationTokenCreatedAt = verificationTokenCreatedAt;
+    }
+
+    public boolean tokenStillValid() {
+        Date now = new Date();
+        if ((now.getTime() - this.verificationTokenCreatedAt.getTime()) >= 15*60*1000) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.models.CleanEventDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import com.example.demo.service.EventService;
 import com.example.demo.dto.OrgListDTO;
 import com.example.demo.dto.EventsListDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +62,11 @@ public class OrganisationController {
     public ResponseEntity<EventsListDTO> orgEvents(@PathVariable String orgId) {
         Organisation o = organisationService.getOrg(orgId);
         List<Event> events = eventService.getOrgEvents(o);
-        EventsListDTO res = new EventsListDTO(events);
+        List<CleanEventDTO> cleanEvents = new ArrayList<>();
+        for (Event e : events) {
+            cleanEvents.add(eventService.getCleanEvent(e));
+        }
+        EventsListDTO res = new EventsListDTO(cleanEvents);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

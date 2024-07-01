@@ -1,15 +1,13 @@
 package com.example.demo.service;
 
-import com.example.demo.model.User;
-import com.example.demo.model.Volunteer;
-import com.example.demo.model.Organisation;
+import com.example.demo.dto.models.CleanEventDTO;
+import com.example.demo.model.*;
 import com.example.demo.repository.UserRepository;
 // import com.example.demo.repository.OrganisationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.CreateOppDTO;
-import com.example.demo.model.Event;
 import com.example.demo.repository.EventRepository;
 
 import java.time.LocalDate;
@@ -62,6 +60,12 @@ public class EventService {
 
     public Event getEvent(String eventId) {
         return eventRepository.findById(eventId).orElse(null);
+    }
+
+    public CleanEventDTO getCleanEvent(Event e) {
+        CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(), e.getOrganisation().getEmail(),
+                e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(), e.getType(), e.getAddress(), e.getPhotos(), e.getSkills(), e.getCauses());
+        return clean;
     }
 
     public Event deleteEvent(String eventId) {

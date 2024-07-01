@@ -5,6 +5,7 @@ import com.example.demo.dto.EventsListDTO;
 import com.example.demo.dto.RegisterForEventDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.VolListDTO;
+import com.example.demo.dto.models.CleanEventDTO;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.User;
 import com.example.demo.model.Volunteer;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.Event;
 import com.example.demo.service.EventService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,7 +75,11 @@ public class EventController {
     @GetMapping("/all")
     public ResponseEntity<EventsListDTO> allEvents() {
         List<Event> events = eventService.getAllEvents();
-        EventsListDTO res = new EventsListDTO(events);
+        List<CleanEventDTO> cleanEvents = new ArrayList<>();
+        for (Event e : events) {
+            cleanEvents.add(eventService.getCleanEvent(e));
+        }
+        EventsListDTO res = new EventsListDTO(cleanEvents);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -81,18 +87,23 @@ public class EventController {
     public ResponseEntity<EventsListDTO> orgEvents(@PathVariable String orgId) {
         Organisation o = organisationService.getOrg(orgId);
         List<Event> events = eventService.getOrgEvents(o);
-        EventsListDTO res = new EventsListDTO(events);
+        List<CleanEventDTO> cleanEvents = new ArrayList<>();
+        for (Event e : events) {
+            cleanEvents.add(eventService.getCleanEvent(e));
+        }
+        EventsListDTO res = new EventsListDTO(cleanEvents);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/get/{eventId}")
     @PreAuthorize("hasAnyRole('ORGANISATION', 'VOLUNTEER')")
-    public ResponseEntity<Event> getEvent(@PathVariable String eventId) {
+    public ResponseEntity<CleanEventDTO> getEvent(@PathVariable String eventId) {
         Event event = eventService.getEvent(eventId);
         if (event == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(event, HttpStatus.OK);
+        CleanEventDTO res = eventService.getCleanEvent(event);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PutMapping("/update/{eventId}")

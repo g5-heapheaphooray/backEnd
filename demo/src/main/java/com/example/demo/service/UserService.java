@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,10 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final EventService eventService;
     private final VolunteerRepository volunteerRepository;
+    private final MailService mailService;
 
     @Autowired
-    public UserService(UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, EventService eventService) {
+    public UserService(UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, EventService eventService, MailService mailService) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
         this.volunteerRepository = volunteerRepository;
@@ -45,6 +47,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.eventService = eventService;
+        this.mailService = mailService;
     }
 
     public User createVolunteer(RegisterVolunteerDTO v) {
@@ -152,6 +155,31 @@ public class UserService {
         } 
         userRepository.delete(user);
         return user;
+    }
+
+    public String forgetPassword(String email) {
+        User user = userRepository.findById(email).orElse(null);
+        if (user == null) {
+            return "User not found";
+        }
+        String token = UUID.randomUUID().toString();
+        user.setVerificationToken(token);
+        userRepository.save(user);
+        String content = "http://localhost:8080/api/v1/auth/reset-password/"+token;
+        mailService.sendMail(email, "Reset Password", content);
+        return "Email sent";
+    }
+
+    public String resetPassword(String token, String newPassword) {
+        User user = userRepository.findByVerificationToken(token);
+        if (user == null) {
+            return "User not found";
+        } else if (!user.tokenStillValid()) {
+            return "Expired token";
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return "Password changed";
     }
 
 
