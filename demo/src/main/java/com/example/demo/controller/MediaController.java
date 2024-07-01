@@ -10,6 +10,7 @@ import com.example.demo.service.RewardService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/v1/media")
+@RequestMapping(value="/api/v1/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 class MediaController {
     private final MediaService mediaService;
 
@@ -31,9 +32,10 @@ class MediaController {
 
     @PostMapping("/pfp/upload")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResponseDTO> uploadPfp(@RequestParam MultipartFile multipartImage) throws Exception {
+    public ResponseEntity<ResponseDTO> uploadPfp(@RequestParam("file") MultipartFile multipartImage) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+        System.out.println(multipartImage.getOriginalFilename());
         Media m = mediaService.savePfpImage(multipartImage, user);
         if (m == null) {
             return new ResponseEntity<>(new ResponseDTO("Image upload failed", 400), HttpStatus.BAD_REQUEST);

@@ -33,14 +33,15 @@ public class MediaService {
     }
 
     public PfpMedia savePfpImage(MultipartFile multipartImage, User user) {
-        Path currentRelativePath = Paths.get("");
-        System.out.println(currentRelativePath.toAbsolutePath().toString());
+//        Path currentRelativePath = Paths.get("");
+//        System.out.println(currentRelativePath.toAbsolutePath().toString());
         PfpMedia pfp = new PfpMedia();
-        pfp.setFilename(multipartImage.getName());
+        String filename = "PFP-" + user.getEmail() + ".png";
+        pfp.setFilename(filename);
         pfp.setUser(user);
         String filepath = null;
         try {
-            filepath = saveImageToStorage("pfp", multipartImage);
+            filepath = saveImageToStorage("pfp", multipartImage, filename);
         } catch (Exception e) {
             return null;
         }
@@ -53,8 +54,8 @@ public class MediaService {
         return mediaRepository.save(pfp);
     }
 
-    public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile) throws IOException {
-        String uniqueFileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+    public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile, String filename) throws IOException {
+        String uniqueFileName = UUID.randomUUID().toString() + "_" + filename;
 
         Path uploadPath = Path.of(rootUploadDirectory + uploadDirectory);
         Path filePath = uploadPath.resolve(uniqueFileName);
