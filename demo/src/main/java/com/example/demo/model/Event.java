@@ -37,7 +37,7 @@ public class Event {
 //    @Column(name = "organisation_id")
 //    private String organisation;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="organisation_id", nullable=false)
     private Organisation organisation;
 

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "event_media")
 public class EventMedia extends Media {
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 

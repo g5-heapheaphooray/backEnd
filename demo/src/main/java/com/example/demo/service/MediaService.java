@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,14 @@ public class MediaService {
     
     private final MediaRepository mediaRepository;
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
     private final String rootUploadDirectory = "./media/";
 
     @Autowired
-    public MediaService(MediaRepository mediaRepository, UserRepository userRepository) {
+    public MediaService(MediaRepository mediaRepository, UserRepository userRepository, EventRepository eventRepository) {
         this.mediaRepository = mediaRepository;
         this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
     }
 
     public PfpMedia savePfpImage(MultipartFile multipartImage, User user) {
@@ -49,9 +52,50 @@ public class MediaService {
             return null;
         }
         pfp.setFilepath(filepath);
-        user.setPfp(pfp);
-        userRepository.save(user); 
-        return mediaRepository.save(pfp);
+        if (!user.getPfp().getFilename().equals("default.png")) {
+            try {
+                deleteMedia(user.getPfp());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+        try {
+            PfpMedia oldpfp = user.getPfp();
+            mediaRepository.save(pfp);
+            user.setPfp(pfp);
+            userRepository.save(user);
+            mediaRepository.delete(oldpfp);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return pfp;
+    }
+
+    public EventMedia saveEventImages(MultipartFile multipartImage, Event event) {
+//        Path currentRelativePath = Paths.get("");
+//        System.out.println(currentRelativePath.toAbsolutePath().toString());
+        EventMedia em = new EventMedia();
+        String filename = "EM-" + event.getId() + ".png";
+        em.setFilename(filename);
+        em.setEvent(event);
+        String filepath = null;
+        try {
+            filepath = saveImageToStorage("event-photos", multipartImage, filename);
+        } catch (Exception e) {
+            return null;
+        }
+        if (filepath == null) {
+            return null;
+        }
+        em.setFilepath(filepath);
+        List<EventMedia> ems = event.getPhotos();
+        ems.add(em);
+        event.setPhotos(ems);
+        eventRepository.save(event);
+        return mediaRepository.save(em);
     }
 
     public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile, String filename) throws IOException {
@@ -84,11 +128,12 @@ public class MediaService {
     }
 
     // Delete an image
-    public String deleteMedia(String imageDirectory, String imageName) throws IOException {
-        Path imagePath = Path.of(imageDirectory, imageName);
-
+    public String deleteMedia(Media m) throws IOException {
+        Path imagePath = Path.of(m.getFilepath());
+        System.out.println(imagePath);
         if (Files.exists(imagePath)) {
             Files.delete(imagePath);
+//            mediaRepository.delete(m);
             return "Success";
         } else {
             return "Failed"; // Handle missing images
