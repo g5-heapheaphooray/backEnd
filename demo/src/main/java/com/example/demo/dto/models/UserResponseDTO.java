@@ -1,5 +1,6 @@
-package com.example.demo.dto;
+package com.example.demo.dto.models;
 
+import com.example.demo.dto.ResponseDTO;
 import com.example.demo.model.User;
 import jakarta.persistence.Column;
 

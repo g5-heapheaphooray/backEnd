@@ -1,12 +1,15 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
+import com.example.demo.dto.models.CleanOrganisationDTO;
+import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.Admin;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.Volunteer;
 import com.example.demo.service.AdminService;
 import com.example.demo.service.OrganisationService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +59,12 @@ public class AdminController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         List<Volunteer> volunteers = adminService.getAllVolunteers();
-        VolListDTO res = new VolListDTO(volunteers);
+        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
+        for (Volunteer v : volunteers) {
+            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+            cleanVols.add(cv);
+        }
+        VolListDTO res = new VolListDTO(cleanVols);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -66,7 +74,12 @@ public class AdminController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         List<Organisation> orgs = organisationService.getAllOrg();
-        OrgListDTO res = new OrgListDTO(orgs);
+        List<CleanOrganisationDTO> cleanOrgs = new ArrayList<>();
+        for (Organisation o : orgs) {
+            CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+            cleanOrgs.add(co);
+        }
+        OrgListDTO res = new OrgListDTO(cleanOrgs);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

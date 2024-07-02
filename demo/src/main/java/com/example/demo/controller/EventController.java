@@ -6,6 +6,7 @@ import com.example.demo.dto.RegisterForEventDTO;
 import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.VolListDTO;
 import com.example.demo.dto.models.CleanEventDTO;
+import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.User;
 import com.example.demo.model.Volunteer;
@@ -146,7 +147,12 @@ public class EventController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         List<Volunteer> participants = eventService.getEventParticipants(eventId);
-        VolListDTO res = new VolListDTO(participants);
+        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
+        for (Volunteer v : participants) {
+            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+            cleanVols.add(cv);
+        }
+        VolListDTO res = new VolListDTO(cleanVols);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -156,7 +162,12 @@ public class EventController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         List<Volunteer> participants = eventService.getEventParticipants(eventId);
-        VolListDTO res = new VolListDTO(participants);
+        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
+        for (Volunteer v : participants) {
+            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+            cleanVols.add(cv);
+        }
+        VolListDTO res = new VolListDTO(cleanVols);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -166,7 +177,12 @@ public class EventController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         List<Volunteer> participants = eventService.getEventParticipants(eventId);
-        VolListDTO res = new VolListDTO(participants);
+        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
+        for (Volunteer v : participants) {
+            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+            cleanVols.add(cv);
+        }
+        VolListDTO res = new VolListDTO(cleanVols);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

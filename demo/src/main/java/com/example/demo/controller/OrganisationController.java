@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.models.CleanEventDTO;
+import com.example.demo.dto.models.CleanOrganisationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,21 +41,28 @@ public class OrganisationController {
 
     @PutMapping("/updateDetails")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<Organisation> updateVolunteer(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<CleanOrganisationDTO> updateVolunteer(@RequestBody Map<String, String> payload) {
         Organisation o = organisationService.updateDetails(payload.get("email"), payload);
-        return new ResponseEntity<>(o, HttpStatus.OK);
+        CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+        return new ResponseEntity<>(co, HttpStatus.OK);
     }
 
     @GetMapping("/get/{orgId}")
-    public ResponseEntity<Organisation> getOrg(@PathVariable String orgId) {
-        Organisation u = organisationService.getOrg(orgId);
-        return  new ResponseEntity<>(u, HttpStatus.OK);
+    public ResponseEntity<CleanOrganisationDTO> getOrg(@PathVariable String orgId) {
+        Organisation o = organisationService.getOrg(orgId);
+        CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+        return  new ResponseEntity<>(co, HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<OrgListDTO> getAllOrg() {
         List<Organisation> orgs = organisationService.getAllOrg();
-        OrgListDTO res = new OrgListDTO(orgs);
+        List<CleanOrganisationDTO> cleanOrgs = new ArrayList<>();
+        for (Organisation o : orgs) {
+            CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+            cleanOrgs.add(co);
+        }
+        OrgListDTO res = new OrgListDTO(cleanOrgs);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

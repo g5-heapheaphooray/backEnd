@@ -1,8 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
+import com.example.demo.dto.models.CleanOrganisationDTO;
+import com.example.demo.dto.models.CleanVolunteerDTO;
+import com.example.demo.dto.models.UserResponseDTO;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.Volunteer;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,10 +80,19 @@ public class UserController {
 //    }
 
     @GetMapping("/{userid}")
-    public ResponseEntity<User> getUser(@PathVariable String userid) {
+    public ResponseEntity<Object> getUser(@PathVariable String userid) {
         User user = userService.getUser(userid);
-        System.out.println(user.getEventsPart());
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        Object res = null;
+        if (user instanceof Volunteer) {
+            Volunteer v = (Volunteer) user;
+            res = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+        } else if (user instanceof Organisation) {
+            Organisation o = (Organisation) user;
+            res = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+
+        }
+//        System.out.println(user.getEventsPart());
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
     
 
@@ -105,21 +118,39 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<User> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+    public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         User user = userService.updatePassword(changePasswordDTO.getEmail(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        Object res = null;
+        if (user instanceof Volunteer) {
+            Volunteer v = (Volunteer) user;
+            res = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+        } else if (user instanceof Organisation) {
+            Organisation o = (Organisation) user;
+            res = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     @PreAuthorize("hasAnyRole('VOLUNTEER', 'ORGANISATION')")
-    public ResponseEntity<User> deleteUser(@RequestBody AuthenticationDTO authenticationDTO) {
+    public ResponseEntity<Object> deleteUser(@RequestBody AuthenticationDTO authenticationDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userAuth = (User) authentication.getPrincipal();
         User user = userService.deleteUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
         if (userAuth == null || user == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        Object res = null;
+        if (user instanceof Volunteer) {
+            Volunteer v = (Volunteer) user;
+            res = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+        } else if (user instanceof Organisation) {
+            Organisation o = (Organisation) user;
+            res = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 
