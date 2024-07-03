@@ -3,15 +3,12 @@ package com.example.demo.dto;
 public class CreateRewardDTO {
     private String name;
     private int pointsNeeded;
-    private String barcodeSerialNo;
     private String type;
     private String description;
     
-    public CreateRewardDTO(String name, int pointsNeeded, String barcodeSerialNo, String type,
-            String description) {
+    public CreateRewardDTO(String name, int pointsNeeded, String type, String description) {
         this.name = name;
         this.pointsNeeded = pointsNeeded;
-        this.barcodeSerialNo = barcodeSerialNo;
         this.type = type;
         this.description = description;
     }
@@ -30,14 +27,6 @@ public class CreateRewardDTO {
 
     public void setPointsNeeded(int pointsNeeded) {
         this.pointsNeeded = pointsNeeded;
-    }
-
-    public String getBarcodeSerialNo() {
-        return barcodeSerialNo;
-    }
-
-    public void setBarcodeSerialNo(String barcodeSerialNo) {
-        this.barcodeSerialNo = barcodeSerialNo;
     }
 
     public String getType() {

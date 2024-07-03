@@ -5,20 +5,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import com.example.demo.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.dto.CreateRewardDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.MediaRepository;
-import com.example.demo.repository.RewardRepository;
 import com.example.demo.repository.UserRepository;
 
 @Service

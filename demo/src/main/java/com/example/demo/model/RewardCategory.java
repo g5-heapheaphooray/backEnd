@@ -1,28 +1,23 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "reward")
-public class Reward {
-    
+@Table(name = "reward_cat")
+public class RewardCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "points_needed")
     private int pointsNeeded;
-
-    @Column(name = "barcode_serial_no")
-    private String barcodeSerialNo;
 
     @Column(name = "type")
     private String type;
@@ -30,15 +25,22 @@ public class Reward {
     @Column(name = "description")
     private String description;
 
-    public Reward(){
+    @Column(name = "count")
+    private int count;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rewardCategory")
+    private Set<RewardBarcode> rewards;
+
+    public RewardCategory(){
     }
 
-    public Reward(String name, int pointsNeeded, String barcodeSerialNo, String type, String description){
+    public RewardCategory(String name, int pointsNeeded, String type, String description, int count){
         this.name = name;
         this.pointsNeeded = pointsNeeded;
-        this.barcodeSerialNo = barcodeSerialNo;
         this.type = type;
         this.description = description;
+        this.count = count;
+        this.rewards = new HashSet<>();
     }
 
     public int getId() {
@@ -65,14 +67,6 @@ public class Reward {
         this.pointsNeeded = pointsNeeded;
     }
 
-    public String getBarcodeSerialNo() {
-        return barcodeSerialNo;
-    }
-
-    public void setBarcodeSerialNo(String barcodeSerialNo) {
-        this.barcodeSerialNo = barcodeSerialNo;
-    }
-
     public String getType() {
         return type;
     }
@@ -88,6 +82,20 @@ public class Reward {
     public void setDescription(String description) {
         this.description = description;
     }
-    
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Set<RewardBarcode> getRewards() {
+        return rewards;
+    }
+
+    public void setRewards(Set<RewardBarcode> rewards) {
+        this.rewards = rewards;
+    }
 }

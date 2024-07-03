@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import com.example.demo.model.RoleEnum;
 import com.example.demo.repository.RoleRepository;
 
@@ -31,6 +33,9 @@ public class Volunteer extends User {
     @Column(name = "points")
     private int points;
 
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH}, mappedBy = "volunteer")
+    private Set<RewardBarcode> redeemedRewards;
+
     public Volunteer() {}
 
     public Volunteer(String fullName, char gender, LocalDate dob, String email, String contactNo, String password, Role role){
@@ -38,6 +43,7 @@ public class Volunteer extends User {
         super(fullName, email, contactNo, password, new HashSet<>(), null, role);
         this.gender = gender;
         this.dob = dob;
+        this.redeemedRewards = new HashSet<>();
     }
 
     public char getGender() {
