@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.models.CleanEventDTO;
+import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.UserRepository;
 // import com.example.demo.repository.OrganisationRepository;
@@ -118,18 +119,47 @@ public class EventService {
     //     return eventRepository.save(e);
     // }
 
-    public List<Volunteer> getEventParticipants(String eventId) {
-        List<String> participantsEmail = eventRepository.findByIdWithParticipants(eventId);
-        List<Volunteer> participants = new ArrayList<>();
-        for (String pEmail : participantsEmail) {
-            Volunteer v = (Volunteer) userRepository.findById(pEmail).orElse(null);
-            if (v != null) {
-                participants.add(v);
+    public List<CleanVolunteerDTO> getEventParticipants(String eventId) {
+        Event e = eventRepository.findById(eventId).orElse(null); 
+        if (e == null) {
+            return new ArrayList<>();
+        }
+
+        Set<User> volList = e.getParticipants();
+        List<CleanVolunteerDTO> cleanVolList = new ArrayList<>();
+        for (User vol : volList) {
+            if (vol instanceof Volunteer v) {
+                cleanVolList.add(new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath()));
             }
         }
-        return participants;
+        return cleanVolList;
     }
 
-    
+    public void setEventParticipants(String eventId, List<CleanVolunteerDTO> dto) {
+        Event e = eventRepository.findById(eventId).orElse(null);
+        if (e == null) {
+            return;
+        }
+
+        Set<User> participants = new HashSet<>();
+        for (CleanVolunteerDTO vol : dto) {
+            User user = userRepository.findById(vol.getEmail()).orElse(null);
+            if (user != null) {
+                participants.add(user);
+            }
+        }
+        
+        for (User vol : e.getParticipants()) {
+            if (!participants.contains(vol)) {
+                Set<Event> eventsPart = vol.getEventsPart();
+                eventsPart.remove(e);
+                vol.setEventsPart(eventsPart);
+                userRepository.save(vol);
+            }
+        }
+
+        e.setParticipants(participants);
+        eventRepository.save(e);
+    }
 
 }

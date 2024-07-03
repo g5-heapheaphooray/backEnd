@@ -28,6 +28,7 @@ import com.example.demo.service.EventService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -142,49 +143,40 @@ public class EventController {
     public ResponseEntity<VolListDTO> eventPartipants(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Event e = eventService.getEvent(eventId);
-        System.out.println(e);
-        System.out.println(!e.getOrganisation().equals((Organisation) user));
-        if (e == null || e.getOrganisation().equals((Organisation) user)) {
+        Event e = eventService.getEvent(eventId);   
+        if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        List<Volunteer> participants = eventService.getEventParticipants(eventId);
-        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
-        for (Volunteer v : participants) {
-            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-            cleanVols.add(cv);
-        }
-        VolListDTO res = new VolListDTO(cleanVols);
+        List<CleanVolunteerDTO> participants = eventService.getEventParticipants(eventId);
+        VolListDTO res = new VolListDTO(participants);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/{eventId}/participants/attendance")
-    @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<VolListDTO> getEventAttendance(@PathVariable String eventId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        List<Volunteer> participants = eventService.getEventParticipants(eventId);
-        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
-        for (Volunteer v : participants) {
-            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-            cleanVols.add(cv);
-        }
-        VolListDTO res = new VolListDTO(cleanVols);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
+    // @GetMapping("/{eventId}/participants/attendance")
+    // @PreAuthorize("hasRole('ORGANISATION')")
+    // public ResponseEntity<VolListDTO> getEventAttendance(@PathVariable String eventId) {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     User user = (User) authentication.getPrincipal();
+    //     Event e = eventService.getEvent(eventId);
+    //     if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
+    //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    //     }
+    //     List<CleanVolunteerDTO> participants = eventService.getEventParticipants(eventId);
+    //     VolListDTO res = new VolListDTO(participants);
+    //     return new ResponseEntity<>(res, HttpStatus.OK);
+    // }
 
     @PostMapping("/{eventId}/participants/attendance")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<VolListDTO> setEventAttendance(@PathVariable String eventId) {
+    public ResponseEntity<VolListDTO> setEventAttendance(@PathVariable String eventId, @RequestBody List<CleanVolunteerDTO> dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        List<Volunteer> participants = eventService.getEventParticipants(eventId);
-        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
-        for (Volunteer v : participants) {
-            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-            cleanVols.add(cv);
+        Event e = eventService.getEvent(eventId);
+        if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        VolListDTO res = new VolListDTO(cleanVols);
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        eventService.setEventParticipants(eventId, dto);
+        VolListDTO res = new VolListDTO(dto);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 }
