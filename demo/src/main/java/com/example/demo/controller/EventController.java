@@ -144,7 +144,7 @@ public class EventController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event e = eventService.getEvent(eventId);   
-        if (e == null || e.getOrganisation().equals((Organisation) user)) {
+        if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         List<CleanVolunteerDTO> participants = eventService.getEventParticipants(eventId);
@@ -158,7 +158,7 @@ public class EventController {
     //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     //     User user = (User) authentication.getPrincipal();
     //     Event e = eventService.getEvent(eventId);
-    //     if (e == null || e.getOrganisation().equals((Organisation) user)) {
+    //     if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
     //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     //     }
     //     List<CleanVolunteerDTO> participants = eventService.getEventParticipants(eventId);
@@ -172,7 +172,7 @@ public class EventController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event e = eventService.getEvent(eventId);
-        if (e == null || e.getOrganisation().equals((Organisation) user)) {
+        if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         eventService.setEventParticipants(eventId, dto);
