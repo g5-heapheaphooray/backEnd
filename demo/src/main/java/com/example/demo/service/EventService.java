@@ -74,13 +74,23 @@ public class EventService {
             return null;
         }
 
-        List<User> participants = event.getParticipants();
+        Set<User> participants = event.getParticipants();
         for (User participant : participants) {
             participant.getEventsPart().remove(event);
             userRepository.save(participant); 
         }
 
-        eventRepository.delete(event);
+        Organisation o = event.getOrganisation();
+        Set<Event> eventsOrg = o.getEventsOrg();
+        eventsOrg.remove(event);
+        userRepository.save(o);
+
+        try {
+            eventRepository.delete(event);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return event;
     }
 

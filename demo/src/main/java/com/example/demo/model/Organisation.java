@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -24,7 +25,7 @@ public class Organisation extends User {
     }
 
     public Organisation(String email, String name, String password, String contactNo, String location, String website, String description, Role role){
-        super(name, email, contactNo, password, null, new ArrayList<>(), role);
+        super(name, email, contactNo, password, null, new HashSet<>(), role);
         this.location = location;
         this.website = website;
         this.description = description;

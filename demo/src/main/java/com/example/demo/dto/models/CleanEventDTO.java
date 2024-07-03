@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 public class CleanEventDTO {
     private String id;
@@ -32,11 +33,11 @@ public class CleanEventDTO {
 
     private String address;
 
-    private List<EventMedia> photos;
+    private Set<EventMedia> photos;
     private List<String> skills;
     private List<String> causes;
 
-    public CleanEventDTO(String id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, List<EventMedia> photos, List<String> skills, List<String> causes) {
+    public CleanEventDTO(String id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, Set<EventMedia> photos, List<String> skills, List<String> causes) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -150,11 +151,11 @@ public class CleanEventDTO {
         this.address = address;
     }
 
-    public List<EventMedia> getPhotos() {
+    public Set<EventMedia> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<EventMedia> photos) {
+    public void setPhotos(Set<EventMedia> photos) {
         this.photos = photos;
     }
 

@@ -67,7 +67,7 @@ public class User implements UserDetails {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "organisation")
 //    @JoinColumn(name = "user_id")
-    private List<Event> eventsOrg;
+    private Set<Event> eventsOrg;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
@@ -93,7 +93,7 @@ public class User implements UserDetails {
     public User(){
     }
 
-    public User(String fullName, String email, String contactNo, String password, Set<Event> eventsPart, List<Event> eventsOrg, Role role){
+    public User(String fullName, String email, String contactNo, String password, Set<Event> eventsPart, Set<Event> eventsOrg, Role role){
         this.fullName = fullName;
         this.email = email;
         this.contactNo = contactNo;
@@ -153,11 +153,11 @@ public class User implements UserDetails {
         this.eventsPart = eventsPart;
     }
 
-    public List<Event> getEventsOrg() {
+    public Set<Event> getEventsOrg() {
         return eventsOrg;
     }
 
-    public void setEventsOrg(List<Event> eventsOrg) {
+    public void setEventsOrg(Set<Event> eventsOrg) {
         this.eventsOrg = eventsOrg;
     }
 
@@ -212,7 +212,7 @@ public class User implements UserDetails {
 //        if (!isAccountNonLocked() || getEventsOrg() == null) {
 //            return false;
 //        }
-        List<Event> currentE = getEventsOrg();
+        Set<Event> currentE = getEventsOrg();
         currentE.add(e);
         setEventsOrg(currentE);
         System.out.println(currentE);
@@ -248,6 +248,7 @@ public class User implements UserDetails {
     public boolean tokenStillValid() {
         Date now = new Date();
         if ((now.getTime() - this.verificationTokenCreatedAt.getTime()) >= 15*60*1000) {
+            setVerificationToken(null);
             return false;
         }
         return true;

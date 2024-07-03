@@ -91,7 +91,7 @@ class MediaController {
         if (!event.getOrganisation().getEmail().equals(user.getEmail())) {
             return new ResponseEntity<>(new ResponseDTO("Unauthorised", 400), HttpStatus.UNAUTHORIZED);
         }
-        List<EventMedia> ems = event.getPhotos();
+        Set<EventMedia> ems = event.getPhotos();
         List<byte[]> res = new ArrayList<>();
         for (EventMedia em : ems) {
             byte[] data = null;

@@ -143,7 +143,9 @@ public class EventController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event e = eventService.getEvent(eventId);
-        if (e == null || !e.getOrganisation().equals((Organisation) user)) {
+        System.out.println(e);
+        System.out.println(!e.getOrganisation().equals((Organisation) user));
+        if (e == null || e.getOrganisation().equals((Organisation) user)) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         List<Volunteer> participants = eventService.getEventParticipants(eventId);

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.example.demo.repository.EventRepository;
@@ -91,7 +92,7 @@ public class MediaService {
             return null;
         }
         em.setFilepath(filepath);
-        List<EventMedia> ems = event.getPhotos();
+        Set<EventMedia> ems = event.getPhotos();
         ems.add(em);
         event.setPhotos(ems);
         eventRepository.save(event);

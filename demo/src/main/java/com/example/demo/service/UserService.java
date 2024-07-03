@@ -178,6 +178,7 @@ public class UserService {
             return "Expired token";
         }
         user.setPassword(passwordEncoder.encode(newPassword));
+        user.setVerificationToken(null);
         userRepository.save(user);
         return "Password changed";
     }

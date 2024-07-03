@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,13 +40,13 @@ public class Event {
 //    @Column(name = "organisation_id")
 //    private String organisation;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="organisation_id", nullable=false)
     private Organisation organisation;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "eventsPart", cascade={CascadeType.PERSIST, CascadeType.DETACH})
-    private List<User> participants;
+    @ManyToMany(mappedBy = "eventsPart")
+    private Set<User> participants;
 
     @Column(name = "needed_manpower_count")
     private int neededManpowerCount;
@@ -65,27 +68,27 @@ public class Event {
 
 //    @Column(name = "photos")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
-    private List<EventMedia> photos;
+    private Set<EventMedia> photos;
 
     @ElementCollection
     @CollectionTable(
             name="event_skills",
             joinColumns=@JoinColumn(name="event_id")
     )
-    private List<String> skills;  
+    private List<String> skills;
 
     @ElementCollection
     @CollectionTable(
             name="event_causes",
             joinColumns=@JoinColumn(name="event_id")
     )
-    private List<String> causes;  
+    private List<String> causes;
 
 
     public Event(){
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes, List<EventMedia> photos){
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes, Set<EventMedia> photos){
         this.id = String.format("%s-%s", organisation.getEmail(), name);
         this.name = name;
         this.date = date;
@@ -97,7 +100,7 @@ public class Event {
         this.type = type;
         this.location = location;
         this.address = address;
-        this.participants = new ArrayList<>();
+        this.participants = new HashSet<>();
         this.skills = skills;
         this.causes = causes;
         this.photos = photos;
@@ -151,11 +154,11 @@ public class Event {
         this.organisation = organisation;
     }
 
-    public List<User> getParticipants() {
+    public Set<User> getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<User> participants) {
+    public void setParticipants(Set<User> participants) {
         this.participants = participants;
     }
 
@@ -233,11 +236,11 @@ public class Event {
         this.causes = causes;
     }
 
-    public List<EventMedia> getPhotos() {
+    public Set<EventMedia> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<EventMedia> photos) {
+    public void setPhotos(Set<EventMedia> photos) {
         this.photos = photos;
     }
 }
