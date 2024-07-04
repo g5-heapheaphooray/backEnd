@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.example.demo.repository.EventRepository;
+import com.example.demo.repository.RewardCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,13 +24,15 @@ public class MediaService {
     private final MediaRepository mediaRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final RewardCategoryRepository rewardCategoryRepository;
     private final String rootUploadDirectory = "./media/";
 
     @Autowired
-    public MediaService(MediaRepository mediaRepository, UserRepository userRepository, EventRepository eventRepository) {
+    public MediaService(MediaRepository mediaRepository, UserRepository userRepository, EventRepository eventRepository, RewardCategoryRepository rewardCategoryRepository) {
         this.mediaRepository = mediaRepository;
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
+        this.rewardCategoryRepository = rewardCategoryRepository;
     }
 
     public PfpMedia savePfpImage(MultipartFile multipartImage, User user) {
@@ -93,6 +96,45 @@ public class MediaService {
         event.setPhotos(ems);
         eventRepository.save(event);
         return mediaRepository.save(em);
+    }
+
+    public RewardMedia saveRewardImage(MultipartFile multipartImage, RewardCategory rc) {
+//        Path currentRelativePath = Paths.get("");
+//        System.out.println(currentRelativePath.toAbsolutePath().toString());
+        RewardMedia rm = new RewardMedia();
+        String filename = "RM-" + rc.getId() + ".png";
+        rm.setFilename(filename);
+        rm.setRewardCategory(rc);
+        String filepath = null;
+        try {
+            filepath = saveImageToStorage("reward-media", multipartImage, filename);
+        } catch (Exception e) {
+            return null;
+        }
+        if (filepath == null) {
+            return null;
+        }
+        rm.setFilepath(filepath);
+        if (rc.getRewardMedia() != null) {
+            try {
+                deleteMedia(rc.getRewardMedia());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+        try {
+            RewardMedia oldrm = rc.getRewardMedia();
+            mediaRepository.save(rm);
+            rc.setRewardMedia(rm);
+            rewardCategoryRepository.save(rc);
+            mediaRepository.delete(oldrm);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return rm;
     }
 
     public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile, String filename) throws IOException {

@@ -10,6 +10,8 @@ public class CleanOrganisationDTO {
     private String description;
     private String pfp_filepath;
 
+    private byte[] pfp_bytes;
+
     public CleanOrganisationDTO(String email, String fullName, int complainCount, String contactNo, String location, String website, String description, String pfp_filepath) {
         this.email = email;
         this.fullName = fullName;
@@ -83,5 +85,13 @@ public class CleanOrganisationDTO {
 
     public void setPfp_filepath(String pfp_filepath) {
         this.pfp_filepath = pfp_filepath;
+    }
+
+    public byte[] getPfp_bytes() {
+        return pfp_bytes;
+    }
+
+    public void setPfp_bytes(byte[] pfp_bytes) {
+        this.pfp_bytes = pfp_bytes;
     }
 }

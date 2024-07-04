@@ -2,20 +2,20 @@ package com.example.demo.dto;
 
 import java.util.List;
 
-import com.example.demo.dto.models.CleanRewardsDTO;
+import com.example.demo.dto.models.CleanRewardsCategoryDTO;
 
 public class RewardsListDTO {
-    public List<CleanRewardsDTO> rewards;
+    public List<CleanRewardsCategoryDTO> rewards;
 
-    public RewardsListDTO(List<CleanRewardsDTO> rewards) {
+    public RewardsListDTO(List<CleanRewardsCategoryDTO> rewards) {
         this.rewards = rewards;
     }
 
-    public List<CleanRewardsDTO> getRewards() {
+    public List<CleanRewardsCategoryDTO> getRewards() {
         return rewards;
     }
 
-    public void setRewards(List<CleanRewardsDTO> rewards) {
+    public void setRewards(List<CleanRewardsCategoryDTO> rewards) {
         this.rewards = rewards;
     }
 }

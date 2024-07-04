@@ -34,6 +34,10 @@ public class RewardCategory {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rewardCategory")
     private Set<RewardBarcode> rewards;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "media_id", referencedColumnName = "id")
+    private RewardMedia media;
+
     public RewardCategory(){
     }
 
@@ -108,5 +112,13 @@ public class RewardCategory {
 
     public void setNextAvailableIndex(int nextAvailableIndex) {
         this.nextAvailableIndex = nextAvailableIndex;
+    }
+
+    public RewardMedia getRewardMedia() {
+        return media;
+    }
+
+    public void setRewardMedia(RewardMedia media) {
+        this.media = media;
     }
 }

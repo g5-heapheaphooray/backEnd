@@ -21,6 +21,10 @@ public class Organisation extends User {
     @Column(name = "verified")
     private boolean verified;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "media_id", referencedColumnName = "id")
+    private PfpMedia pfp;
+
     public Organisation(){
     }
 

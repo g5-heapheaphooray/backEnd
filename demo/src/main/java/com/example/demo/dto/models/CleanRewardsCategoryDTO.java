@@ -1,8 +1,6 @@
 package com.example.demo.dto.models;
 
-import jakarta.persistence.Column;
-
-public class CleanRewardsDTO {
+public class CleanRewardsCategoryDTO {
     private int id;
     private String name;
     private int pointsNeeded;
@@ -10,13 +8,18 @@ public class CleanRewardsDTO {
     private String type;
 
     private String description;
+    private int count;
+    private String mediaFilepath;
+    private byte[] mediaBytes;
 
-    public CleanRewardsDTO(int id, String name, int pointsNeeded, String type, String description) {
+    public CleanRewardsCategoryDTO(int id, String name, int pointsNeeded, String type, String description, int count, String mediaFilepath) {
         this.id = id;
         this.name = name;
         this.pointsNeeded = pointsNeeded;
         this.type = type;
         this.description = description;
+        this.count = count;
+        this.mediaFilepath = mediaFilepath;
     }
 
     public int getId() {
@@ -57,5 +60,29 @@ public class CleanRewardsDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getMediaFilepath() {
+        return mediaFilepath;
+    }
+
+    public void setMediaFilepath(String mediaFilepath) {
+        this.mediaFilepath = mediaFilepath;
+    }
+
+    public byte[] getMediaBytes() {
+        return mediaBytes;
+    }
+
+    public void setMediaBytes(byte[] mediaBytes) {
+        this.mediaBytes = mediaBytes;
     }
 }

@@ -19,11 +19,13 @@ public class EventService {
     
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final MediaService mediaService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository, MediaService mediaService) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.mediaService = mediaService;
     }
 
     public Event updateEvent(CreateOppDTO dto, String eventId) {
@@ -64,8 +66,19 @@ public class EventService {
     }
 
     public CleanEventDTO getCleanEvent(Event e) {
+        Set<EventMedia> ems = e.getPhotos();
+        List<String> emsFp = new ArrayList<>();
+        List<byte[]> emsBytes = new ArrayList<>();
+        for (EventMedia em : ems) {
+            try {
+                emsBytes.add(mediaService.getMedia(em.getFilepath()));
+                emsFp.add(em.getFilepath());
+            } catch (Exception ex) {
+            }
+
+        }
         CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(), e.getOrganisation().getEmail(),
-                e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(), e.getType(), e.getAddress(), e.getPhotos(), e.getSkills(), e.getCauses());
+                e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(), e.getType(), e.getAddress(), emsFp, e.getSkills(), e.getCauses());
         return clean;
     }
 

@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.dto.models.CleanOrganisationDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
-import com.example.demo.dto.models.UserResponseDTO;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.Volunteer;
 import org.aspectj.weaver.ast.Or;
@@ -98,16 +97,16 @@ public class UserController {
 
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResponseDTO> getUser() {
+    public ResponseEntity<Object> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("user not found", 400);
+        Object res = new ResponseDTO("user not found", 400);
         System.out.println(user);
         if (user != null) {
             if (user instanceof Volunteer) {
-                res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Volunteer) user).getGender(), ((Volunteer) user).getDob(), ((Volunteer) user).getHours(), ((Volunteer) user).getPoints(), 'V');
+                res = new CleanVolunteerDTO(user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Volunteer) user).getGender(), ((Volunteer) user).getDob(), ((Volunteer) user).getHours(), ((Volunteer) user).getPoints(), user.getPfp().getFilepath());
             } else if (user instanceof Organisation) {
-                res = new UserResponseDTO("user found", 200, user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organisation) user).getLocation(), ((Organisation) user).getWebsite(), ((Organisation) user).getDescription(), 'O');
+                res = new CleanOrganisationDTO(user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organisation) user).getLocation(), ((Organisation) user).getWebsite(), ((Organisation) user).getDescription(), user.getPfp().getFilepath());
             } else {
                 return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
             }

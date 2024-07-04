@@ -32,12 +32,12 @@ public class CleanEventDTO {
     private String type;
 
     private String address;
-
-    private Set<EventMedia> photos;
     private List<String> skills;
     private List<String> causes;
+    private List<String> photosFilepaths;
+    private List<byte[]> photosBytes;
 
-    public CleanEventDTO(String id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, Set<EventMedia> photos, List<String> skills, List<String> causes) {
+    public CleanEventDTO(String id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes, List<String> photosFilepaths) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -50,9 +50,9 @@ public class CleanEventDTO {
         this.description = description;
         this.type = type;
         this.address = address;
-        this.photos = photos;
         this.skills = skills;
         this.causes = causes;
+        this.photosFilepaths = photosFilepaths;
     }
 
     public String getId() {
@@ -151,14 +151,6 @@ public class CleanEventDTO {
         this.address = address;
     }
 
-    public Set<EventMedia> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(Set<EventMedia> photos) {
-        this.photos = photos;
-    }
-
     public List<String> getSkills() {
         return skills;
     }
@@ -173,5 +165,21 @@ public class CleanEventDTO {
 
     public void setCauses(List<String> causes) {
         this.causes = causes;
+    }
+
+    public List<String> getPhotosFilepaths() {
+        return photosFilepaths;
+    }
+
+    public void setPhotosFilepaths(List<String> photosFilepaths) {
+        this.photosFilepaths = photosFilepaths;
+    }
+
+    public List<byte[]> getPhotosBytes() {
+        return photosBytes;
+    }
+
+    public void setPhotosBytes(List<byte[]> photosBytes) {
+        this.photosBytes = photosBytes;
     }
 }

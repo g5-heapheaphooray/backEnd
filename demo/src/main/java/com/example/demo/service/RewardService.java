@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.example.demo.model.RewardCategory;
+import com.example.demo.model.RewardMedia;
 import com.example.demo.model.Volunteer;
+import com.example.demo.repository.MediaRepository;
 import com.example.demo.repository.RewardCategoryRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -26,25 +28,20 @@ public class RewardService {
     private final RewardBarcodeRepository rewardBarcodeRepository;
     private final RewardCategoryRepository rewardCategoryRepository;
     private final UserRepository userRepository;
+    private final MediaService mediaService;
 
     @Autowired
-    public RewardService(RewardBarcodeRepository rewardBarcodeRepository, RewardCategoryRepository rewardCategoryRepository, UserRepository userRepository) {
+    public RewardService(RewardBarcodeRepository rewardBarcodeRepository, RewardCategoryRepository rewardCategoryRepository, UserRepository userRepository, MediaService mediaService) {
         this.rewardBarcodeRepository = rewardBarcodeRepository;
         this.rewardCategoryRepository = rewardCategoryRepository;
         this.userRepository = userRepository;
+        this.mediaService = mediaService;
     }
 
     public RewardCategory createRewardCategory(CreateRewardDTO r) {
-        RewardCategory rc = new RewardCategory();
-        rc.setName(r.getName());
-        rc.setDescription(r.getDescription());
-        rc.setPointsNeeded(r.getPointsNeeded());
-        rc.setType(r.getType());
-        try {
-            rewardCategoryRepository.save(rc);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        RewardCategory rc = new RewardCategory(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount());
+        rewardCategoryRepository.save(rc);
+        RewardMedia rm = mediaService.saveRewardImage(r.getMedia(), rc);
 //        Reward newReward = new Reward(r.getName(), r.getPointsNeeded(), r.getBarcodeSerialNo(), r.getType(), r.getDescription());
         return rc;
     }

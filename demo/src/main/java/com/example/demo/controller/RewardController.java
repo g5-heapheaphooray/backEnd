@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.RewardBarcodesListDTO;
 import com.example.demo.dto.models.CleanRewardsBarcodeDTO;
-import com.example.demo.dto.models.CleanRewardsDTO;
+import com.example.demo.dto.models.CleanRewardsCategoryDTO;
 import com.example.demo.model.RewardCategory;
 import com.example.demo.model.User;
 import com.example.demo.model.Volunteer;
@@ -39,25 +38,25 @@ public class RewardController {
 
     @PostMapping("/reward-category/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CleanRewardsDTO> createReward(@RequestBody CreateRewardDTO dto) {
+    public ResponseEntity<CleanRewardsCategoryDTO> createReward(@RequestBody CreateRewardDTO dto) {
         RewardCategory r = rewardService.createRewardCategory(dto);
-        CleanRewardsDTO res = new CleanRewardsDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
+        CleanRewardsCategoryDTO res = new CleanRewardsCategoryDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount(), r.getRewardMedia().getFilepath());
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
     @PutMapping("/reward-category/update/{rewardId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CleanRewardsDTO> updateReward(@PathVariable int rewardId, @RequestBody CreateRewardDTO dto) {
+    public ResponseEntity<CleanRewardsCategoryDTO> updateReward(@PathVariable int rewardId, @RequestBody CreateRewardDTO dto) {
         RewardCategory r = rewardService.updateRewardCategory(dto, rewardId);
-        CleanRewardsDTO res = new CleanRewardsDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
+        CleanRewardsCategoryDTO res = new CleanRewardsCategoryDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount(), r.getRewardMedia().getFilepath());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @DeleteMapping("/reward-category/delete/{rewardId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CleanRewardsDTO> deleteReward(@PathVariable int rewardId) {
+    public ResponseEntity<CleanRewardsCategoryDTO> deleteReward(@PathVariable int rewardId) {
         RewardCategory r = rewardService.deleteRewardCategory(rewardId);
-        CleanRewardsDTO res = new CleanRewardsDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
+        CleanRewardsCategoryDTO res = new CleanRewardsCategoryDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount(), r.getRewardMedia().getFilepath());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -65,20 +64,20 @@ public class RewardController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<RewardsListDTO> allRewards() {
         List<RewardCategory> rewards = rewardService.getAllRewardCategories();
-        List<CleanRewardsDTO> cleanRewardsDTOList = new ArrayList<>();
+        List<CleanRewardsCategoryDTO> cleanRewardsCategoryDTOList = new ArrayList<>();
         for (RewardCategory r : rewards) {
-            CleanRewardsDTO cr = new CleanRewardsDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
-            cleanRewardsDTOList.add(cr);
+            CleanRewardsCategoryDTO cr = new CleanRewardsCategoryDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount(), r.getRewardMedia().getFilepath());
+            cleanRewardsCategoryDTOList.add(cr);
         }
-        RewardsListDTO res = new RewardsListDTO(cleanRewardsDTOList);
+        RewardsListDTO res = new RewardsListDTO(cleanRewardsCategoryDTOList);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/reward-category/get/{rewardId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<CleanRewardsDTO> getReward(@PathVariable int rewardId) {
+    public ResponseEntity<CleanRewardsCategoryDTO> getReward(@PathVariable int rewardId) {
         RewardCategory r = rewardService.getRewardCategory(rewardId);
-        CleanRewardsDTO res = new CleanRewardsDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
+        CleanRewardsCategoryDTO res = new CleanRewardsCategoryDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount(), r.getRewardMedia().getFilepath());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

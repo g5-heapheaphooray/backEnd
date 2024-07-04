@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class VolunteerService {
     public VolunteerService(VolunteerRepository volunteerRepository, EventRepository eventRepository) {
         this.volunteerRepository = volunteerRepository;
         this.eventRepository = eventRepository;
+    }
+
+    public CleanVolunteerDTO getCleanVol(Volunteer v) {
+        return new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
     }
 
     public Volunteer updateHours(String id, double hours){

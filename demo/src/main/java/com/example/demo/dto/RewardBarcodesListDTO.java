@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.dto.models.CleanRewardsBarcodeDTO;
-import com.example.demo.dto.models.CleanRewardsDTO;
 
 import java.util.List;
 
