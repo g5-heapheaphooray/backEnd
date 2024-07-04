@@ -28,6 +28,9 @@ public class RewardCategory {
     @Column(name = "count")
     private int count;
 
+    @Column(name = "next_available_index")
+    private int nextAvailableIndex;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rewardCategory")
     private Set<RewardBarcode> rewards;
 
@@ -97,5 +100,13 @@ public class RewardCategory {
 
     public void setRewards(Set<RewardBarcode> rewards) {
         this.rewards = rewards;
+    }
+
+    public int getNextAvailableIndex() {
+        return nextAvailableIndex;
+    }
+
+    public void setNextAvailableIndex(int nextAvailableIndex) {
+        this.nextAvailableIndex = nextAvailableIndex;
     }
 }

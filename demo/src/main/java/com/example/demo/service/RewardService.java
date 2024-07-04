@@ -5,10 +5,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.example.demo.model.RewardCategory;
 import com.example.demo.model.Volunteer;
 import com.example.demo.repository.RewardCategoryRepository;
+import com.example.demo.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +25,13 @@ public class RewardService {
     
     private final RewardBarcodeRepository rewardBarcodeRepository;
     private final RewardCategoryRepository rewardCategoryRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public RewardService(RewardBarcodeRepository rewardBarcodeRepository, RewardCategoryRepository rewardCategoryRepository) {
+    public RewardService(RewardBarcodeRepository rewardBarcodeRepository, RewardCategoryRepository rewardCategoryRepository, UserRepository userRepository) {
         this.rewardBarcodeRepository = rewardBarcodeRepository;
         this.rewardCategoryRepository = rewardCategoryRepository;
+        this.userRepository = userRepository;
     }
 
     public RewardCategory createRewardCategory(CreateRewardDTO r) {
@@ -103,6 +108,10 @@ public class RewardService {
         return bcList;
     }
 
+    public RewardBarcode getRewardBarcode(int id) {
+        return rewardBarcodeRepository.findById(id).orElse(null);
+    }
+
     public RewardBarcode deleteBarcode(int id) {
         RewardBarcode rb = rewardBarcodeRepository.findById(id).orElse(null);
         if (rb == null) {
@@ -112,16 +121,35 @@ public class RewardService {
         return rb;
     }
 
-//    public RewardBarcode redeemReward(int rewardId, Volunteer v) {
-//        RewardBarcode reward = getReward(rewardId);
-//        if (reward == null) {
-//            return null;
-//        }
-//        int vPoint = v.getPoints();
-//        if (vPoint >= reward.getPointsNeeded()) {
-//
-//        }
-//
-//        return reward;
-//    }
+    @Transactional()
+    public String redeemReward(RewardCategory rc, Volunteer v) {
+        RewardBarcode reward = rewardBarcodeRepository.findById(rc.getNextAvailableIndex()).orElse(null);
+        if (reward == null || reward.isRedeemed()) {
+            return "Reward not available";
+        }
+        int vPoint = v.getPoints();
+        Set<RewardBarcode> vRewards = v.getRedeemedRewards();
+        if (vPoint >= rc.getPointsNeeded()) {
+            reward.setVolunteer(v); // sets redeemed to true
+            rewardBarcodeRepository.save(reward);
+
+            v.setPoints(vPoint-rc.getPointsNeeded());
+            vRewards.add(reward);
+            userRepository.save(v);
+
+            rc.setNextAvailableIndex(rc.getNextAvailableIndex()+1);
+            rewardCategoryRepository.save(rc);
+            return "Reward redeemed";
+        }
+        return "Not enough points";
+    }
+
+    public RewardBarcode viewRewardBarcode(int rewardId, Volunteer v) {
+        RewardBarcode rb = rewardBarcodeRepository.findById(rewardId).orElse(null);
+        Set<RewardBarcode> vRewards = v.getRedeemedRewards();
+        if (vRewards.contains(rb)) {
+            return rb;
+        }
+        return null;
+    }
 }

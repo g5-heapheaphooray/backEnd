@@ -74,6 +74,7 @@ public class RewardBarcode {
 
     public void setVolunteer(Volunteer volunteer) {
         this.volunteer = volunteer;
+        setRedeemed(true);
     }
 
     public String getExpiryDate() {

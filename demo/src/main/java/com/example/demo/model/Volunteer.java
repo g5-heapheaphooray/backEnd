@@ -86,6 +86,14 @@ public class Volunteer extends User {
         this.points = points;
     }
 
+    public Set<RewardBarcode> getRedeemedRewards() {
+        return redeemedRewards;
+    }
+
+    public void setRedeemedRewards(Set<RewardBarcode> redeemedRewards) {
+        this.redeemedRewards = redeemedRewards;
+    }
+
     // public boolean addEventPart(Event e) {
     //     if (!isAccountNonLocked() || getEventsPart() == null) {
     //         return false;
