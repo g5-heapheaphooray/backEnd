@@ -59,9 +59,15 @@ public class ComplaintController {
     }
 
     @GetMapping("/get/{complaintId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Complaint> getComplaint(@PathVariable int complaintId) {
-        return new ResponseEntity<>(complaintService.getComplaint(complaintId), HttpStatus.OK);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Complaint complaint = complaintService.getComplaint(complaintId);
+        if (user instanceof Admin || complaint.getUser().getEmail().equals(user.getEmail())) {
+            return new ResponseEntity<>(complaintService.getComplaint(complaintId), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/update/{complaintId}")
