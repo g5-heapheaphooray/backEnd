@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "reward_media")
 public class RewardMedia extends Media {
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "media")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "rewardMedia")
     private RewardCategory rewardCategory;
 
     public RewardMedia() {

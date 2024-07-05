@@ -34,6 +34,15 @@ public class VolunteerService {
         return new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
     }
 
+    public List<CleanVolunteerDTO> getAllVolunteers() {
+        List<Volunteer> volunteers = volunteerRepository.findAll();
+        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
+        for (Volunteer v : volunteers) {
+            cleanVols.add(getCleanVol(v));
+        }
+        return cleanVols;
+    }
+
     public Volunteer updateHours(String id, double hours){
         Volunteer v = volunteerRepository.findById(id).orElse(null);
 

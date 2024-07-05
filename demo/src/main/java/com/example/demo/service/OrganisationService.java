@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -56,7 +57,12 @@ public class OrganisationService {
         return organisationRepository.findById(email).orElse(null);
     }
 
-    public List<Organisation> getAllOrg() {
-        return organisationRepository.findAll();
+    public List<CleanOrganisationDTO> getAllOrg() {
+        List<Organisation> orgs = organisationRepository.findAll();
+        List<CleanOrganisationDTO> cleanOrgs = new ArrayList<>();
+        for (Organisation o : orgs) {
+            cleanOrgs.add(getCleanOrg(o));
+        }
+        return cleanOrgs;
     }
 }

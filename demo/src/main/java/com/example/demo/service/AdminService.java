@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import com.example.demo.dto.RegisterAdminDTO;
 import com.example.demo.dto.RegisterVolunteerDTO;
+import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +43,6 @@ public class AdminService {
         o.setVerified(true);
 
         return organisationRepository.save(o);
-    }
-
-    public List<Volunteer> getAllVolunteers() {
-        return volunteerRepository.findAll();
     }
 
     public User blacklistUser(String id) {

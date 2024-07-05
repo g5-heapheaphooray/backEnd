@@ -56,12 +56,7 @@ public class OrganisationController {
 
     @GetMapping("/all")
     public ResponseEntity<OrgListDTO> getAllOrg() {
-        List<Organisation> orgs = organisationService.getAllOrg();
-        List<CleanOrganisationDTO> cleanOrgs = new ArrayList<>();
-        for (Organisation o : orgs) {
-            CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
-            cleanOrgs.add(co);
-        }
+        List<CleanOrganisationDTO> cleanOrgs = organisationService.getAllOrg();
         OrgListDTO res = new OrgListDTO(cleanOrgs);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

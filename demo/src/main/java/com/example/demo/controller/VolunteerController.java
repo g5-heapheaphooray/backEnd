@@ -64,11 +64,8 @@ public class VolunteerController {
     public ResponseEntity<CleanVolunteerDTO> updateVolunteer(@RequestBody RegisterVolunteerDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        System.out.println("1");
         Volunteer v = volunteerService.updateDetails(dto, user);
-        System.out.println("2");
-        CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-        System.out.println("3");
+        CleanVolunteerDTO cv = volunteerService.getCleanVol(v);
         return new ResponseEntity<>(cv , HttpStatus.OK);
     }
 

@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import com.example.demo.service.VolunteerService;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000",maxAge = 3600, allowedHeaders = "*", methods = "*")
@@ -30,11 +31,13 @@ public class AdminController {
 
     private final AdminService adminService;
     private final OrganisationService organisationService;
+    private final VolunteerService volunteerService;
 
     @Autowired
-    public AdminController(AdminService adminService, OrganisationService organisationService) {
+    public AdminController(AdminService adminService, OrganisationService organisationService, VolunteerService volunteerService) {
         this.adminService = adminService;
         this.organisationService = organisationService;
+        this.volunteerService = volunteerService;
     }
 
     @GetMapping("/verify/{orgId}")
@@ -54,12 +57,7 @@ public class AdminController {
     @GetMapping("/all-volunteers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<VolListDTO> getAllVolunteers() {
-        List<Volunteer> volunteers = adminService.getAllVolunteers();
-        List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
-        for (Volunteer v : volunteers) {
-            CleanVolunteerDTO cv = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-            cleanVols.add(cv);
-        }
+        List<CleanVolunteerDTO> cleanVols = volunteerService.getAllVolunteers();
         VolListDTO res = new VolListDTO(cleanVols);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -67,12 +65,7 @@ public class AdminController {
     @GetMapping("/all-organisation")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrgListDTO> getAllOrganisations() {
-        List<Organisation> orgs = organisationService.getAllOrg();
-        List<CleanOrganisationDTO> cleanOrgs = new ArrayList<>();
-        for (Organisation o : orgs) {
-            CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
-            cleanOrgs.add(co);
-        }
+        List<CleanOrganisationDTO> cleanOrgs = organisationService.getAllOrg();
         OrgListDTO res = new OrgListDTO(cleanOrgs);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

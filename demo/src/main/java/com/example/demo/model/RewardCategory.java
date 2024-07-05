@@ -36,7 +36,7 @@ public class RewardCategory {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "media_id", referencedColumnName = "id")
-    private RewardMedia media;
+    private RewardMedia rewardMedia;
 
     public RewardCategory(){
     }
@@ -115,10 +115,10 @@ public class RewardCategory {
     }
 
     public RewardMedia getRewardMedia() {
-        return media;
+        return rewardMedia;
     }
 
-    public void setRewardMedia(RewardMedia media) {
-        this.media = media;
+    public void setRewardMedia(RewardMedia rewardMedia) {
+        this.rewardMedia = rewardMedia;
     }
 }

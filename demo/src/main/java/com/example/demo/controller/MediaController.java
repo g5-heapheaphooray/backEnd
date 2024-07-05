@@ -25,11 +25,13 @@ import java.util.*;
 class MediaController {
     private final MediaService mediaService;
     private final EventService eventService;
+    private final RewardService rewardService;
 
     @Autowired
-    public MediaController(MediaService mediaService, EventService eventService) {
+    public MediaController(MediaService mediaService, EventService eventService, RewardService rewardService) {
         this.mediaService = mediaService;
         this.eventService = eventService;
+        this.rewardService = rewardService;
     }
 
     @PostMapping(value = "/pfp/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -65,7 +67,7 @@ class MediaController {
 
     @PostMapping(value = "/event-photos/upload/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<String> uploadEventPhotos(@RequestParam("eventPhotos") MultipartFile[] multipartImage, @PathVariable String eventId) throws Exception {
+    public ResponseEntity<String> uploadEventPhotos(@RequestPart("eventPhotos") MultipartFile[] multipartImage, @PathVariable String eventId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event event = eventService.getEvent(eventId);
@@ -108,7 +110,41 @@ class MediaController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/reward-category/reward-image/upload/{rewardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<String> uploadRewardImage(@RequestPart("reward-image") MultipartFile multipartImage, @PathVariable int rewardId) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        RewardCategory rc = rewardService.getRewardCategory(rewardId);
+        if (rc == null) {
+            return new ResponseEntity<>("Reward category not found", HttpStatus.BAD_REQUEST);
+        }
+        RewardMedia m = mediaService.saveRewardImage(multipartImage, rc);
+        if (m == null) {
+            return new ResponseEntity<>("Image upload failed", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
+    }
 
-
+    @GetMapping("/reward-category/reward-image/upload/{rewardId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getRewardMedia(@PathVariable int rewardId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        byte[] data = null;
+        RewardCategory rc = rewardService.getRewardCategory(rewardId);
+        if (rc == null) {
+            return new ResponseEntity<>("Reward category not found", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            data = mediaService.getMedia(rc.getRewardMedia().getFilepath());
+        } catch (Exception e) {
+            return new ResponseEntity<>("idk", HttpStatus.NOT_FOUND);
+        }
+        if (data == null) {
+            return new ResponseEntity<>("idk2", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(data, HttpStatus.OK);
+    }
     
 }

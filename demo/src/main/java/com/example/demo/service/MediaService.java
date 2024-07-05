@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 import java.util.Set;
 import java.util.UUID;
 
@@ -160,10 +161,9 @@ public class MediaService {
 
         if (Files.exists(imagePath)) {
             byte[] imageBytes = Files.readAllBytes(imagePath);
-            return imageBytes;
-        } else {
-            return null; // Handle missing images
-        }
+            return Base64.getEncoder().encode(imageBytes);
+        } 
+        return null; // Handle missing images
     }
 
     // Delete an image
@@ -178,4 +178,6 @@ public class MediaService {
             return "Failed"; // Handle missing images
         }
     }
+
+
 }
