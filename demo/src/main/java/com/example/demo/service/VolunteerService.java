@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.example.demo.dto.RegisterVolunteerDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,14 +75,13 @@ public class VolunteerService {
         return new ArrayList<>(v.getEventsPart());
     }
 
-    public Volunteer updateDetails(String id, Map<String, String> payload) {
-        Volunteer v = volunteerRepository.findById(id).orElse(null);
-        if(v == null){
-            return null;
+    public Volunteer updateDetails(RegisterVolunteerDTO dto, User user) {
+        if (user instanceof Volunteer v) {
+            v.setContactNo(dto.getContactNo());
+            v.setFullName(dto.getFullName());
+            return volunteerRepository.save(v);
         }
-        v.setContactNo(payload.get("contactNo"));
-        v.setFullName(payload.get("fullName"));
-        return volunteerRepository.save(v);
+        return null;
     }
 
     public Volunteer registerEvent(String eventId, String userId) {

@@ -34,7 +34,7 @@ class MediaController {
 
     @PostMapping(value = "/pfp/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> uploadPfp(@RequestParam("pfp") MultipartFile multipartImage) throws Exception {
+    public ResponseEntity<String> uploadPfp(@RequestPart("pfp") MultipartFile multipartImage) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         System.out.println(multipartImage.getOriginalFilename());

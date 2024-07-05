@@ -12,6 +12,7 @@ import com.example.demo.model.User;
 import com.example.demo.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -36,7 +37,7 @@ public class RewardController {
         this.rewardService = rewardService;
     }
 
-    @PostMapping("/reward-category/create")
+    @PostMapping(value = "/reward-category/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CleanRewardsCategoryDTO> createReward(@RequestBody CreateRewardDTO dto) {
         RewardCategory r = rewardService.createRewardCategory(dto);
