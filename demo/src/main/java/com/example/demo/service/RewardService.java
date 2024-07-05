@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.CreateRewardDTO;
+import com.example.demo.dto.models.CleanRewardsCategoryDTO;
 import com.example.demo.model.RewardBarcode;
 import com.example.demo.repository.RewardBarcodeRepository;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,23 +39,41 @@ public class RewardService {
         this.mediaService = mediaService;
     }
 
-    public RewardCategory createRewardCategory(CreateRewardDTO r) {
+    public CleanRewardsCategoryDTO getCleanRewardCategory(RewardCategory rc) {
+        return new CleanRewardsCategoryDTO(rc.getId(), rc.getName(), rc.getPointsNeeded(), rc.getType(), rc.getDescription(), rc.getCount(), rc.getRewardMedia().getFilepath());
+    }
+
+    public CleanRewardsCategoryDTO createRewardCategory(CreateRewardDTO r) {
         RewardCategory rc = new RewardCategory(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount());
         rewardCategoryRepository.save(rc);
         // RewardMedia rm = mediaService.saveRewardImage(r.getMedia(), rc);
 //        Reward newReward = new Reward(r.getName(), r.getPointsNeeded(), r.getBarcodeSerialNo(), r.getType(), r.getDescription());
-        return rc;
+        return getCleanRewardCategory(rc);
     }
 
-    public List<RewardCategory> getAllRewardCategories() {
-        return rewardCategoryRepository.findAll();
+
+    public List<CleanRewardsCategoryDTO> getAllRewardCategories() {
+        List<RewardCategory> rewardCategories = rewardCategoryRepository.findAll();
+        List<CleanRewardsCategoryDTO> cleanRewardsCategoryDTOList = new ArrayList<>();
+        for (RewardCategory rc : rewardCategories) {
+            cleanRewardsCategoryDTOList.add(getCleanRewardCategory(rc));
+        }
+        return cleanRewardsCategoryDTOList;
     }
 
     public RewardCategory getRewardCategory(int rewardId) {
         return rewardCategoryRepository.findById(rewardId).orElse(null);
     }
+    
+    public CleanRewardsCategoryDTO getCleanRewardCategory(int rewardId) {
+        RewardCategory rc = rewardCategoryRepository.findById(rewardId).orElse(null);
+        if (rc == null) {
+            return null;
+        }
+        return getCleanRewardCategory(rc);
+    }
 
-    public RewardCategory updateRewardCategory(CreateRewardDTO r, int rewardId) {
+    public CleanRewardsCategoryDTO updateRewardCategory(CreateRewardDTO r, int rewardId) {
         RewardCategory currentReward = rewardCategoryRepository.findById(rewardId).orElse(null);
 
         if (currentReward == null) {
@@ -66,10 +85,10 @@ public class RewardService {
         currentReward.setType(r.getType());
         currentReward.setDescription(r.getDescription());
 
-        return rewardCategoryRepository.save(currentReward);
+        return getCleanRewardCategory(rewardCategoryRepository.save(currentReward));
     }
 
-    public RewardCategory deleteRewardCategory(int rewardId) {
+    public CleanRewardsCategoryDTO deleteRewardCategory(int rewardId) {
         RewardCategory reward = getRewardCategory(rewardId);
         if (reward == null) {
             return null;
@@ -81,7 +100,7 @@ public class RewardService {
             System.out.println(e.getMessage());
         }
 
-        return reward;
+        return getCleanRewardCategory(reward);
     }
 
     public List<RewardBarcode> uploadBarcodes(RewardCategory rc, MultipartFile file) {
