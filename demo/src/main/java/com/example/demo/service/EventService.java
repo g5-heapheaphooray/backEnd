@@ -110,12 +110,22 @@ public class EventService {
         return event;
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<CleanEventDTO> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        List<CleanEventDTO> cleanEvents = new ArrayList<>();
+        for (Event e : events) {
+            cleanEvents.add(getCleanEvent(e));
+        }
+        return cleanEvents;
     }
 
-    public List<Event> getOrgEvents(Organisation o) {
-        return eventRepository.findByOrganisation(o);
+    public List<CleanEventDTO> getOrgEvents(Organisation o) {
+        List<Event> events = eventRepository.findByOrganisation(o);
+        List<CleanEventDTO> cleanEvents = new ArrayList<>();
+        for (Event e : events) {
+            cleanEvents.add(getCleanEvent(e));
+        }
+        return cleanEvents;
     }
 
     public List<Event> getEventsEqAftDate(LocalDate d) {
