@@ -1,12 +1,12 @@
 package com.example.demo.dto.models;
 
-import com.example.demo.dto.ResponseDTO;
 import com.example.demo.model.User;
 import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
-public class UserResponseDTO extends ResponseDTO {
+public class UserResponseDTO {
+    private String message;
     private String email;
     private String fullName;
     // both volunteer and organisation will have but the limit diff ig
@@ -21,8 +21,8 @@ public class UserResponseDTO extends ResponseDTO {
     private String description;
     private char userType;
 
-    public UserResponseDTO(String message, int code, String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType) {
-        super(message, code);
+    public UserResponseDTO(String message, String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType) {
+        this.message = message;
         this.email = email;
         this.fullName = fullName;
         this.complainCount = complainCount;
@@ -35,7 +35,7 @@ public class UserResponseDTO extends ResponseDTO {
     }
 
     public UserResponseDTO(String message, int code, String email, String fullName, int complainCount, String contactNo, String location, String website, String description, char userType) {
-        super(message, code);
+        this.message = message;
         this.email = email;
         this.fullName = fullName;
         this.complainCount = complainCount;
@@ -44,6 +44,14 @@ public class UserResponseDTO extends ResponseDTO {
         this.website = website;
         this.description = description;
         this.userType = userType;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getEmail() {

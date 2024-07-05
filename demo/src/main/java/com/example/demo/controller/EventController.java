@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.dto.EventsListDTO;
 import com.example.demo.dto.RegisterForEventDTO;
-import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.VolListDTO;
 import com.example.demo.dto.models.CleanEventDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
@@ -48,12 +47,11 @@ public class EventController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<ResponseDTO> createEvent(@RequestBody CreateOppDTO dto) {
+    public ResponseEntity<String> createEvent(@RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         System.out.println(user.getFullName());
         System.out.println("name" + dto.getName());
-        ResponseDTO res = new ResponseDTO("event creation unsucessful", 400);
         if (user instanceof Organisation) {
             Organisation o = (Organisation) user;
             Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(),
@@ -61,8 +59,7 @@ public class EventController {
             System.out.println(e.getName());
             Event newEvent = eventService.createEvent(e, user);
             if (newEvent != null) {
-                res = new ResponseDTO("event creation sucessful", 200);
-                return new ResponseEntity<>(res, HttpStatus.CREATED);
+                return new ResponseEntity<>("event creation sucessful", HttpStatus.CREATED);
             }
         }
 //        System.out.println(dto.getOrganisationEmail());
@@ -70,7 +67,7 @@ public class EventController {
 //        Organisation o = organisationService.getOrg(dto.getOrganisationEmail());
 //        Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
 //        Event newEvent = eventService.createEvent(e);
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("event creation unsucessful", HttpStatus.BAD_REQUEST);
     }
 
 
@@ -110,32 +107,28 @@ public class EventController {
 
     @PutMapping("/update/{eventId}")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<ResponseDTO> updateEvent(@PathVariable String eventId, @RequestBody CreateOppDTO dto) {
+    public ResponseEntity<String> updateEvent(@PathVariable String eventId, @RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("event update unsucessful", 400);
         if (user instanceof Organisation) {
             // Event event = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
             eventService.updateEvent(dto, eventId);
-            res = new ResponseDTO("event update sucessful", 200);
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return new ResponseEntity<>("event update sucessful", HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("event update unsucessful", HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/delete/{eventId}")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<ResponseDTO> deleteEvent(@PathVariable String eventId) {
+    public ResponseEntity<String> deleteEvent(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("event deletion unsucessful", 400);
         if (user instanceof Organisation) {
             eventService.deleteEvent(eventId);
-            res = new ResponseDTO("event deletion sucessful", 200);
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return new ResponseEntity<>("event deletion sucessful", HttpStatus.OK);
         }
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("event deletion unsucessful", HttpStatus.BAD_REQUEST);
     }
     
     @GetMapping("/{eventId}/participants")

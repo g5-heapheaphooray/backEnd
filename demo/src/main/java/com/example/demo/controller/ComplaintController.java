@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.CreateComplaintDTO;
-import com.example.demo.dto.ResponseDTO;
 import com.example.demo.model.Admin;
 import com.example.demo.model.Complaint;
 import com.example.demo.model.User;
@@ -39,17 +38,15 @@ public class ComplaintController {
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResponseDTO> createComplaint(@RequestBody CreateComplaintDTO dto) {
+    public ResponseEntity<String> createComplaint(@RequestBody CreateComplaintDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("complaint creation unsucessful", 400);
         if (user != null) {
             complaintService.createComplaint(dto, user);
-            res = new ResponseDTO("complaint created successfully", 200);
-            return new ResponseEntity<>(res, HttpStatus.CREATED);
+            return new ResponseEntity<>("complaint created successfully", HttpStatus.CREATED);
         }
     
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("complaint creation unsucessful", HttpStatus.BAD_REQUEST);
     }   
 
     @GetMapping("/all")

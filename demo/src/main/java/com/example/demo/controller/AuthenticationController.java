@@ -26,47 +26,35 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register-volunteer")
-    public ResponseEntity<ResponseDTO> createVolunteer(@RequestBody RegisterVolunteerDTO v) {
+    public ResponseEntity<String> createVolunteer(@RequestBody RegisterVolunteerDTO v) {
         User newUser = userService.createVolunteer(v);
-        ResponseDTO res = null;
-        if (newUser == null) {
-            res = new ResponseDTO("registration failed", 400);
-        } else {
-            res = new ResponseDTO("registration success", 200);
+        if (newUser != null) {
+            return new ResponseEntity<>("registration successful", HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        return new ResponseEntity<>("registration unsuccessful", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/register-organisation")
-    public ResponseEntity<ResponseDTO> createOrganisation(@RequestBody RegisterOrganisationDTO o) {
+    public ResponseEntity<String> createOrganisation(@RequestBody RegisterOrganisationDTO o) {
         User newUser = userService.createOrganisation(o);
-        ResponseDTO res = null;
-        if (newUser == null) {
-            res = new ResponseDTO("registration failed", 400);
-            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
-        } else {
-            res = new ResponseDTO("registration success", 200);
-        }
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        if (newUser != null) {
+            return new ResponseEntity<>("registration successful", HttpStatus.CREATED);
+        } 
+        return new ResponseEntity<>("registration unsuccessful", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/register-admin")
-    public ResponseEntity<ResponseDTO> createAdmin(@RequestBody RegisterAdminDTO a) {
+    public ResponseEntity<String> createAdmin(@RequestBody RegisterAdminDTO a) {
         User newUser = userService.createAdmin(a);
-        ResponseDTO res = null;
-        if (newUser == null) {
-            res = new ResponseDTO("registration failed", 400);
-            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
-        } else {
-            res = new ResponseDTO("registration success", 200);
-        }
-        return new ResponseEntity<>(res, HttpStatus.CREATED);
+        if (newUser != null) {
+            return new ResponseEntity<>("registration successful", HttpStatus.CREATED);
+        } 
+        return new ResponseEntity<>("registration unsuccessful", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> loginUser(@RequestBody AuthenticationDTO authenticationDTO) {
+    public ResponseEntity<Object> loginUser(@RequestBody AuthenticationDTO authenticationDTO) {
         User user = userService.authenticateUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
-        ResponseDTO response = null;
         System.out.println(user);
         if (user != null) {
             String jwtToken = jwtService.generateToken(user);
@@ -78,12 +66,9 @@ public class AuthenticationController {
                 userType = 'V';
             }
 //            response = new UserResponse("login success", 200, user, userType)
-            response = new JwtDTO("login success", 200, jwtToken, jwtService.getExpirationTime(), userType);
-        } else {
-            response = new ResponseDTO("login failure", 400);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(new JwtDTO("login success", jwtToken, jwtService.getExpirationTime(), userType), HttpStatus.OK);
+        } 
+        return new ResponseEntity<>("login failure", HttpStatus.OK);
     }
 
 //    @PostMapping("/forget-password")
@@ -104,8 +89,5 @@ public class AuthenticationController {
         String res = userService.resetPassword(token, resetPasswordDTO.getNewPassword());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
-
-
-
 
 }

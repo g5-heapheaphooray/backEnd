@@ -2,17 +2,26 @@ package com.example.demo.dto;
 
 import com.example.demo.model.User;
 
-public class JwtDTO extends ResponseDTO {
+public class JwtDTO {
+    private String message;
     private String token;
     private long expiresIn;
     private char userType;
 
 
-    public JwtDTO(String message, int code, String token, long expiresIn, char userType) {
-        super(message, code);
+    public JwtDTO(String message, String token, long expiresIn, char userType) {
+        this.message = message;
         this.token = token;
         this.expiresIn = expiresIn;
         this.userType = userType;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getToken() {

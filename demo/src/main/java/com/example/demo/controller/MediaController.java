@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.ResponseDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.MediaRepository;
 import com.example.demo.service.EventService;
@@ -35,15 +34,15 @@ class MediaController {
 
     @PostMapping(value = "/pfp/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<ResponseDTO> uploadPfp(@RequestParam("pfp") MultipartFile multipartImage) throws Exception {
+    public ResponseEntity<String> uploadPfp(@RequestParam("pfp") MultipartFile multipartImage) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         System.out.println(multipartImage.getOriginalFilename());
         PfpMedia m = mediaService.savePfpImage(multipartImage, user);
         if (m == null) {
-            return new ResponseEntity<>(new ResponseDTO("Image upload failed", 400), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Image upload failed", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(new ResponseDTO("Image uploaded successfully", 200), HttpStatus.OK);
+        return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
     @GetMapping("/pfp/get")
@@ -66,20 +65,20 @@ class MediaController {
 
     @PostMapping(value = "/event-photos/upload/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<ResponseDTO> uploadEventPhotos(@RequestParam("eventPhotos") MultipartFile[] multipartImage, @PathVariable String eventId) throws Exception {
+    public ResponseEntity<String> uploadEventPhotos(@RequestParam("eventPhotos") MultipartFile[] multipartImage, @PathVariable String eventId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event event = eventService.getEvent(eventId);
         if (!event.getOrganisation().getEmail().equals(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseDTO("Unauthorised", 400), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorised", HttpStatus.UNAUTHORIZED);
         }
         for (MultipartFile img : multipartImage) {
             EventMedia m = mediaService.saveEventImages(img, event);
             if (m == null) {
-                return new ResponseEntity<>(new ResponseDTO("Image upload failed", 400), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Image upload failed", HttpStatus.BAD_REQUEST);
             }
         }
-        return new ResponseEntity<>(new ResponseDTO("Image uploaded successfully", 200), HttpStatus.OK);
+        return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
     @GetMapping("/event-photos/get/{eventId}")
@@ -89,7 +88,7 @@ class MediaController {
         User user = (User) authentication.getPrincipal();
         Event event = eventService.getEvent(eventId);
         if (!event.getOrganisation().getEmail().equals(user.getEmail())) {
-            return new ResponseEntity<>(new ResponseDTO("Unauthorised", 400), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Unauthorised", HttpStatus.UNAUTHORIZED);
         }
         Set<EventMedia> ems = event.getPhotos();
         List<byte[]> res = new ArrayList<>();

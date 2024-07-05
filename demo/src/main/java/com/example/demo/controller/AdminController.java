@@ -39,25 +39,21 @@ public class AdminController {
 
     @GetMapping("/verify/{orgId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> verifyOrg(@PathVariable String orgId) {
+    public ResponseEntity<String> verifyOrg(@PathVariable String orgId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
         if (user instanceof Admin) {
             Organisation o = organisationService.updateVerified(orgId);
             if (o != null) {
-                res = new ResponseDTO("operation successful", 200);
-                return new ResponseEntity<>(res, HttpStatus.OK);
+                return new ResponseEntity<>("operation successful", HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("operation unsuccessful", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/all-volunteers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<VolListDTO> getAllVolunteers() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
         List<Volunteer> volunteers = adminService.getAllVolunteers();
         List<CleanVolunteerDTO> cleanVols = new ArrayList<>();
         for (Volunteer v : volunteers) {
@@ -71,8 +67,6 @@ public class AdminController {
     @GetMapping("/all-organisation")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<OrgListDTO> getAllOrganisations() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
         List<Organisation> orgs = organisationService.getAllOrg();
         List<CleanOrganisationDTO> cleanOrgs = new ArrayList<>();
         for (Organisation o : orgs) {
@@ -85,44 +79,32 @@ public class AdminController {
 
     @GetMapping("/blacklist/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> blacklistUser(@PathVariable String id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
+    public ResponseEntity<String> blacklistUser(@PathVariable String id) {
         User u = adminService.blacklistUser(id);
         if (u != null) {
-            res = new ResponseDTO("operation successful", 200);
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return new ResponseEntity<>("operation successful", HttpStatus.OK);
         }
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("operation unsuccessful", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/whitelist/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> whitelistUser(@PathVariable String id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
+    public ResponseEntity<String> whitelistUser(@PathVariable String id) {
         User u = adminService.whitelistUser(id);
         if (u != null) {
-            res = new ResponseDTO("operation successful", 200);
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return new ResponseEntity<>("operation successful", HttpStatus.OK);
         }
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("operation unsuccessful", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseDTO> deleteUser(@PathVariable String id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("operation unsuccessful", 400);
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
         User u = adminService.deleteUser(id);
         if (u != null) {
-            res = new ResponseDTO("operation successful", 200);
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            return new ResponseEntity<>("operation successful", HttpStatus.OK);
         }
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("operation unsuccessful", HttpStatus.BAD_REQUEST);
     }
 
 

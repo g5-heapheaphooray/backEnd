@@ -100,20 +100,20 @@ public class UserController {
     public ResponseEntity<Object> getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Object res = new ResponseDTO("user not found", 400);
         System.out.println(user);
         if (user != null) {
+            Object res = null;
             if (user instanceof Volunteer) {
                 res = new CleanVolunteerDTO(user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Volunteer) user).getGender(), ((Volunteer) user).getDob(), ((Volunteer) user).getHours(), ((Volunteer) user).getPoints(), user.getPfp().getFilepath());
+                return new ResponseEntity<>(res, HttpStatus.OK);
             } else if (user instanceof Organisation) {
                 res = new CleanOrganisationDTO(user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organisation) user).getLocation(), ((Organisation) user).getWebsite(), ((Organisation) user).getDescription(), user.getPfp().getFilepath());
+                return new ResponseEntity<>(res, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("user not found", HttpStatus.BAD_REQUEST);
             }
-        } else {
-            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        return new ResponseEntity<>("user not found", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/change-password")

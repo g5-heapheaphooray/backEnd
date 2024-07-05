@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.EventsListDTO;
-import com.example.demo.dto.ResponseDTO;
 import com.example.demo.dto.models.CleanEventDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.*;
@@ -69,34 +68,30 @@ public class VolunteerController {
 
     @PostMapping("/register/event/{eventId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
-    public ResponseEntity<ResponseDTO> registerEvent(@PathVariable String eventId) {
+    public ResponseEntity<String> registerEvent(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 //        System.out.println(payload.get("userId"));
-        ResponseDTO res = new ResponseDTO("event registration unsucessful", 400);
         if (user instanceof Volunteer) {
             //update volunteer's event list
             volunteerService.registerEvent(eventId, user.getEmail());
-            res = new ResponseDTO("event registration sucessful", 200);
-            return new ResponseEntity<>(res, HttpStatus.CREATED);
+            return new ResponseEntity<>("event registration sucessful", HttpStatus.CREATED);
         }
 
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("event registration unsucessful", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/unregister/event/{eventId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
-    public ResponseEntity<ResponseDTO> unregisterEvent(@PathVariable String eventId) {
+    public ResponseEntity<String> unregisterEvent(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        ResponseDTO res = new ResponseDTO("event unregistration unsucessful", 400);
         if (user instanceof Volunteer) {
             //update volunteer's event list
             volunteerService.unregisterEvent(eventId, user.getEmail());
-            res = new ResponseDTO("event unregistration sucessful", 200);
-            return new ResponseEntity<>(res, HttpStatus.CREATED);
+            return new ResponseEntity<>("event unregistration sucessful", HttpStatus.CREATED);
         }
 
-        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("event unregistration unsucessful", HttpStatus.BAD_REQUEST);
     }
 }
