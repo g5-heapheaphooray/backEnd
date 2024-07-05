@@ -129,7 +129,9 @@ public class MediaService {
             mediaRepository.save(rm);
             rc.setRewardMedia(rm);
             rewardCategoryRepository.save(rc);
-            mediaRepository.delete(oldrm);
+            if (oldrm != null) {
+                mediaRepository.delete(oldrm);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;

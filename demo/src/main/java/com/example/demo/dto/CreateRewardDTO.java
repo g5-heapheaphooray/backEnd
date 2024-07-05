@@ -8,15 +8,13 @@ public class CreateRewardDTO {
     private String type;
     private String description;
     private int count;
-    private MultipartFile media;
     
-    public CreateRewardDTO(String name, int pointsNeeded, String type, String description, int count, MultipartFile media) {
+    public CreateRewardDTO(String name, int pointsNeeded, String type, String description, int count) {
         this.name = name;
         this.pointsNeeded = pointsNeeded;
         this.type = type;
         this.description = description;
         this.count = count;
-        this.media = media;
     }
 
     public String getName() {
@@ -57,13 +55,5 @@ public class CreateRewardDTO {
 
     public void setCount(int count) {
         this.count = count;
-    }
-
-    public MultipartFile getMedia() {
-        return media;
-    }
-
-    public void setMedia(MultipartFile media) {
-        this.media = media;
     }
 }

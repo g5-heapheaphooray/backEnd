@@ -37,11 +37,11 @@ public class RewardController {
         this.rewardService = rewardService;
     }
 
-    @PostMapping(value = "/reward-category/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/reward-category/create")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CleanRewardsCategoryDTO> createReward(@RequestBody CreateRewardDTO dto) {
         RewardCategory r = rewardService.createRewardCategory(dto);
-        CleanRewardsCategoryDTO res = new CleanRewardsCategoryDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount(), r.getRewardMedia().getFilepath());
+        CleanRewardsCategoryDTO res = new CleanRewardsCategoryDTO(r.getId(), r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount(), null);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
