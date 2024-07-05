@@ -16,7 +16,7 @@ import java.util.*;
 
 @Service
 public class EventService {
-    
+
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final MediaService mediaService;
@@ -30,7 +30,7 @@ public class EventService {
 
     public Event updateEvent(CreateOppDTO dto, String eventId) {
         Event currentEvent = eventRepository.findById(eventId).orElse(null);
-        
+
         if (currentEvent == null) {
             return null;
         }
@@ -55,7 +55,7 @@ public class EventService {
         // System.out.println(o.getUsername());
         o.getEventsOrg().add(event);
         // System.out.println(o.getEventsOrg());
-//        o.addEventOrg(event);
+        // o.addEventOrg(event);
         // userRepository.save(o);
         // System.out.println("hello creating event");
         return eventRepository.save(event);
@@ -77,8 +77,10 @@ public class EventService {
             }
 
         }
-        CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(), e.getOrganisation().getEmail(),
-                e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(), e.getType(), e.getAddress(), emsFp, e.getSkills(), e.getCauses());
+        CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(),
+                e.getOrganisation().getEmail(),
+                e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(),
+                e.getType(), e.getAddress(), e.getSkills(), e.getCauses(), emsFp);
         return clean;
     }
 
@@ -91,7 +93,7 @@ public class EventService {
         Set<User> participants = event.getParticipants();
         for (User participant : participants) {
             participant.getEventsPart().remove(event);
-            userRepository.save(participant); 
+            userRepository.save(participant);
         }
 
         Organisation o = event.getOrganisation();
@@ -121,19 +123,19 @@ public class EventService {
     }
 
     // public Event updateEventParticipants(String eventId, User user) {
-    //     Event e = eventRepository.findById(eventId).orElse(null);
-        
-    //     if (e == null) {
-    //         return null;
-    //     }
+    // Event e = eventRepository.findById(eventId).orElse(null);
 
-    //     e.getParticipants().add(user);
-    //     System.out.println(e.getParticipants());
-    //     return eventRepository.save(e);
+    // if (e == null) {
+    // return null;
+    // }
+
+    // e.getParticipants().add(user);
+    // System.out.println(e.getParticipants());
+    // return eventRepository.save(e);
     // }
 
     public List<CleanVolunteerDTO> getEventParticipants(String eventId) {
-        Event e = eventRepository.findById(eventId).orElse(null); 
+        Event e = eventRepository.findById(eventId).orElse(null);
         if (e == null) {
             return new ArrayList<>();
         }
@@ -142,7 +144,9 @@ public class EventService {
         List<CleanVolunteerDTO> cleanVolList = new ArrayList<>();
         for (User vol : volList) {
             if (vol instanceof Volunteer v) {
-                cleanVolList.add(new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath()));
+                cleanVolList.add(
+                        new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(),
+                                v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath()));
             }
         }
         return cleanVolList;
@@ -161,7 +165,7 @@ public class EventService {
                 participants.add(user);
             }
         }
-        
+
         for (User vol : e.getParticipants()) {
             if (!participants.contains(vol)) {
                 Set<Event> eventsPart = vol.getEventsPart();
