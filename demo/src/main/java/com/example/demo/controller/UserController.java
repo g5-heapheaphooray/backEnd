@@ -82,12 +82,10 @@ public class UserController {
     public ResponseEntity<Object> getUser(@PathVariable String userid) {
         User user = userService.getUser(userid);
         Object res = null;
-        if (user instanceof Volunteer) {
-            Volunteer v = (Volunteer) user;
-            res = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-        } else if (user instanceof Organisation) {
-            Organisation o = (Organisation) user;
-            res = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+        if (user instanceof Volunteer v) {
+            res = userService.getCleanVolunteer(v);
+        } else if (user instanceof Organisation o) {
+            res = userService.getCleanOrganisation(o);
 
         }
 //        System.out.println(user.getEventsPart());
@@ -103,16 +101,16 @@ public class UserController {
         System.out.println(user);
         if (user != null) {
             Object res = null;
-            if (user instanceof Volunteer) {
-                res = new CleanVolunteerDTO(user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Volunteer) user).getGender(), ((Volunteer) user).getDob(), ((Volunteer) user).getHours(), ((Volunteer) user).getPoints(), user.getPfp().getFilepath());
+            if (user instanceof Volunteer v) {
+                res = userService.getCleanVolunteer(v);
                 return new ResponseEntity<>(res, HttpStatus.OK);
-            } else if (user instanceof Organisation) {
-                res = new CleanOrganisationDTO(user.getEmail(), user.getFullName(), user.getComplainCount(), user.getContactNo(), ((Organisation) user).getLocation(), ((Organisation) user).getWebsite(), ((Organisation) user).getDescription(), user.getPfp().getFilepath());
+            } else if (user instanceof Organisation o) {
+                res = userService.getCleanOrganisation(o);
                 return new ResponseEntity<>(res, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("user not found", HttpStatus.BAD_REQUEST);
             }
-        }
+        }       
         return new ResponseEntity<>("user not found", HttpStatus.BAD_REQUEST);
     }
 
@@ -120,13 +118,10 @@ public class UserController {
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         User user = userService.updatePassword(changePasswordDTO.getEmail(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
         Object res = null;
-        if (user instanceof Volunteer) {
-            Volunteer v = (Volunteer) user;
-            res = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-        } else if (user instanceof Organisation) {
-            Organisation o = (Organisation) user;
-            res = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
-
+        if (user instanceof Volunteer v) {
+            res = userService.getCleanVolunteer(v);
+        } else if (user instanceof Organisation o) {
+            res = userService.getCleanOrganisation(o);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
@@ -141,13 +136,10 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         Object res = null;
-        if (user instanceof Volunteer) {
-            Volunteer v = (Volunteer) user;
-            res = new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
-        } else if (user instanceof Organisation) {
-            Organisation o = (Organisation) user;
-            res = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
-
+        if (user instanceof Volunteer v) {
+            res = userService.getCleanVolunteer(v);
+        } else if (user instanceof Organisation o) {
+            res = userService.getCleanOrganisation(o);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

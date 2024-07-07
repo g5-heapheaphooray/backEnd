@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.dto.RegisterAdminDTO;
 import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.RegisterVolunteerDTO;
+import com.example.demo.dto.models.CleanOrganisationDTO;
+import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.RoleRepository;
@@ -48,6 +50,14 @@ public class UserService {
         this.roleRepository = roleRepository;
         this.eventService = eventService;
         this.mailService = mailService;
+    }
+
+    public CleanVolunteerDTO getCleanVolunteer(Volunteer v) {
+        return new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+    }
+
+    public CleanOrganisationDTO getCleanOrganisation(Organisation o) {
+        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
     }
 
     public User createVolunteer(RegisterVolunteerDTO v) {
