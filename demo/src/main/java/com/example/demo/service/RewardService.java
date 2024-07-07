@@ -84,6 +84,7 @@ public class RewardService {
         currentReward.setPointsNeeded(r.getPointsNeeded());
         currentReward.setType(r.getType());
         currentReward.setDescription(r.getDescription());
+        currentReward.setCount(r.getCount());
 
         return getCleanRewardCategory(rewardCategoryRepository.save(currentReward));
     }
