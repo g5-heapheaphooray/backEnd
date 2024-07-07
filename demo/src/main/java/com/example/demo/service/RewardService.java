@@ -48,7 +48,7 @@ public class RewardService {
         rewardCategoryRepository.save(rc);
         // RewardMedia rm = mediaService.saveRewardImage(r.getMedia(), rc);
 //        Reward newReward = new Reward(r.getName(), r.getPointsNeeded(), r.getBarcodeSerialNo(), r.getType(), r.getDescription());
-        return getCleanRewardCategory(rc);
+        return new CleanRewardsCategoryDTO(rc.getId(), rc.getName(), rc.getPointsNeeded(), rc.getType(), r.getDescription(), rc.getCount(), null);
     }
 
 
