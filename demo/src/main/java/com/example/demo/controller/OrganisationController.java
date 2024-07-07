@@ -6,13 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.Organisation;
+import com.example.demo.model.User;
 import com.example.demo.service.OrganisationService;
 import com.example.demo.model.Event;
 import com.example.demo.service.EventService;
 import com.example.demo.dto.OrgListDTO;
+import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.EventsListDTO;
 
 import java.util.ArrayList;
@@ -41,17 +45,18 @@ public class OrganisationController {
 
     @PutMapping("/updateDetails")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<CleanOrganisationDTO> updateVolunteer(@RequestBody Map<String, String> payload) {
-        Organisation o = organisationService.updateDetails(payload.get("email"), payload);
-        CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+    public ResponseEntity<CleanOrganisationDTO> updateOrganisation(@RequestBody RegisterOrganisationDTO dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Organisation o = organisationService.updateDetails(dto, user);
+        CleanOrganisationDTO co = organisationService.getCleanOrg(o);
         return new ResponseEntity<>(co, HttpStatus.OK);
     }
 
     @GetMapping("/get/{orgId}")
     public ResponseEntity<CleanOrganisationDTO> getOrg(@PathVariable String orgId) {
-        Organisation o = organisationService.getOrg(orgId);
-        CleanOrganisationDTO co = new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
-        return  new ResponseEntity<>(co, HttpStatus.OK);
+        CleanOrganisationDTO o = organisationService.getCleanOrg(orgId);
+        return  new ResponseEntity<>(o, HttpStatus.OK);
     }
 
     @GetMapping("/all")

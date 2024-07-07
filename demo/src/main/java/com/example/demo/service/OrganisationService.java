@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.models.CleanOrganisationDTO;
 import com.example.demo.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Organisation;
+import com.example.demo.model.User;
 import com.example.demo.repository.OrganisationRepository;
 
 @Service
@@ -30,6 +32,14 @@ public class OrganisationService {
         return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
     }
 
+    public CleanOrganisationDTO getCleanOrg(String email) {
+        Organisation o = organisationRepository.findById(email).orElse(null);
+        if (o == null) {
+            return null;
+        }
+        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+    }
+
     public Organisation updateVerified(String id) {
         Organisation o = organisationRepository.findById(id).orElse(null);
         if(o == null){
@@ -40,17 +50,17 @@ public class OrganisationService {
         return organisationRepository.save(o);
     }
 
-    public Organisation updateDetails(String id, Map<String, String> payload) {
-        Organisation o = organisationRepository.findById(id).orElse(null);
-        if(o == null){
-            return null;
+    public Organisation updateDetails(RegisterOrganisationDTO dto, User user) {
+        if (user instanceof Organisation o) {
+            o.setContactNo(dto.getContactNo());
+            o.setFullName(dto.getFullName());
+            o.setLocation(dto.getLocation());
+            o.setWebsite(dto.getWebsite());
+            o.setDescription(dto.getDescription());
+            
+            return organisationRepository.save(o);
         }
-        o.setContactNo(payload.get("contactNo"));
-        o.setFullName(payload.get("fullName"));
-        o.setLocation(payload.get("location"));
-        o.setWebsite(payload.get("website"));
-        o.setDescription(payload.get("description"));
-        return organisationRepository.save(o);
+        return null;
     }
 
     public Organisation getOrg(String email) {
