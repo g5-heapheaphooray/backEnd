@@ -73,9 +73,10 @@ public class RewardController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @PostMapping("/reward-category/upload-barcodes/{rewardId}")
+    @PostMapping(value="/reward-category/upload-barcodes/{rewardId}", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<CleanRewardsBarcodeDTO>> uploadReward(@PathVariable int rewardId, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<List<CleanRewardsBarcodeDTO>> uploadReward(@PathVariable int rewardId, @RequestPart("file") MultipartFile file) {
+        System.out.println("helloo");
         RewardCategory rc = rewardService.getRewardCategory(rewardId);
         List<RewardBarcode> rbs = rewardService.uploadBarcodes(rc, file);
         List<CleanRewardsBarcodeDTO> res = new ArrayList<>();

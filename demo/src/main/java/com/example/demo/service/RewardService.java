@@ -112,9 +112,7 @@ public class RewardService {
             InputStream is = file.getInputStream();
             br = new BufferedReader(new InputStreamReader(is));
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
-                line = line.replace("ï»¿", "");
-                RewardBarcode bc = new RewardBarcode(line.split(",")[0], rc, line.split(",")[1]);
+                RewardBarcode bc = new RewardBarcode(line.split(",")[0].replaceAll("[^a-zA-Z0-9]", ""), rc, line.split(",")[1]);
                 rewardBarcodeRepository.save(bc);
                 bcList.add(bc);
             }
