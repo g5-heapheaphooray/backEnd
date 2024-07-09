@@ -50,11 +50,8 @@ public class EventController {
     public ResponseEntity<CleanEventDTO> createEvent(@RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        System.out.println(user.getFullName());
-        System.out.println("name" + dto.getName());
-        Event newEvent = eventService.createEvent(dto, (Organisation) user);
-        if (newEvent != null) {
-            CleanEventDTO ce = eventService.getCleanEvent(newEvent);
+        CleanEventDTO ce = eventService.createEvent(dto, (Organisation) user);
+        if (ce != null) {
             return new ResponseEntity<>(ce, HttpStatus.CREATED);
         }
 //        System.out.println(dto.getOrganisationEmail());

@@ -15,7 +15,7 @@ public class CreateComplaintDTO {
     public CreateComplaintDTO(String title, String description, String status) {
         this.title = title;
         this.description = description;
-        dateTime = LocalDateTime.now().withNano(0);
+        dateTime = LocalDateTime.now();
         // this.photos = photos;
         this.status = status;
     }

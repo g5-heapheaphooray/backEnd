@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.CreateComplaintDTO;
+import com.example.demo.dto.models.CleanComplaintDTO;
 import com.example.demo.model.Admin;
 import com.example.demo.model.Complaint;
 import com.example.demo.model.User;
@@ -38,30 +39,29 @@ public class ComplaintController {
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<String> createComplaint(@RequestBody CreateComplaintDTO dto) {
+    public ResponseEntity<CleanComplaintDTO> createComplaint(@RequestBody CreateComplaintDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        if (user != null) {
-            complaintService.createComplaint(dto, user);
-            return new ResponseEntity<>("complaint created successfully", HttpStatus.CREATED);
+        CleanComplaintDTO cc = complaintService.createComplaint(dto, user);
+        if (cc != null) {
+            return new ResponseEntity<>(cc, HttpStatus.CREATED);
         }
-    
-        return new ResponseEntity<>("complaint creation unsucessful", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }   
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Complaint>> getAllComplaints() {
+    public ResponseEntity<List<CleanComplaintDTO>> getAllComplaints() {
         return new ResponseEntity<>(complaintService.getAllComplaints(), HttpStatus.OK);
     }
 
     @GetMapping("/get/{complaintId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Complaint> getComplaint(@PathVariable int complaintId) {
+    public ResponseEntity<CleanComplaintDTO> getComplaint(@PathVariable int complaintId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Complaint complaint = complaintService.getComplaint(complaintId);
-        if (user instanceof Admin || complaint.getUser().getEmail().equals(user.getEmail())) {
+        CleanComplaintDTO complaint = complaintService.getComplaint(complaintId);
+        if (user instanceof Admin || complaint.getUserId().equals(user.getEmail())) {
             return new ResponseEntity<>(complaintService.getComplaint(complaintId), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -69,11 +69,11 @@ public class ComplaintController {
 
     @PutMapping("/update/{complaintId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Complaint> updateComplaint(@PathVariable int complaintId, @RequestBody CreateComplaintDTO dto) {
+    public ResponseEntity<CleanComplaintDTO> updateComplaint(@PathVariable int complaintId, @RequestBody CreateComplaintDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Complaint complaint = complaintService.getComplaint(complaintId);
-        if (user instanceof Admin || complaint.getUser().getEmail().equals(user.getEmail())) {
+        CleanComplaintDTO complaint = complaintService.getComplaint(complaintId);
+        if (user instanceof Admin || complaint.getUserId().equals(user.getEmail())) {
             return new ResponseEntity<>(complaintService.updateComplaint(dto, complaintId), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -81,13 +81,19 @@ public class ComplaintController {
 
     @DeleteMapping("/delete/{complaintId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Complaint> deleteComplaint(@PathVariable int complaintId) {
+    public ResponseEntity<CleanComplaintDTO> deleteComplaint(@PathVariable int complaintId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        Complaint complaint = complaintService.getComplaint(complaintId);
-        if (user instanceof Admin || complaint.getUser().getEmail().equals(user.getEmail())) {
+        CleanComplaintDTO complaint = complaintService.getComplaint(complaintId);
+        if (user instanceof Admin || complaint.getUserId().equals(user.getEmail())) {
             return new ResponseEntity<>(complaintService.deleteComplaint(complaintId), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/resolve/{complaintId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CleanComplaintDTO> resolveComplaint(@PathVariable int complaintId) {
+        return new ResponseEntity<>(complaintService.resolveComplaint(complaintId), HttpStatus.OK);
     }
 }
