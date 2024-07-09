@@ -33,7 +33,7 @@ public class Volunteer extends User {
     @Column(name = "points")
     private int points;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.DETACH}, mappedBy = "volunteer")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "volunteer")
     private Set<RewardBarcode> redeemedRewards;
 
     public Volunteer() {}

@@ -144,16 +144,26 @@ public class RewardService {
         }
         int vPoint = v.getPoints();
         Set<RewardBarcode> vRewards = v.getRedeemedRewards();
+        System.out.println(vRewards);
         if (vPoint >= rc.getPointsNeeded()) {
+            System.out.println("hi1");
             reward.setVolunteer(v); // sets redeemed to true
             rewardBarcodeRepository.save(reward);
+            System.out.println("hi2");
 
             v.setPoints(vPoint-rc.getPointsNeeded());
+            System.out.println("hi2.1");
+            System.out.println(vRewards);
             vRewards.add(reward);
+            System.out.println("hi2.2");
+            v.setRedeemedRewards(vRewards);
+            System.out.println("hi2.3");
             userRepository.save(v);
+            System.out.println("hi3");
 
             rc.setNextAvailableIndex(rc.getNextAvailableIndex()+1);
             rewardCategoryRepository.save(rc);
+            System.out.println("hi4");
             return "Reward redeemed";
         }
         return "Not enough points";

@@ -116,6 +116,7 @@ public class RewardController {
         User user = (User) authentication.getPrincipal();
         RewardCategory rc = rewardService.getRewardCategory(rewardCatId);
         String s = rewardService.redeemReward(rc, (Volunteer) user);
+        System.out.println(s);
         if (s.equals("Reward redeemed")) {
             return new ResponseEntity<>(s, HttpStatus.OK);
         } else {

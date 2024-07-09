@@ -49,6 +49,7 @@ public class RewardCategory {
         this.count = count;
         this.rewards = new HashSet<>();
         this.rewardMedia = new RewardMedia("default.png", "./media/reward-media/default.png", this);
+        this.nextAvailableIndex = 1;
     }
 
     public int getId() {
