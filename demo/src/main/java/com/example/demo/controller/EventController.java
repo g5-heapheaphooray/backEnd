@@ -47,7 +47,7 @@ public class EventController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<String> createEvent(@RequestBody CreateOppDTO dto) {
+    public ResponseEntity<CleanEventDTO> createEvent(@RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         System.out.println(user.getFullName());
@@ -59,7 +59,8 @@ public class EventController {
             System.out.println(e.getName());
             Event newEvent = eventService.createEvent(e, user);
             if (newEvent != null) {
-                return new ResponseEntity<>("event creation sucessful", HttpStatus.CREATED);
+                CleanEventDTO ce = eventService.getCleanEvent(newEvent);
+                return new ResponseEntity<>(ce, HttpStatus.CREATED);
             }
         }
 //        System.out.println(dto.getOrganisationEmail());
@@ -67,7 +68,7 @@ public class EventController {
 //        Organisation o = organisationService.getOrg(dto.getOrganisationEmail());
 //        Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
 //        Event newEvent = eventService.createEvent(e);
-        return new ResponseEntity<>("event creation unsucessful", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
 
