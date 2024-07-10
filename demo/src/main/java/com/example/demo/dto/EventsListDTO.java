@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.example.demo.dto.models.CleanEventDTO;
-import com.example.demo.model.Event;
 
 import java.util.List;
 

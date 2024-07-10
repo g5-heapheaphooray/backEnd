@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.ComplaintsListDTO;
 import com.example.demo.dto.CreateComplaintDTO;
 import com.example.demo.dto.models.CleanComplaintDTO;
 import com.example.demo.model.Admin;
@@ -51,8 +52,10 @@ public class ComplaintController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<CleanComplaintDTO>> getAllComplaints() {
-        return new ResponseEntity<>(complaintService.getAllComplaints(), HttpStatus.OK);
+    public ResponseEntity<ComplaintsListDTO> getAllComplaints() {
+        List<CleanComplaintDTO> cc = complaintService.getAllComplaints();
+        ComplaintsListDTO ccd = new ComplaintsListDTO(cc);
+        return new ResponseEntity<>(ccd, HttpStatus.OK);
     }
 
     @GetMapping("/get/{complaintId}")
