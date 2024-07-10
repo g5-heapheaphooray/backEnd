@@ -141,12 +141,12 @@ public class RewardController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/reward/view-barcode/{rewardId}")
+    @GetMapping("/reward/use/{rewardId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
-    public ResponseEntity<CleanRewardsBarcodeDTO> viewRewardBarcode(@PathVariable int rewardId) {
+    public ResponseEntity<CleanRewardsBarcodeDTO> useRewardBarcode(@PathVariable int rewardId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        RewardBarcode rb = rewardService.viewRewardBarcode(rewardId, (Volunteer) user);
+        RewardBarcode rb = rewardService.useRewardBarcode(rewardId, (Volunteer) user);
         if (rb == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }

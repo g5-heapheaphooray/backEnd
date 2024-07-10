@@ -169,12 +169,29 @@ public class RewardService {
         return "Not enough points";
     }
 
-    public RewardBarcode viewRewardBarcode(int rewardId, Volunteer v) {
+    public RewardBarcode useRewardBarcode(int rewardId, Volunteer v) {
         RewardBarcode rb = rewardBarcodeRepository.findById(rewardId).orElse(null);
         Set<RewardBarcode> vRewards = v.getRedeemedRewards();
+        if (rb == null) {
+            return null;
+        }
         if (vRewards.contains(rb)) {
+            vRewards.remove(rb);
+            v.setRedeemedRewards(vRewards);
+            userRepository.save(v);
+
+            rewardBarcodeRepository.delete(rb);
             return rb;
         }
         return null;
     }
+
+//    public RewardBarcode viewRewardBarcode(int rewardId, Volunteer v) {
+//        RewardBarcode rb = rewardBarcodeRepository.findById(rewardId).orElse(null);
+//        Set<RewardBarcode> vRewards = v.getRedeemedRewards();
+//        if (vRewards.contains(rb)) {
+//            return rb;
+//        }
+//        return null;
+//    }
 }
