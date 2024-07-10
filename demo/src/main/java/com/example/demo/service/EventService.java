@@ -50,7 +50,7 @@ public class EventService {
         return eventRepository.save(currentEvent);
     }
 
-    public Event createEvent(CreateOppDTO dto, Organisation o) {
+    public CleanEventDTO createEvent(CreateOppDTO dto, Organisation o) {
         Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(),
                 dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
         // System.out.println("creating event now");
@@ -60,7 +60,7 @@ public class EventService {
         // o.addEventOrg(event);
         // userRepository.save(o);
         // System.out.println("hello creating event");
-        return eventRepository.save(e);
+        return getCleanEvent(eventRepository.save(e));
     }
 
     public Event getEvent(String eventId) {

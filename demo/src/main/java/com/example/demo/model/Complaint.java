@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.HashSet;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,14 +43,15 @@ public class Complaint {
     private String status;
 
     public Complaint() {
+        photos = new HashSet<>();
     }
 
-    public Complaint(User user, LocalDateTime dateTime, String title, String description, Set<ComplaintMedia> photos, String status) {
+    public Complaint(User user, LocalDateTime dateTime, String title, String description, String status) {
         this.user = user;
         this.dateTime = dateTime;
         this.title = title;
         this.description = description;
-        this.photos = photos;
+        photos = new HashSet<>();
         this.status = status;
     }
 
