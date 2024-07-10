@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.CreateComplaintDTO;
@@ -18,11 +19,16 @@ import com.example.demo.repository.ComplaintRepository;
 public class ComplaintService {
     private final ComplaintRepository complaintRepository;
     private final MediaService mediaService;
+    private final MailService mailService;
+
+    @Value("${admin.complaintemail}")
+    private String gmailEmail;
 
     @Autowired
-    public ComplaintService(ComplaintRepository complaintRepository, MediaService mediaService) {
+    public ComplaintService(ComplaintRepository complaintRepository, MediaService mediaService, MailService mailService) {
         this.complaintRepository = complaintRepository;
         this.mediaService = mediaService;
+        this.mailService = mailService;
     }
 
     public CleanComplaintDTO getCleanComplaintDTO(Complaint c) {
@@ -49,6 +55,15 @@ public class ComplaintService {
         complaint.setStatus(c.getStatus());
 
         complaint = complaintRepository.save(complaint);
+
+        String msg = """
+A new complaint has been made by %s with the following title:
+%s
+and the following description:
+%s
+                """.formatted(user.getEmail(), c.getTitle(), c.getDescription());
+        mailService.sendMail(gmailEmail, "New Complaint Made: %s".formatted(c.getTitle()), msg);
+
         return getCleanComplaintDTO(complaint);
     }
 
