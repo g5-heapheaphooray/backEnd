@@ -67,7 +67,7 @@ class MediaController {
 
     @PostMapping(value = "/event-photos/upload/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<String> uploadEventPhotos(@RequestPart("eventPhotos") MultipartFile[] multipartImage, @PathVariable String eventId) throws Exception {
+    public ResponseEntity<String> uploadEventPhotos(@RequestPart("eventPhotos") MultipartFile[] multipartImage, @PathVariable int eventId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event event = eventService.getEvent(eventId);
@@ -92,7 +92,7 @@ class MediaController {
 
     @GetMapping("/event-photos/get/{eventId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> getEventPhotos(@PathVariable String eventId) {
+    public ResponseEntity<Object> getEventPhotos(@PathVariable int eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event event = eventService.getEvent(eventId);

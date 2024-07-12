@@ -93,7 +93,7 @@ public class VolunteerService {
         return null;
     }
 
-    public Volunteer registerEvent(String eventId, String userId) {
+    public Volunteer registerEvent(int eventId, String userId) {
         Event event = eventRepository.findById(eventId).orElse(null);
         Volunteer v = volunteerRepository.findById(userId).orElse(null);
         if (event == null || v == null) {
@@ -108,7 +108,7 @@ public class VolunteerService {
         return volunteerRepository.save(v);
     }
 
-    public Volunteer unregisterEvent(String eventId, String userId) {
+    public Volunteer unregisterEvent(int eventId, String userId) {
         Event event = eventRepository.findById(eventId).orElse(null);
         Volunteer v = volunteerRepository.findById(userId).orElse(null);
         if (event == null || v == null) {

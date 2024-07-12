@@ -71,7 +71,7 @@ public class VolunteerController {
 
     @PostMapping("/register/event/{eventId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
-    public ResponseEntity<String> registerEvent(@PathVariable String eventId) {
+    public ResponseEntity<String> registerEvent(@PathVariable int eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 //        System.out.println(payload.get("userId"));
@@ -86,7 +86,7 @@ public class VolunteerController {
 
     @PostMapping("/unregister/event/{eventId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
-    public ResponseEntity<String> unregisterEvent(@PathVariable String eventId) {
+    public ResponseEntity<String> unregisterEvent(@PathVariable int eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (user instanceof Volunteer) {

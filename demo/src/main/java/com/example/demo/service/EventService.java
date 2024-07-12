@@ -28,7 +28,7 @@ public class EventService {
         this.mediaService = mediaService;
     }
 
-    public Event updateEvent(CreateOppDTO dto, String eventId) {
+    public Event updateEvent(CreateOppDTO dto, int eventId) {
         Event currentEvent = eventRepository.findById(eventId).orElse(null);
 
         if (currentEvent == null) {
@@ -52,10 +52,7 @@ public class EventService {
 
     public CleanEventDTO createEvent(CreateOppDTO dto, Organisation o) {
         Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(),
-                dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
-        if (eventRepository.findById(e.getId()).isPresent()) {
-            return null;
-        }
+        dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
         // System.out.println("creating event now");
         // System.out.println(o.getUsername());
         o.getEventsOrg().add(e);
@@ -66,7 +63,7 @@ public class EventService {
         return getCleanEvent(eventRepository.save(e));
     }
 
-    public Event getEvent(String eventId) {
+    public Event getEvent(int eventId) {
         return eventRepository.findById(eventId).orElse(null);
     }
 
@@ -89,7 +86,7 @@ public class EventService {
         return clean;
     }
 
-    public Event deleteEvent(String eventId) {
+    public Event deleteEvent(int eventId) {
         Event event = getEvent(eventId);
         if (event == null) {
             return null;
@@ -149,7 +146,7 @@ public class EventService {
     // return eventRepository.save(e);
     // }
 
-    public List<CleanVolunteerDTO> getEventParticipants(String eventId) {
+    public List<CleanVolunteerDTO> getEventParticipants(int eventId) {
         Event e = eventRepository.findById(eventId).orElse(null);
         if (e == null) {
             return new ArrayList<>();
@@ -167,21 +164,26 @@ public class EventService {
         return cleanVolList;
     }
 
-    public void setEventParticipants(String eventId, List<CleanVolunteerDTO> dto) {
+    public List<CleanVolunteerDTO> setEventParticipants(int eventId, List<CleanVolunteerDTO> dto) {
         Event e = eventRepository.findById(eventId).orElse(null);
         if (e == null) {
-            return;
+            return new ArrayList<>();
         }
 
+        List<CleanVolunteerDTO> newCleanVol = new ArrayList<>(dto);
+        Set<User> currentParticipants = e.getParticipants();
         Set<User> participants = new HashSet<>();
         for (CleanVolunteerDTO vol : dto) {
+            System.out.println(vol.getEmail());
             User user = userRepository.findById(vol.getEmail()).orElse(null);
-            if (user != null) {
+            if (user != null && currentParticipants.contains(user)) {
                 participants.add(user);
+            } else if (!currentParticipants.contains(user)) {
+                newCleanVol.remove(vol);
             }
         }
 
-        for (User vol : e.getParticipants()) {
+        for (User vol : currentParticipants) {
             if (!participants.contains(vol)) {
                 Set<Event> eventsPart = vol.getEventsPart();
                 eventsPart.remove(e);
@@ -192,6 +194,8 @@ public class EventService {
 
         e.setParticipants(participants);
         eventRepository.save(e);
+        
+        return newCleanVol;
     }
 
 }

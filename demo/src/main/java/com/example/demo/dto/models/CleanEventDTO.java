@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CleanEventDTO {
-    private String id;
+    private int id;
     private String name;
     private LocalDate date;
     private LocalTime startTime;
@@ -37,7 +37,7 @@ public class CleanEventDTO {
     private List<String> photosFilepaths;
     private List<byte[]> photosBytes;
 
-    public CleanEventDTO(String id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes, List<String> photosFilepaths) {
+    public CleanEventDTO(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes, List<String> photosFilepaths) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -55,11 +55,11 @@ public class CleanEventDTO {
         this.photosFilepaths = photosFilepaths;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface EventRepository extends JpaRepository<Event, String> {
+public interface EventRepository extends JpaRepository<Event, Integer> {
     List<Event> findByOrganisation(Organisation org);
 
     List<Event> findByDateGreaterThanEqual(LocalDate d);

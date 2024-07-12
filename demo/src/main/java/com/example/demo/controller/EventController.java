@@ -79,8 +79,8 @@ public class EventController {
     }
 
     @GetMapping("/get/{eventId}")
-    @PreAuthorize("hasAnyRole('ORGANISATION', 'VOLUNTEER')")
-    public ResponseEntity<CleanEventDTO> getEvent(@PathVariable String eventId) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<CleanEventDTO> getEvent(@PathVariable int eventId) {
         Event event = eventService.getEvent(eventId);
         if (event == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -91,7 +91,7 @@ public class EventController {
 
     @PutMapping("/update/{eventId}")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<String> updateEvent(@PathVariable String eventId, @RequestBody CreateOppDTO dto) {
+    public ResponseEntity<String> updateEvent(@PathVariable int eventId, @RequestBody CreateOppDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (user instanceof Organisation) {
@@ -105,7 +105,7 @@ public class EventController {
 
     @DeleteMapping("/delete/{eventId}")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<String> deleteEvent(@PathVariable String eventId) {
+    public ResponseEntity<String> deleteEvent(@PathVariable int eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (user instanceof Organisation) {
@@ -117,7 +117,7 @@ public class EventController {
     
     @GetMapping("/{eventId}/participants")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<VolListDTO> eventPartipants(@PathVariable String eventId) {
+    public ResponseEntity<VolListDTO> eventPartipants(@PathVariable int eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event e = eventService.getEvent(eventId);   
@@ -145,15 +145,16 @@ public class EventController {
 
     @PostMapping("/{eventId}/participants/attendance")
     @PreAuthorize("hasRole('ORGANISATION')")
-    public ResponseEntity<VolListDTO> setEventAttendance(@PathVariable String eventId, @RequestBody List<CleanVolunteerDTO> dto) {
+    public ResponseEntity<VolListDTO> setEventAttendance(@PathVariable int eventId, @RequestBody List<CleanVolunteerDTO> dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event e = eventService.getEvent(eventId);
         if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        eventService.setEventParticipants(eventId, dto);
-        VolListDTO res = new VolListDTO(dto);
+        
+        List<CleanVolunteerDTO> cvd = eventService.setEventParticipants(eventId, dto);
+        VolListDTO res = new VolListDTO(cvd);
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 }

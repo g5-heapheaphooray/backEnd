@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Event {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    // private String id;
 
     @Column(name = "name")
     private String name;
@@ -89,7 +89,7 @@ public class Event {
     }
 
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes){
-        this.id = String.format("%s-%s", organisation.getEmail(), name);
+        // this.id = String.format("%s-%s", organisation.getEmail(), name);
         this.name = name;
         this.date = date;
         this.startTime = startTime;
@@ -106,11 +106,11 @@ public class Event {
         this.photos = new HashSet<>();
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
