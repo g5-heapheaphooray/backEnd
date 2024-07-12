@@ -53,6 +53,9 @@ public class EventService {
     public CleanEventDTO createEvent(CreateOppDTO dto, Organisation o) {
         Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(),
                 dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
+        if (eventRepository.findById(e.getId()).isPresent()) {
+            return null;
+        }
         // System.out.println("creating event now");
         // System.out.println(o.getUsername());
         o.getEventsOrg().add(e);
