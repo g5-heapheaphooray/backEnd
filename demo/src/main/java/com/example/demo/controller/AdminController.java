@@ -56,17 +56,17 @@ public class AdminController {
 
     @GetMapping("/all-volunteers")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<VolListDTO> getAllVolunteers() {
-        List<CleanVolunteerDTO> cleanVols = volunteerService.getAllVolunteers();
-        VolListDTO res = new VolListDTO(cleanVols);
+    public ResponseEntity<UserListDTO> getAllVolunteers() {
+        List<UserResponseDTO> cleanVols = adminService.getAllVol();
+        UserListDTO res = new UserListDTO(cleanVols);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/all-organisation")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<OrgListDTO> getAllOrganisations() {
-        List<CleanOrganisationDTO> cleanOrgs = organisationService.getAllOrg();
-        OrgListDTO res = new OrgListDTO(cleanOrgs);
+    public ResponseEntity<UserListDTO> getAllOrganisations() {
+        List<UserResponseDTO> cleanOrgs = organisationService.getAllOrg();
+        UserListDTO res = new UserListDTO(cleanOrgs);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

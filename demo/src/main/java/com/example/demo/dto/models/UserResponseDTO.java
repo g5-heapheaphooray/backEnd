@@ -20,8 +20,11 @@ public class UserResponseDTO {
     private String website;
     private String description;
     private char userType;
+    private boolean verified;
+    private boolean blacklisted;
+    private byte[] pfpBytes;
 
-    public UserResponseDTO(String message, String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType) {
+    public UserResponseDTO(String message, String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType, boolean blacklisted, byte[] pfpBytes) {
         this.message = message;
         this.email = email;
         this.fullName = fullName;
@@ -32,9 +35,11 @@ public class UserResponseDTO {
         this.hours = hours;
         this.points = points;
         this.userType = userType;
+        this.blacklisted = blacklisted;
+        this.pfpBytes = pfpBytes;
     }
 
-    public UserResponseDTO(String message, int code, String email, String fullName, int complainCount, String contactNo, String location, String website, String description, char userType) {
+    public UserResponseDTO(String message, int code, String email, String fullName, int complainCount, String contactNo, String location, String website, String description, boolean verified, boolean blacklisted, char userType, byte[] pfpBytes) {
         this.message = message;
         this.email = email;
         this.fullName = fullName;
@@ -44,6 +49,9 @@ public class UserResponseDTO {
         this.website = website;
         this.description = description;
         this.userType = userType;
+        this.verified = verified;
+        this.blacklisted = blacklisted;
+        this.pfpBytes = pfpBytes;
     }
 
     public String getMessage() {
@@ -148,5 +156,29 @@ public class UserResponseDTO {
 
     public void setUserType(char userType) {
         this.userType = userType;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public boolean isBlacklisted() {
+        return blacklisted;
+    }
+
+    public void setBlacklisted(boolean blacklisted) {
+        this.blacklisted = blacklisted;
+    }
+
+    public byte[] getPfpBytes() {
+        return pfpBytes;
+    }
+
+    public void setPfpBytes(byte[] pfpBytes) {
+        this.pfpBytes = pfpBytes;
     }
 }

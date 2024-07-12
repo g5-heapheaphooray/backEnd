@@ -71,7 +71,9 @@ public class OrganisationService {
         List<Organisation> orgs = organisationRepository.findAll();
         List<CleanOrganisationDTO> cleanOrgs = new ArrayList<>();
         for (Organisation o : orgs) {
-            cleanOrgs.add(getCleanOrg(o));
+            if (o.isVerified() && o.isAccountNonLocked()) {
+                cleanOrgs.add(getCleanOrg(o));
+            }
         }
         return cleanOrgs;
     }
