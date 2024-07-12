@@ -138,7 +138,15 @@ public class RewardService {
 
     @Transactional()
     public String redeemReward(RewardCategory rc, Volunteer v) {
-        RewardBarcode reward = rewardBarcodeRepository.findById(rc.getNextAvailableIndex()).orElse(null);
+        List<RewardBarcode> rewards = rewardBarcodeRepository.findByRewardCategory(rc);
+        RewardBarcode reward = null;
+        for (RewardBarcode rb : rewards) {
+            if (rb.isRedeemed() == false) {
+                reward = rb; 
+                break;
+            }
+        }
+        // RewardBarcode reward = rewardBarcodeRepository.findById(rc.getNextAvailableIndex()).orElse(null);
         if (reward == null || reward.isRedeemed()) {
             return "Reward not available";
         }
@@ -161,7 +169,7 @@ public class RewardService {
             userRepository.save(v);
             System.out.println("hi3");
 
-            rc.setNextAvailableIndex(rc.getNextAvailableIndex()+1);
+            // rc.setNextAvailableIndex(rc.getNextAvailableIndex()+1);
             rewardCategoryRepository.save(rc);
             System.out.println("hi4");
             return "Reward redeemed";
@@ -180,7 +188,9 @@ public class RewardService {
         }
         for (RewardBarcode rewardBarcode : vRewards) {
             if (rewardBarcode.getId() == rb.getId()) {
-                vRewards.remove(rb);
+                System.out.println("hello");
+                vRewards.remove(rewardBarcode);
+                System.out.println(vRewards.size());
                 v.setRedeemedRewards(vRewards);
                 userRepository.save(v);
 

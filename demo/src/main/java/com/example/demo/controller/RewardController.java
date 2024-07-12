@@ -127,6 +127,7 @@ public class RewardController {
     @GetMapping("/reward/all-redeemed")
     @PreAuthorize("hasRole('VOLUNTEER')")
     public ResponseEntity<RewardBarcodesListDTO> redeemedReward() {
+        System.out.println("hi 1");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Set<RewardBarcode> vRewards = ((Volunteer) user).getRedeemedRewards();
@@ -138,12 +139,15 @@ public class RewardController {
             rList.add(crb);
         }
         RewardBarcodesListDTO res = new RewardBarcodesListDTO(rList);
+        System.out.println("bye 1");
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/reward/use/{rewardId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
     public ResponseEntity<CleanRewardsBarcodeDTO> useRewardBarcode(@PathVariable int rewardId) {
+        System.out.println("hi 2");
+        System.out.println(rewardId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         RewardBarcode rb = rewardService.useRewardBarcode(rewardId, (Volunteer) user);
@@ -153,6 +157,7 @@ public class RewardController {
         RewardCategory rc = rb.getRewardCategory();
         CleanRewardsBarcodeDTO crb = new CleanRewardsBarcodeDTO(rb.getId(), rb.getBarcode(), rb.isRedeemed(), rb.getExpiryDate(), user.getEmail(),
                 rc.getId(), rc.getName(), rc.getPointsNeeded(), rc.getType(), rc.getDescription());
+        System.out.println("bye 2");
         return new ResponseEntity<>(crb, HttpStatus.OK);
     }
 
