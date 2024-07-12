@@ -41,12 +41,11 @@ public class RewardCategory {
     public RewardCategory(){
     }
 
-    public RewardCategory(String name, int pointsNeeded, String type, String description, int count){
+    public RewardCategory(String name, int pointsNeeded, String type, String description){
         this.name = name;
         this.pointsNeeded = pointsNeeded;
         this.type = type;
         this.description = description;
-        this.count = count;
         this.rewards = new HashSet<>();
         this.rewardMedia = new RewardMedia("default.png", "./media/reward-media/default.png", this);
         this.nextAvailableIndex = 1;

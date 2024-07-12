@@ -44,7 +44,7 @@ public class RewardService {
     }
 
     public CleanRewardsCategoryDTO createRewardCategory(CreateRewardDTO r) {
-        RewardCategory rc = new RewardCategory(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription(), r.getCount());
+        RewardCategory rc = new RewardCategory(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
         rewardCategoryRepository.save(rc);
         // RewardMedia rm = mediaService.saveRewardImage(r.getMedia(), rc);
 //        Reward newReward = new Reward(r.getName(), r.getPointsNeeded(), r.getBarcodeSerialNo(), r.getType(), r.getDescription());
