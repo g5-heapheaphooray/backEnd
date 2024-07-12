@@ -169,19 +169,24 @@ public class RewardService {
         return "Not enough points";
     }
 
+    @Transactional()
     public RewardBarcode useRewardBarcode(int rewardId, Volunteer v) {
         RewardBarcode rb = rewardBarcodeRepository.findById(rewardId).orElse(null);
+        System.out.println(rb);
         Set<RewardBarcode> vRewards = v.getRedeemedRewards();
+        System.out.println(vRewards);
         if (rb == null) {
             return null;
         }
-        if (vRewards.contains(rb)) {
-            vRewards.remove(rb);
-            v.setRedeemedRewards(vRewards);
-            userRepository.save(v);
+        for (RewardBarcode rewardBarcode : vRewards) {
+            if (rewardBarcode.getId() == rb.getId()) {
+                vRewards.remove(rb);
+                v.setRedeemedRewards(vRewards);
+                userRepository.save(v);
 
-            rewardBarcodeRepository.delete(rb);
-            return rb;
+                rewardBarcodeRepository.delete(rb);
+                return rb;
+            }
         }
         return null;
     }
