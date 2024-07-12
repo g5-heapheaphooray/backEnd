@@ -6,7 +6,6 @@ import jakarta.persistence.Column;
 import java.time.LocalDate;
 
 public class UserResponseDTO {
-    private String message;
     private String email;
     private String fullName;
     // both volunteer and organisation will have but the limit diff ig
@@ -24,8 +23,7 @@ public class UserResponseDTO {
     private boolean blacklisted;
     private byte[] pfpBytes;
 
-    public UserResponseDTO(String message, String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType, boolean blacklisted, byte[] pfpBytes) {
-        this.message = message;
+    public UserResponseDTO(String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType, boolean blacklisted, byte[] pfpBytes) {
         this.email = email;
         this.fullName = fullName;
         this.complainCount = complainCount;
@@ -39,8 +37,7 @@ public class UserResponseDTO {
         this.pfpBytes = pfpBytes;
     }
 
-    public UserResponseDTO(String message, int code, String email, String fullName, int complainCount, String contactNo, String location, String website, String description, boolean verified, boolean blacklisted, char userType, byte[] pfpBytes) {
-        this.message = message;
+    public UserResponseDTO(String email, String fullName, int complainCount, String contactNo, String location, String website, String description, boolean verified, boolean blacklisted, char userType, byte[] pfpBytes) {
         this.email = email;
         this.fullName = fullName;
         this.complainCount = complainCount;
@@ -52,14 +49,6 @@ public class UserResponseDTO {
         this.verified = verified;
         this.blacklisted = blacklisted;
         this.pfpBytes = pfpBytes;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public String getEmail() {

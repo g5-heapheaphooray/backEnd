@@ -2,21 +2,19 @@ package com.example.demo.dto;
 
 import java.util.List;
 
-import com.example.demo.dto.models.CleanVolunteerDTO;
-import com.example.demo.model.Volunteer;
-
+import com.example.demo.dto.models.UserResponseDTO;
 public class UserListDTO {
-    public List<UserListDTO> users;
+    public List<UserResponseDTO> users;
 
-    public UserListDTO(List<UserListDTO> users) {
+    public UserListDTO(List<UserResponseDTO> users) {
         this.users = users;
     }
 
-    public List<UserListDTO> getUsers() {
+    public List<UserResponseDTO> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserListDTO> users) {
+    public void setUsers(List<UserResponseDTO> users) {
         this.users = users;
     }
 }

@@ -8,10 +8,12 @@ import java.util.Optional;
 import com.example.demo.dto.RegisterAdminDTO;
 import com.example.demo.dto.RegisterVolunteerDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
+import com.example.demo.dto.models.UserResponseDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.demo.service.*;
 
 @Service
 public class AdminService {
@@ -21,14 +23,16 @@ public class AdminService {
     private final EventRepository eventRepository;
     private final VolunteerRepository volunteerRepository;
     private final RoleRepository roleRepository;
+    private final MediaService mediaService;
 
     @Autowired
-    public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, RoleRepository roleRepository) {
+    public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, RoleRepository roleRepository, MediaService mediaService) {
         this.organisationRepository = organisationRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.volunteerRepository = volunteerRepository;
         this.roleRepository = roleRepository;
+        this.mediaService = mediaService;
     }
 
 //    public Organisation createOrganisation(Organisation organisation) {
@@ -74,15 +78,25 @@ public class AdminService {
     }
 
     public UserResponseDTO getCleanOrg(Organisation o) {
-        byte[] pfpBytes = mediaService.getMedia(o.getPfp().getFilepath());
+        byte[] pfpBytes = null;
+        try {
+            pfpBytes = mediaService.getMedia(o.getPfp().getFilepath());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return new UserResponseDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(),
                 o.isVerified(), !o.isAccountNonLocked(), 'O', pfpBytes);
     }
 
     public UserResponseDTO getCleanVol(Volunteer v) {
-        byte[] pfpBytes = mediaService.getMedia(v.getPfp().getFilepath());
+        byte[] pfpBytes = null;
+        try {
+            pfpBytes = mediaService.getMedia(v.getPfp().getFilepath());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return new UserResponseDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(),
-                'V', !o.isAccountNonLocked(), pfpBytes);
+                'V', !v.isAccountNonLocked(), pfpBytes);
     }
     public List<UserResponseDTO> getAllOrg() {
         List<Organisation> orgs = organisationRepository.findAll();

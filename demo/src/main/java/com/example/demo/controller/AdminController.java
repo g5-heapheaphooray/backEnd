@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.*;
 import com.example.demo.dto.models.CleanOrganisationDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
+import com.example.demo.dto.models.UserResponseDTO;
 import com.example.demo.model.Admin;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.Volunteer;
@@ -65,7 +66,7 @@ public class AdminController {
     @GetMapping("/all-organisation")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserListDTO> getAllOrganisations() {
-        List<UserResponseDTO> cleanOrgs = organisationService.getAllOrg();
+        List<UserResponseDTO> cleanOrgs = adminService.getAllOrg();
         UserListDTO res = new UserListDTO(cleanOrgs);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
