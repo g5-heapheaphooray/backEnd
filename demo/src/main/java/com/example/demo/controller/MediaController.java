@@ -92,13 +92,10 @@ class MediaController {
 
     @GetMapping("/event-photos/get/{eventId}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> uploadEventPhotos(@PathVariable String eventId) {
+    public ResponseEntity<Object> getEventPhotos(@PathVariable String eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         Event event = eventService.getEvent(eventId);
-        if (!event.getOrganisation().getEmail().equals(user.getEmail())) {
-            return new ResponseEntity<>("Unauthorised", HttpStatus.UNAUTHORIZED);
-        }
         Set<EventMedia> ems = event.getPhotos();
         List<byte[]> res = new ArrayList<>();
         for (EventMedia em : ems) {
