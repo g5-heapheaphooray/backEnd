@@ -74,11 +74,18 @@ class MediaController {
         if (!event.getOrganisation().getEmail().equals(user.getEmail())) {
             return new ResponseEntity<>("Unauthorised", HttpStatus.UNAUTHORIZED);
         }
+        Set<EventMedia> ems = new HashSet<>();
+        System.out.println(multipartImage.length);
         for (MultipartFile img : multipartImage) {
             EventMedia m = mediaService.saveEventImages(img, event);
             if (m == null) {
                 return new ResponseEntity<>("Image upload failed", HttpStatus.BAD_REQUEST);
             }
+            ems.add(m);
+        }
+        Event e = mediaService.saveEventImagesDb(ems, event);
+        if (e == null) {
+            return new ResponseEntity<>("Image upload failed", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }

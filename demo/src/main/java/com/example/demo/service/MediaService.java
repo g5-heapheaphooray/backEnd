@@ -75,6 +75,11 @@ public class MediaService {
         return pfp;
     }
 
+    public Event saveEventImagesDb(Set<EventMedia> ems, Event event) {
+        event.setPhotos(ems);
+        return eventRepository.save(event);
+    }
+
     public EventMedia saveEventImages(MultipartFile multipartImage, Event event) {
 //        Path currentRelativePath = Paths.get("");
 //        System.out.println(currentRelativePath.toAbsolutePath().toString());
@@ -92,10 +97,10 @@ public class MediaService {
             return null;
         }
         em.setFilepath(filepath);
-        Set<EventMedia> ems = event.getPhotos();
-        ems.add(em);
-        event.setPhotos(ems);
-        eventRepository.save(event);
+        // Set<EventMedia> ems = event.getPhotos();
+        // ems.add(em);
+        // event.setPhotos(ems);
+        // eventRepository.save(event);
         return mediaRepository.save(em);
     }
 
