@@ -117,6 +117,8 @@ public class RewardService {
                 bcList.add(bc);
             }
             System.out.println("end");
+            rc.setCount(rc.getCount() + bcList.size());
+            rewardCategoryRepository.save(rc);
         } catch (Exception e) {
             return null;
         }
@@ -138,6 +140,9 @@ public class RewardService {
 
     @Transactional()
     public String redeemReward(RewardCategory rc, Volunteer v) {
+        if (rc.getCount() == 0) {
+            return "Reward not available";
+        }
         List<RewardBarcode> rewards = rewardBarcodeRepository.findByRewardCategory(rc);
         RewardBarcode reward = null;
         for (RewardBarcode rb : rewards) {
@@ -172,6 +177,9 @@ public class RewardService {
             // rc.setNextAvailableIndex(rc.getNextAvailableIndex()+1);
             rewardCategoryRepository.save(rc);
             System.out.println("hi4");
+
+            rc.setCount(rc.getCount() - 1);
+            rewardCategoryRepository.save(rc);
             return "Reward redeemed";
         }
         return "Not enough points";
