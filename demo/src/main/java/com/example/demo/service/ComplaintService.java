@@ -37,8 +37,8 @@ public class ComplaintService {
         List<byte[]> cmsBytes = new ArrayList<>();
         for (ComplaintMedia cm : cms) {
             try {
-                cmsBytes.add(mediaService.getMedia(cm.getFilepath()));
-                cmsFp.add(cm.getFilepath());
+//                cmsBytes.add(mediaService.getMedia(cm.getFilepath()));
+                cmsFp.add(mediaService.getObjectUrl(cm.getFilepath()));
             } catch (Exception ex) {
             }         
         }
@@ -123,5 +123,9 @@ and the following description:
         }
         complaint.setStatus("resolved");
         return getCleanComplaintDTO(complaintRepository.save(complaint));
+    }
+
+    public Complaint getUncleanComplaint(int complaintId) {
+        return complaintRepository.findById(complaintId).orElse(null);
     }
 }

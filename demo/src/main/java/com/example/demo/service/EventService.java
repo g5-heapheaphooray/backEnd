@@ -73,8 +73,8 @@ public class EventService {
         List<byte[]> emsBytes = new ArrayList<>();
         for (EventMedia em : ems) {
             try {
-                emsBytes.add(mediaService.getMedia(em.getFilepath()));
-                emsFp.add(em.getFilepath());
+//                emsBytes.add(mediaService.getMedia(em.getFilepath()));
+                emsFp.add(mediaService.getObjectUrl(em.getFilepath()));
             } catch (Exception ex) {
             }
 

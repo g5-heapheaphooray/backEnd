@@ -42,7 +42,7 @@ public class RewardService {
     }
 
     public CleanRewardsCategoryDTO getCleanRewardCategory(RewardCategory rc) {
-        return new CleanRewardsCategoryDTO(rc.getId(), rc.getName(), rc.getPointsNeeded(), rc.getType(), rc.getDescription(), rc.getCount(), rc.getRewardMedia().getFilepath());
+        return new CleanRewardsCategoryDTO(rc.getId(), rc.getName(), rc.getPointsNeeded(), rc.getType(), rc.getDescription(), rc.getCount(), mediaService.getObjectUrl(rc.getRewardMedia().getFilepath()));
     }
 
     public CleanRewardsBarcodeDTO getCleanRewardBarcode(RewardBarcode rb) {

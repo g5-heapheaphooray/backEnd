@@ -39,9 +39,10 @@ public class UserService {
     private final EventService eventService;
     private final VolunteerRepository volunteerRepository;
     private final MailService mailService;
+    private final MediaService mediaService;
 
     @Autowired
-    public UserService(UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, EventService eventService, MailService mailService) {
+    public UserService(UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, EventService eventService, MailService mailService, MediaService mediaService) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
         this.volunteerRepository = volunteerRepository;
@@ -50,14 +51,15 @@ public class UserService {
         this.roleRepository = roleRepository;
         this.eventService = eventService;
         this.mailService = mailService;
+        this.mediaService = mediaService;
     }
 
     public CleanVolunteerDTO getCleanVolunteer(Volunteer v) {
-        return new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+        return new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), mediaService.getObjectUrl(v.getPfp().getFilepath()));
     }
 
     public CleanOrganisationDTO getCleanOrganisation(Organisation o) {
-        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), mediaService.getObjectUrl(o.getPfp().getFilepath()));
     }
 
     public User createVolunteer(RegisterVolunteerDTO v) {

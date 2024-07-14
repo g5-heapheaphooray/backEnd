@@ -87,6 +87,14 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.huaweicloud/esdk-obs-java-bundle -->
+		<dependency>
+			<groupId>com.huaweicloud</groupId>
+			<artifactId>esdk-obs-java-bundle</artifactId>
+			<version>3.23.9</version>
+		</dependency>
+
+
 
 	</dependencies>
 
