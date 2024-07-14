@@ -63,6 +63,13 @@ public class AdminController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/get-volunteer/{email}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CleanVolunteerDTO> getVolunteer(@PathVariable String email) {
+        CleanVolunteerDTO res = adminService.getVol(email);
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/all-organisation")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserListDTO> getAllOrganisations() {

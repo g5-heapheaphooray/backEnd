@@ -24,15 +24,18 @@ public class AdminService {
     private final VolunteerRepository volunteerRepository;
     private final RoleRepository roleRepository;
     private final MediaService mediaService;
+    private final UserService userService;
 
     @Autowired
-    public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, RoleRepository roleRepository, MediaService mediaService) {
+    public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, RoleRepository roleRepository,
+                        MediaService mediaService, UserService userService) {
         this.organisationRepository = organisationRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.volunteerRepository = volunteerRepository;
         this.roleRepository = roleRepository;
         this.mediaService = mediaService;
+        this.userService = userService;
     }
 
 //    public Organisation createOrganisation(Organisation organisation) {
@@ -114,6 +117,14 @@ public class AdminService {
             cleanVols.add(getCleanVol(v));
         }
         return cleanVols;
+    }
+
+    public CleanVolunteerDTO getVol(String email) {
+        Volunteer v = volunteerRepository.findById(email).orElse(null);
+        if (v == null) {
+            return null;
+        }
+        return userService.getCleanVolunteer(v);
     }
 
 

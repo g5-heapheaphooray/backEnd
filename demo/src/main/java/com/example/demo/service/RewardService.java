@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.example.demo.dto.RewardBarcodesListDTO;
+import com.example.demo.dto.models.CleanRewardsBarcodeDTO;
 import com.example.demo.model.RewardCategory;
 import com.example.demo.model.RewardMedia;
 import com.example.demo.model.Volunteer;
@@ -41,6 +43,16 @@ public class RewardService {
 
     public CleanRewardsCategoryDTO getCleanRewardCategory(RewardCategory rc) {
         return new CleanRewardsCategoryDTO(rc.getId(), rc.getName(), rc.getPointsNeeded(), rc.getType(), rc.getDescription(), rc.getCount(), rc.getRewardMedia().getFilepath());
+    }
+
+    public CleanRewardsBarcodeDTO getCleanRewardBarcode(RewardBarcode rb) {
+        RewardCategory rc = rb.getRewardCategory();
+        String vemail = null;
+        if (rb.getVolunteer() != null) {
+            vemail = rb.getVolunteer().getEmail();
+        }
+        return new CleanRewardsBarcodeDTO(rb.getId(), rb.getBarcode(), rb.isRedeemed(), rb.getExpiryDate(), vemail,
+                rc.getId(), rc.getName(), rc.getPointsNeeded(), rc.getType(), rc.getDescription());
     }
 
     public CleanRewardsCategoryDTO createRewardCategory(CreateRewardDTO r) {
@@ -207,6 +219,20 @@ public class RewardService {
             }
         }
         return null;
+    }
+
+    public RewardBarcodesListDTO getRewardBarcodes(int rewardCatId) {
+        RewardCategory rc = rewardCategoryRepository.findById(rewardCatId).orElse(null);
+        if (rc == null) {
+            return null;
+        }
+        List<CleanRewardsBarcodeDTO> crbList = new ArrayList<>();
+        List<RewardBarcode> rbList = rewardBarcodeRepository.findByRewardCategory(rc);
+        for (RewardBarcode rb : rbList) {
+            crbList.add(getCleanRewardBarcode(rb));
+        }
+        RewardBarcodesListDTO res = new RewardBarcodesListDTO(crbList);
+        return res;
     }
 
 //    public RewardBarcode viewRewardBarcode(int rewardId, Volunteer v) {
