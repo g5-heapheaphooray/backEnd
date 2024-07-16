@@ -27,6 +27,7 @@ import com.example.demo.service.VolunteerService;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000",maxAge = 3600, allowedHeaders = "*", methods = "*")
+@CrossOrigin
 @RequestMapping("/api/v1/admin")
 public class AdminController {
 
