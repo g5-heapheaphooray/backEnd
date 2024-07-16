@@ -35,7 +35,6 @@ public class CleanEventDTO {
     private List<String> skills;
     private List<String> causes;
     private List<String> photosFilepaths;
-    private List<byte[]> photosBytes;
 
     public CleanEventDTO(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes, List<String> photosFilepaths) {
         this.id = id;
@@ -173,13 +172,5 @@ public class CleanEventDTO {
 
     public void setPhotosFilepaths(List<String> photosFilepaths) {
         this.photosFilepaths = photosFilepaths;
-    }
-
-    public List<byte[]> getPhotosBytes() {
-        return photosBytes;
-    }
-
-    public void setPhotosBytes(List<byte[]> photosBytes) {
-        this.photosBytes = photosBytes;
     }
 }

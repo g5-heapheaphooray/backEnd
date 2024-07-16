@@ -158,7 +158,7 @@ public class EventService {
             if (vol instanceof Volunteer v) {
                 cleanVolList.add(
                         new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(),
-                                v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath()));
+                                v.getGender(), v.getDob(), v.getHours(), v.getPoints(), mediaService.getObjectUrl(v.getPfp().getFilepath())));
             }
         }
         return cleanVolList;

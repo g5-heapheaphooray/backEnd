@@ -11,7 +11,6 @@ public class CleanComplaintDTO {
     private String description;
     private String status;
     private List<String> photosFilepaths;
-    private List<byte[]> photosBytes;
 
     public CleanComplaintDTO(int id, String userId, LocalDateTime dateTime, String title, String description, String status, List<String> photosFilepaths) {
         this.id = id;
@@ -77,13 +76,5 @@ public class CleanComplaintDTO {
 
     public void setPhotosFilepaths(List<String> photosFilepaths) {
         this.photosFilepaths = photosFilepaths;
-    }
-
-    public List<byte[]> getPhotosBytes() {
-        return photosBytes;
-    }
-
-    public void setPhotosBytes(List<byte[]> photosBytes) {
-        this.photosBytes = photosBytes;
     }
 }

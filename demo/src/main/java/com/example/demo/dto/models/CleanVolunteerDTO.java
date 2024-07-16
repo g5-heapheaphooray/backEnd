@@ -16,7 +16,6 @@ public class CleanVolunteerDTO {
     private double hours;
     private int points;
     private String pfp_filepath;
-    private byte[] pfp_bytes;
 //    private Set<Event> eventsPart;
 
 
@@ -105,11 +104,4 @@ public class CleanVolunteerDTO {
         this.pfp_filepath = pfp_filepath;
     }
 
-    public byte[] getPfp_bytes() {
-        return pfp_bytes;
-    }
-
-    public void setPfp_bytes(byte[] pfp_bytes) {
-        this.pfp_bytes = pfp_bytes;
-    }
 }

@@ -21,9 +21,9 @@ public class UserResponseDTO {
     private char userType;
     private boolean verified;
     private boolean blacklisted;
-    private byte[] pfpBytes;
+    private String pfpFilepath;
 
-    public UserResponseDTO(String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType, boolean blacklisted, byte[] pfpBytes) {
+    public UserResponseDTO(String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, char userType, boolean blacklisted, String pfpFilepath) {
         this.email = email;
         this.fullName = fullName;
         this.complainCount = complainCount;
@@ -34,10 +34,10 @@ public class UserResponseDTO {
         this.points = points;
         this.userType = userType;
         this.blacklisted = blacklisted;
-        this.pfpBytes = pfpBytes;
+        this.pfpFilepath = pfpFilepath;
     }
 
-    public UserResponseDTO(String email, String fullName, int complainCount, String contactNo, String location, String website, String description, boolean verified, boolean blacklisted, char userType, byte[] pfpBytes) {
+    public UserResponseDTO(String email, String fullName, int complainCount, String contactNo, String location, String website, String description, boolean verified, boolean blacklisted, char userType, String pfpFilepath) {
         this.email = email;
         this.fullName = fullName;
         this.complainCount = complainCount;
@@ -48,7 +48,7 @@ public class UserResponseDTO {
         this.userType = userType;
         this.verified = verified;
         this.blacklisted = blacklisted;
-        this.pfpBytes = pfpBytes;
+        this.pfpFilepath = pfpFilepath;
     }
 
     public String getEmail() {
@@ -163,11 +163,11 @@ public class UserResponseDTO {
         this.blacklisted = blacklisted;
     }
 
-    public byte[] getPfpBytes() {
-        return pfpBytes;
+    public String getPfpFilepath() {
+        return pfpFilepath;
     }
 
-    public void setPfpBytes(byte[] pfpBytes) {
-        this.pfpBytes = pfpBytes;
+    public void setPfpFilepath(String pfpFilepath) {
+        this.pfpFilepath = pfpFilepath;
     }
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.models.CleanOrganisationDTO;
+import com.example.demo.model.Media;
 import com.example.demo.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ import com.example.demo.repository.OrganisationRepository;
 public class OrganisationService {
     
     private final OrganisationRepository organisationRepository;
+    private final MediaService mediaService;
 
     @Autowired
-    public OrganisationService(OrganisationRepository organisationRepository) {
+    public OrganisationService(OrganisationRepository organisationRepository, MediaService mediaService) {
         this.organisationRepository = organisationRepository;
+        this.mediaService = mediaService;
     }
 
 //    public Organisation createOrganisation(Organisation organisation) {
@@ -29,7 +32,7 @@ public class OrganisationService {
 //    }
 
     public CleanOrganisationDTO getCleanOrg(Organisation o) {
-        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), mediaService.getObjectUrl(o.getPfp().getFilepath()));
     }
 
     public CleanOrganisationDTO getCleanOrg(String email) {
@@ -37,7 +40,7 @@ public class OrganisationService {
         if (o == null) {
             return null;
         }
-        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), o.getPfp().getFilepath());
+        return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), mediaService.getObjectUrl(o.getPfp().getFilepath()));
     }
 
     public Organisation updateVerified(String id) {

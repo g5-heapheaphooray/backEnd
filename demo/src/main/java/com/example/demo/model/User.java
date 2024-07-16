@@ -101,7 +101,7 @@ public class User implements UserDetails {
         this.eventsPart = eventsPart;
         this.eventsOrg = eventsOrg;
         this.role = role;
-        this.pfp = new PfpMedia("default.png", "./media/pfp/default.png", this);
+        this.pfp = new PfpMedia("default.png", "PFP/default.png", this);
     }
 
 

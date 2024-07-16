@@ -23,15 +23,17 @@ public class VolunteerService {
 
     private final VolunteerRepository volunteerRepository;
     private final EventRepository eventRepository;
+    private final MediaService mediaService;
 
     @Autowired
-    public VolunteerService(VolunteerRepository volunteerRepository, EventRepository eventRepository) {
+    public VolunteerService(VolunteerRepository volunteerRepository, EventRepository eventRepository, MediaService mediaService) {
         this.volunteerRepository = volunteerRepository;
         this.eventRepository = eventRepository;
+        this.mediaService = mediaService;
     }
 
     public CleanVolunteerDTO getCleanVol(Volunteer v) {
-        return new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), v.getPfp().getFilepath());
+        return new CleanVolunteerDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(), mediaService.getObjectUrl(v.getPfp().getFilepath()));
     }
 
     public List<CleanVolunteerDTO> getAllVolunteers() {

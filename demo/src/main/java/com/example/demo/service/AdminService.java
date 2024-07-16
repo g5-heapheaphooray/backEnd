@@ -81,25 +81,13 @@ public class AdminService {
     }
 
     public UserResponseDTO getCleanOrg(Organisation o) {
-        byte[] pfpBytes = null;
-        try {
-            pfpBytes = mediaService.getMedia(o.getPfp().getFilepath());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
         return new UserResponseDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(),
-                o.isVerified(), !o.isAccountNonLocked(), 'O', pfpBytes);
+                o.isVerified(), !o.isAccountNonLocked(), 'O', mediaService.getObjectUrl(o.getPfp().getFilepath()));
     }
 
     public UserResponseDTO getCleanVol(Volunteer v) {
-        byte[] pfpBytes = null;
-        try {
-            pfpBytes = mediaService.getMedia(v.getPfp().getFilepath());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
         return new UserResponseDTO(v.getEmail(), v.getFullName(), v.getComplainCount(), v.getContactNo(), v.getGender(), v.getDob(), v.getHours(), v.getPoints(),
-                'V', !v.isAccountNonLocked(), pfpBytes);
+                'V', !v.isAccountNonLocked(), mediaService.getObjectUrl(v.getPfp().getFilepath()));
     }
     public List<UserResponseDTO> getAllOrg() {
         List<Organisation> orgs = organisationRepository.findAll();

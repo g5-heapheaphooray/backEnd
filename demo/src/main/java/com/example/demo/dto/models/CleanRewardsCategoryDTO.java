@@ -10,7 +10,6 @@ public class CleanRewardsCategoryDTO {
     private String description;
     private int count;
     private String mediaFilepath;
-    private byte[] mediaBytes;
 
     public CleanRewardsCategoryDTO(int id, String name, int pointsNeeded, String type, String description, int count, String mediaFilepath) {
         this.id = id;
@@ -76,13 +75,5 @@ public class CleanRewardsCategoryDTO {
 
     public void setMediaFilepath(String mediaFilepath) {
         this.mediaFilepath = mediaFilepath;
-    }
-
-    public byte[] getMediaBytes() {
-        return mediaBytes;
-    }
-
-    public void setMediaBytes(byte[] mediaBytes) {
-        this.mediaBytes = mediaBytes;
     }
 }
