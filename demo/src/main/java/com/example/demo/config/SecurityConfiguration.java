@@ -59,7 +59,7 @@ public class SecurityConfiguration {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080", "http://192.168.1.154:3000", "http://101.44.162.159:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        System.out.println(configuration.getAllowedOrigins());
+//        System.out.println(configuration.getAllowedOrigins());
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 

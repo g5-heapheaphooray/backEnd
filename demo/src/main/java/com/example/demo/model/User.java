@@ -65,8 +65,9 @@ public class User implements UserDetails {
 //            inverseJoinColumns = @JoinColumn(name = "event_id"))
 //    private List<Event> eventsOrg;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "organisation")
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "organisation")
 //    @JoinColumn(name = "user_id")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "organisation")
     private Set<Event> eventsOrg;
 
     @CreationTimestamp
