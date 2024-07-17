@@ -20,6 +20,7 @@ import java.security.MessageDigest;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
@@ -40,6 +41,9 @@ public class UserService {
     private final VolunteerRepository volunteerRepository;
     private final MailService mailService;
     private final MediaService mediaService;
+
+    @Value("${frontend.source}")
+    private String frontendSource;
 
     @Autowired
     public UserService(UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, EventService eventService, MailService mailService, MediaService mediaService) {
@@ -177,7 +181,7 @@ public class UserService {
         String token = UUID.randomUUID().toString();
         user.setVerificationToken(token);
         userRepository.save(user);
-        String content = "http://localhost:3000/reset-password/"+token;
+        String content = "http://" + frontendSource + "/reset-password/"+token;
         mailService.sendMail(email, "Reset Password", content);
         return "Email sent";
     }
