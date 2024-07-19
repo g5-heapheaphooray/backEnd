@@ -109,12 +109,15 @@ public class PopulateData {
     public void createSampleEvents() {
         System.out.println("Creating sample events");
         List<Organisation> orgs = organisationRepository.findAll();
-        String[] causes = {"Animal Welfare", "Arts", "Children", "Community", "Drug Awareness", "Education", 
-        "Eldercare", "Environment and Water", "Families", "Health", "Heritage", "Humanitarian", "Mental Health", 
-        "Migrant Workers", "Other", "Rehabilitation & Reintegration", "Safety & Security", "Social Services", "Special Needs/Disabilities"};
-        String[] skills = {"Art & Craft", "Befriending", "Coaching & Mentoring", "Counselling", "Dialect-Speaking", "Emcee skills", 
-        "Entrepreneurship", "Event Management", "Facilitation", "First-aid", "Graphic Design", "Language Translation", "Music",
-        "Photography", "Reading", "Sign Language", "Social Media Execution", "Software Development", "Sports", "Tutoring", "Videography", "Web Design", "Others"};
+        String[] causes = {"animalWelfare", "arts", "children", "community", "drugs",
+        "education", "elderly", "environment", "families", "health", "heritage",
+        "humanitarian", "mentalHealth", "migrantWorkers", "other", "rehabilitation", 
+        "safety", "socialServices", "disabilities", "sports", "women", "youth"};
+        String[] skills = { "art", "befriending", "coaching", "counselling", "dialect", 
+        "emcee", "entrepreneurship", "eventManagement", "facilitation", "firstAid", 
+        "GraphicDesign", "translation", "music", "photography", "reading", "signLanguage", 
+        "socialMedia", "softwareDevelopment", "sports", "tutor", "videography", "webDesign", "other" };
+
         for (Organisation org : orgs) {
             int randNum = rand.nextInt(NUM_OF_EVENTS);
             String orgName = org.getFullName();
