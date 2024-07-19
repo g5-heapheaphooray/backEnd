@@ -79,6 +79,7 @@ public class EventService {
             }
 
         }
+        emsFp.sort(null);
         CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(),
                 e.getOrganisation().getEmail(),
                 e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(),

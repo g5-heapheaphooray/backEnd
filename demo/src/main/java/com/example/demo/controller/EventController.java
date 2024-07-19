@@ -86,6 +86,10 @@ public class EventController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         CleanEventDTO res = eventService.getCleanEvent(event);
+        for (String url : res.getPhotosFilepaths()) {
+            System.out.println(url);
+        }
+        System.out.println(res.getPhotosFilepaths().size());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
