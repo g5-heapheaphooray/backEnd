@@ -66,6 +66,12 @@ public class VolunteerService {
         return volunteerRepository.save(v);
     }
 
+    public Volunteer updatePoints(Volunteer v, int points){
+
+        v.setPoints(v.getPoints() + points);
+        return volunteerRepository.save(v);
+    }
+
     // public Volunteer updateEventsPart(String id, Event event){
     //     Volunteer v = volunteerRepository.findById(id).orElse(null);
     //     if(v == null){

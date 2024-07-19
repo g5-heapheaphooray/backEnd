@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -116,6 +118,25 @@ public class RewardService {
         return getCleanRewardCategory(reward);
     }
 
+    public List<RewardBarcode> uploadBarcodes(RewardCategory rc, FileInputStream file) {
+        BufferedReader br = null;
+        List<RewardBarcode> bcList = new ArrayList<>();
+        try {
+            String line;
+            br = new BufferedReader(new InputStreamReader(file));
+            while ((line = br.readLine()) != null) {
+                RewardBarcode bc = new RewardBarcode(line.split(",")[0].replaceAll("[^a-zA-Z0-9]", ""), rc, line.split(",")[1]);
+                rewardBarcodeRepository.save(bc);
+                bcList.add(bc);
+            }
+            rc.setCount(rc.getCount() + bcList.size());
+            rewardCategoryRepository.save(rc);
+        } catch (Exception e) {
+            return null;
+        }
+        return bcList;
+    }
+
     public List<RewardBarcode> uploadBarcodes(RewardCategory rc, MultipartFile file) {
         BufferedReader br = null;
         List<RewardBarcode> bcList = new ArrayList<>();
@@ -128,7 +149,6 @@ public class RewardService {
                 rewardBarcodeRepository.save(bc);
                 bcList.add(bc);
             }
-            System.out.println("end");
             rc.setCount(rc.getCount() + bcList.size());
             rewardCategoryRepository.save(rc);
         } catch (Exception e) {
@@ -136,7 +156,7 @@ public class RewardService {
         }
         return bcList;
     }
-
+    
     public RewardBarcode getRewardBarcode(int id) {
         return rewardBarcodeRepository.findById(id).orElse(null);
     }
@@ -171,24 +191,16 @@ public class RewardService {
         Set<RewardBarcode> vRewards = v.getRedeemedRewards();
         System.out.println(vRewards);
         if (vPoint >= rc.getPointsNeeded()) {
-            System.out.println("hi1");
             reward.setVolunteer(v); // sets redeemed to true
             rewardBarcodeRepository.save(reward);
-            System.out.println("hi2");
 
             v.setPoints(vPoint-rc.getPointsNeeded());
-            System.out.println("hi2.1");
-            System.out.println(vRewards);
             vRewards.add(reward);
-            System.out.println("hi2.2");
             v.setRedeemedRewards(vRewards);
-            System.out.println("hi2.3");
             userRepository.save(v);
-            System.out.println("hi3");
 
             // rc.setNextAvailableIndex(rc.getNextAvailableIndex()+1);
             rewardCategoryRepository.save(rc);
-            System.out.println("hi4");
 
             rc.setCount(rc.getCount() - 1);
             rewardCategoryRepository.save(rc);
@@ -208,7 +220,6 @@ public class RewardService {
         }
         for (RewardBarcode rewardBarcode : vRewards) {
             if (rewardBarcode.getId() == rb.getId()) {
-                System.out.println("hello");
                 vRewards.remove(rewardBarcode);
                 System.out.println(vRewards.size());
                 v.setRedeemedRewards(vRewards);

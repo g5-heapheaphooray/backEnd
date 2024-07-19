@@ -67,6 +67,11 @@ and the following description:
         return getCleanComplaintDTO(complaint);
     }
 
+    public void createComplaintNoMail(CreateComplaintDTO c, User user) {
+        Complaint complaint = new Complaint(user, c.getDateTime(), c.getTitle(), c.getDescription(), c.getStatus());
+        complaint = complaintRepository.save(complaint);
+    }
+
     public List<CleanComplaintDTO> getAllComplaints() {
         List<Complaint> complaints = complaintRepository.findAll();
         List<CleanComplaintDTO> cleanComplaints = new ArrayList<>();
