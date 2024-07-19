@@ -75,7 +75,6 @@ public class VolunteerService {
     //     eventPart.add(event);
     //     v.setEventsPart(eventPart);
     //     return volunteerRepository.save(v);
-
     // }
 
     public List<Event> getRegisteredEvents(String id){
@@ -95,13 +94,11 @@ public class VolunteerService {
         return null;
     }
 
-    public Volunteer registerEvent(int eventId, String userId) {
+    public Volunteer registerEvent(int eventId, Volunteer v) {
         Event event = eventRepository.findById(eventId).orElse(null);
-        Volunteer v = volunteerRepository.findById(userId).orElse(null);
         if (event == null || v == null) {
             return null;
         }
-
         Set<Event> eventList = v.getEventsPart();
         eventList.add(event);
         v.setEventsPart(eventList);

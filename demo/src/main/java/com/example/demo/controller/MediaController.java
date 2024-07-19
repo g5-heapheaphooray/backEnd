@@ -80,10 +80,8 @@ class MediaController {
         }
         Set<EventMedia> ems = new HashSet<>();
         System.out.println(multipartImage.length);
-        boolean first = true;
         for (MultipartFile img : multipartImage) {
-            EventMedia m = mediaService.saveEventImages(img, event, first);
-            first = false;
+            EventMedia m = mediaService.saveEventImages(img, event);
             if (m == null) {
                 return new ResponseEntity<>("Image upload failed", HttpStatus.BAD_REQUEST);
             }

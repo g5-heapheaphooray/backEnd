@@ -77,7 +77,7 @@ public class VolunteerController {
 //        System.out.println(payload.get("userId"));
         if (user instanceof Volunteer) {
             //update volunteer's event list
-            volunteerService.registerEvent(eventId, user.getEmail());
+            volunteerService.registerEvent(eventId, (Volunteer) user);
             return new ResponseEntity<>("event registration sucessful", HttpStatus.CREATED);
         }
 
