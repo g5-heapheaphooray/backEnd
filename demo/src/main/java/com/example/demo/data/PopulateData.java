@@ -23,14 +23,20 @@ import com.example.demo.service.RewardService;
 import com.example.demo.service.UserService;
 import com.example.demo.service.VolunteerService;
 
+import io.jsonwebtoken.impl.lang.Services;
 import jakarta.transaction.Transactional;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
+import javax.print.attribute.standard.MediaSize.Other;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -103,12 +109,22 @@ public class PopulateData {
     public void createSampleEvents() {
         System.out.println("Creating sample events");
         List<Organisation> orgs = organisationRepository.findAll();
+        String[] causes = {"Animal Welfare", "Arts", "Children", "Community", "Drug Awareness", "Education", 
+        "Eldercare", "Environment and Water", "Families", "Health", "Heritage", "Humanitarian", "Mental Health", 
+        "Migrant Workers", "Other", "Rehabilitation & Reintegration", "Safety & Security", "Social Services", "Special Needs/Disabilities"};
+        String[] skills = {"Art & Craft", "Befriending", "Coaching & Mentoring", "Counselling", "Dialect-Speaking", "Emcee skills", 
+        "Entrepreneurship", "Event Management", "Facilitation", "First-aid", "Graphic Design", "Language Translation", "Music",
+        "Photography", "Reading", "Sign Language", "Social Media Execution", "Software Development", "Sports", "Tutoring", "Videography", "Web Design", "Others"};
         for (Organisation org : orgs) {
             int randNum = rand.nextInt(NUM_OF_EVENTS);
             String orgName = org.getFullName();
             for (int i = 0; i < randNum; i++) {
                 String eventName = orgName + "_Event_" + (i+1);
-                CreateOppDTO oppDTO = new CreateOppDTO(eventName, LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of(eventName + "_" + "Skill 1", eventName + "_" + "Skill 2"), List.of(eventName + "_" + "Cause 1", eventName + "_" + "Cause 2"));
+                Set<String> causesSet = new HashSet<String>();
+                Set<String> skillsSet = new HashSet<String>();
+                causesSet.addAll(List.of(causes[rand.nextInt(causes.length)], causes[rand.nextInt(causes.length)]));
+                skillsSet.addAll(List.of(skills[rand.nextInt(skills.length)], skills[rand.nextInt(skills.length)]));
+                CreateOppDTO oppDTO = new CreateOppDTO(eventName, LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", new ArrayList<>(skillsSet), new ArrayList<>(causesSet));
                 eventService.createEvent(oppDTO, org);
             }
         }
@@ -162,7 +178,7 @@ public class PopulateData {
         RegisterOrganisationDTO volDTO = new RegisterOrganisationDTO("org@mail.com", "Organisation", "123", "12345678", "location", "website", "description");
         User org = userService.createVerifiedOrganisation(volDTO);
 
-        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("Skill1", "Skill2"), List.of("Cause1", "Cause2"));
+        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("Art & Craft", "Befriending"), List.of("Arts", "Eldercare"));
         CleanEventDTO cleanEvent = eventService.createEvent(oppDTO, (Organisation) org);
         Event event = eventService.getEvent(cleanEvent.getId());
         vol.getEventsPart().add(event);
