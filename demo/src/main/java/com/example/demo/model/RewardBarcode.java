@@ -84,4 +84,17 @@ public class RewardBarcode {
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof RewardBarcode) {
+            return ((RewardBarcode) obj).getId() == this.getId();
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 }

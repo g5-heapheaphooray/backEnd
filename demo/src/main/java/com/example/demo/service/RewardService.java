@@ -208,15 +208,13 @@ public class RewardService {
         if (rb == null) {
             return null;
         }
-        for (RewardBarcode rewardBarcode : vRewards) {
-            if (rewardBarcode.getId() == rb.getId()) {
-                vRewards.remove(rewardBarcode);
-                v.setRedeemedRewards(vRewards);
-                userRepository.save(v);
+        if (vRewards.contains(rb)) {
+            vRewards.remove(rb);
+            v.setRedeemedRewards(vRewards);
+            userRepository.save(v);
 
-                rewardBarcodeRepository.delete(rb);
-                return rb;
-            }
+            rewardBarcodeRepository.delete(rb);
+            return rb;
         }
         return null;
     }
