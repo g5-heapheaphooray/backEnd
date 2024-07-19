@@ -255,4 +255,9 @@ public class Event {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return 1;
+    }
 }
