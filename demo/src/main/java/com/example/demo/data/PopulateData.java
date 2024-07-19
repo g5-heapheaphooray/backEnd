@@ -178,7 +178,7 @@ public class PopulateData {
         RegisterOrganisationDTO volDTO = new RegisterOrganisationDTO("org@mail.com", "Organisation", "123", "12345678", "location", "website", "description");
         User org = userService.createVerifiedOrganisation(volDTO);
 
-        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("Art & Craft", "Befriending"), List.of("Arts", "Eldercare"));
+        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("art", "befriending"), List.of("arts", "elderly"));
         CleanEventDTO cleanEvent = eventService.createEvent(oppDTO, (Organisation) org);
         Event event = eventService.getEvent(cleanEvent.getId());
         vol.getEventsPart().add(event);
