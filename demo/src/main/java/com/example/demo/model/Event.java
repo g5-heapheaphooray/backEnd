@@ -247,4 +247,12 @@ public class Event {
     public void setPoints(int points) {
         this.points = points;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Event) {
+            return ((Event) obj).getId() == this.getId();
+        }
+        return false;
+    }
 }
