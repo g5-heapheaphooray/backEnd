@@ -68,18 +68,26 @@ public class EventService {
     }
 
     public CleanEventDTO getCleanEvent(Event e) {
-        Set<EventMedia> ems = e.getPhotos();
+        List<EventMedia> ems = new ArrayList<>();
+        ems.addAll(e.getPhotos());
+        Collections.sort(ems);
         List<String> emsFp = new ArrayList<>();
         List<byte[]> emsBytes = new ArrayList<>();
+//        String cover = null;
         for (EventMedia em : ems) {
             try {
-//                emsBytes.add(mediaService.getMedia(em.getFilepath()));
                 emsFp.add(mediaService.getObjectUrl(em.getFilepath()));
+//                if (em.isCover()) {
+//                    cover = mediaService.getObjectUrl(em.getFilepath());
+//                } else {
+//                    emsFp.add(mediaService.getObjectUrl(em.getFilepath()));
+//                }
+//                emsBytes.add(mediaService.getMedia(em.getFilepath()));
+
             } catch (Exception ex) {
             }
 
         }
-        emsFp.sort(null);
         CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(),
                 e.getOrganisation().getEmail(),
                 e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(),

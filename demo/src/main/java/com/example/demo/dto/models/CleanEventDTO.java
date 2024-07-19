@@ -35,10 +35,10 @@ public class CleanEventDTO {
     private List<String> skills;
     private List<String> causes;
     private List<String> photosFilepaths;
-    private String coverPhotoFilepath;
+//    private String coverPhotoFilepath;
 
     public CleanEventDTO(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, 
-    List<String> skills, List<String> causes, List<String> photosFilepaths, String coverPhotoFilepath) {
+    List<String> skills, List<String> causes, List<String> photosFilepaths) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -54,7 +54,7 @@ public class CleanEventDTO {
         this.skills = skills;
         this.causes = causes;
         this.photosFilepaths = photosFilepaths;
-        this.coverPhotoFilepath = coverPhotoFilepath;
+//        this.coverPhotoFilepath = coverPhotoFilepath;
     }
 
     public int getId() {
@@ -177,13 +177,13 @@ public class CleanEventDTO {
         this.photosFilepaths = photosFilepaths;
     }
 
-    public String getCoverPhotoFilepath() {
-        return coverPhotoFilepath;
-    }
-
-    public void setCoverPhotoFilepath(String coverPhotoFilepath) {
-        this.coverPhotoFilepath = coverPhotoFilepath;
-    }
+//    public String getCoverPhotoFilepath() {
+//        return coverPhotoFilepath;
+//    }
+//
+//    public void setCoverPhotoFilepath(String coverPhotoFilepath) {
+//        this.coverPhotoFilepath = coverPhotoFilepath;
+//    }
 
     
 }

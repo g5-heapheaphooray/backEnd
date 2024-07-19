@@ -96,13 +96,14 @@ public class MediaService {
         return eventRepository.save(event);
     }
 
-    public EventMedia saveEventImages(MultipartFile multipartImage, Event event) {
+    public EventMedia saveEventImages(MultipartFile multipartImage, Event event, boolean first) {
 //        Path currentRelativePath = Paths.get("");
 //        System.out.println(currentRelativePath.toAbsolutePath().toString());
         EventMedia em = new EventMedia();
         String filename = "EM-" + event.getId() + ".png";
         em.setFilename(filename);
         em.setEvent(event);
+        em.setCover(first);
         String filepath = writeToObs(multipartImage, filename, "Event-Media");
         if (filepath == null) {
             return null;
