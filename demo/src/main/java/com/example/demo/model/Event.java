@@ -66,6 +66,9 @@ public class Event {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "points")
+    private int points;
+
 //    @Column(name = "photos")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private Set<EventMedia> photos;
@@ -242,5 +245,13 @@ public class Event {
 
     public void setPhotos(Set<EventMedia> photos) {
         this.photos = photos;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.repository.EventRepository;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -55,6 +56,8 @@ public class EventService {
         dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
         // System.out.println("creating event now");
         // System.out.println(o.getUsername());
+        int hours = (int) Duration.between(e.getEndTime(), e.getStartTime()).toHours();
+        e.setPoints(hours * 10);
         o.getEventsOrg().add(e);
         // System.out.println(o.getEventsOrg());
         // o.addEventOrg(event);
@@ -91,7 +94,7 @@ public class EventService {
         CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(),
                 e.getOrganisation().getEmail(),
                 e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(),
-                e.getType(), e.getAddress(), e.getSkills(), e.getCauses(), emsFp);
+                e.getType(), e.getAddress(), e.getSkills(), e.getCauses(), emsFp, e.getPoints());
         return clean;
     }
 
