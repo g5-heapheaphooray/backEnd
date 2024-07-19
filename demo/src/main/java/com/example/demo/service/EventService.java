@@ -56,7 +56,7 @@ public class EventService {
         dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
         // System.out.println("creating event now");
         // System.out.println(o.getUsername());
-        int hours = (int) Duration.between(e.getEndTime(), e.getStartTime()).toHours();
+        int hours = (int) Duration.between(e.getStartTime(), e.getEndTime()).toHours();
         e.setPoints(hours * 10);
         o.getEventsOrg().add(e);
         // System.out.println(o.getEventsOrg());
