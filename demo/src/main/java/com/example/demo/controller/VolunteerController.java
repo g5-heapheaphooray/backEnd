@@ -63,7 +63,11 @@ public class VolunteerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (user instanceof Volunteer) {
-            volunteerService.registerEvent(eventId, (Volunteer) user);
+            try {
+                volunteerService.registerEvent(eventId, (Volunteer) user);
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>("user has already registered for event", HttpStatus.CONFLICT);
+            }
             return new ResponseEntity<>("event registration sucessful", HttpStatus.CREATED);
         }
 

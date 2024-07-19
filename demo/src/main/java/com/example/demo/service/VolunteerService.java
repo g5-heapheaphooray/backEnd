@@ -91,6 +91,15 @@ public class VolunteerService {
         if (event == null || v == null) {
             return null;
         }
+
+        System.out.println(event);
+        System.out.println(v.getEventsPart());
+        System.out.println(v.getEventsPart().contains(event));
+
+        if (v.getEventsPart().contains(event)) {
+            throw new IllegalArgumentException("Already registered for event");
+        }
+
         Set<Event> eventList = v.getEventsPart();
         eventList.add(event);
         v.setEventsPart(eventList);

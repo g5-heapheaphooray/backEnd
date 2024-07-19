@@ -160,6 +160,8 @@ public class EventService {
             User user = userRepository.findById(vol.getEmail()).orElse(null);
             if (user != null && currentParticipants.contains(user)) {
                 participants.add(user);
+                Volunteer v = (Volunteer) user;
+                v.setPoints(v.getPoints() + e.getPoints());
             } else if (!currentParticipants.contains(user)) {
                 newCleanVol.remove(vol);
             }
