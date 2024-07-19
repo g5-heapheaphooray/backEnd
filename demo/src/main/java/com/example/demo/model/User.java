@@ -37,7 +37,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "media_id", referencedColumnName = "id")
     private PfpMedia pfp;
 
-    @ManyToMany(cascade={CascadeType.PERSIST, CascadeType.DETACH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.DETACH})
 //    https://stackoverflow.com/questions/43235303/how-to-delete-a-row-in-join-table-with-jpa
 //    https://www.baeldung.com/jpa-cascade-types
     @JoinTable(
