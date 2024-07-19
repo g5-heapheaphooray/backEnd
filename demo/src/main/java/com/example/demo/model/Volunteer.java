@@ -3,13 +3,9 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import com.example.demo.model.RoleEnum;
-import com.example.demo.repository.RoleRepository;
 
 @Entity
 @DiscriminatorValue("V")
@@ -23,13 +19,6 @@ public class Volunteer extends User {
     @Column(name = "hours")
     private double hours;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "events_part",
-//            joinColumns = @JoinColumn(name = "user_email"),
-//            inverseJoinColumns = @JoinColumn(name = "event_id"))
-//    private List<Event> eventsPart;
-
     @Column(name = "points")
     private int points;
 
@@ -39,7 +28,6 @@ public class Volunteer extends User {
     public Volunteer() {}
 
     public Volunteer(String fullName, char gender, LocalDate dob, String email, String contactNo, String password, Role role){
-//        super(fullName, email, contactNo, password, new ArrayList<>(), null, roleRepository.findByName(RoleEnum.VOLUNTEER));
         super(fullName, email, contactNo, password, new HashSet<>(), null, role);
         this.gender = gender;
         this.dob = dob;
@@ -70,14 +58,6 @@ public class Volunteer extends User {
         this.hours = hours;
     }
 
-//    public List<Event> getEventsPart() {
-//        return eventsPart;
-//    }
-//
-//    public void setEventsPart(List<Event> eventsPart) {
-//        this.eventsPart = eventsPart;
-//    }
-
     public int getPoints() {
         return points;
     }
@@ -93,20 +73,4 @@ public class Volunteer extends User {
     public void setRedeemedRewards(Set<RewardBarcode> redeemedRewards) {
         this.redeemedRewards = redeemedRewards;
     }
-
-    // public boolean addEventPart(Event e) {
-    //     if (!isAccountNonLocked() || getEventsPart() == null) {
-    //         return false;
-    //     }
-    //     for (Event event : getEventsPart()) {
-    //         if (event.getDate().equals(e.getDate())) {
-    //             return false;
-    //         }
-    //     }
-    //     List<Event> currentE = getEventsPart();
-    //     currentE.add(e);
-    //     setEventsPart(currentE);
-    //     return true;
-    // }
-
 }

@@ -83,7 +83,6 @@ public class RewardController {
     @PostMapping(value="/reward-category/upload-barcodes/{rewardId}", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<CleanRewardsBarcodeDTO>> uploadReward(@PathVariable int rewardId, @RequestPart("file") MultipartFile file) {
-        System.out.println("helloo");
         RewardCategory rc = rewardService.getRewardCategory(rewardId);
         List<RewardBarcode> rbs = rewardService.uploadBarcodes(rc, file);
         List<CleanRewardsBarcodeDTO> res = new ArrayList<>();
@@ -112,7 +111,6 @@ public class RewardController {
         User user = (User) authentication.getPrincipal();
         RewardCategory rc = rewardService.getRewardCategory(rewardCatId);
         String s = rewardService.redeemReward(rc, (Volunteer) user);
-        System.out.println(s);
         if (s.equals("Reward redeemed")) {
             return new ResponseEntity<>(s, HttpStatus.OK);
         } else {
@@ -137,7 +135,6 @@ public class RewardController {
     @GetMapping("/reward/use/{rewardId}")
     @PreAuthorize("hasRole('VOLUNTEER')")
     public ResponseEntity<CleanRewardsBarcodeDTO> useRewardBarcode(@PathVariable int rewardId) {
-        System.out.println(rewardId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         RewardBarcode rb = rewardService.useRewardBarcode(rewardId, (Volunteer) user);
@@ -147,18 +144,4 @@ public class RewardController {
         CleanRewardsBarcodeDTO crb = rewardService.getCleanRewardBarcode(rb);
         return new ResponseEntity<>(crb, HttpStatus.OK);
     }
-
-
-
-//    @GetMapping("/redeem/{rewardId}")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<CleanRewardsDTO> redeemReward(@PathVariable int rewardId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-//        RewardCategory r = rewardService.redeemReward(rewardId, (Volunteer) user);
-//        CleanRewardsDTO cr = new CleanRewardsDTO(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
-//        return new ResponseEntity<>(cr, HttpStatus.OK);
-//    }
-
-
 }

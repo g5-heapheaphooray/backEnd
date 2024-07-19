@@ -1,10 +1,6 @@
 package com.example.demo.dto.models;
 
-import com.example.demo.model.Event;
-import com.example.demo.model.PfpMedia;
-
 import java.time.LocalDate;
-import java.util.Set;
 
 public class CleanVolunteerDTO {
     private String email;
@@ -16,8 +12,6 @@ public class CleanVolunteerDTO {
     private double hours;
     private int points;
     private String pfp_filepath;
-//    private Set<Event> eventsPart;
-
 
     public CleanVolunteerDTO(String email, String fullName, int complainCount, String contactNo, char gender, LocalDate dob, double hours, int points, String pfp_filepath) {
         this.email = email;
@@ -29,7 +23,6 @@ public class CleanVolunteerDTO {
         this.hours = hours;
         this.points = points;
         this.pfp_filepath = pfp_filepath;
-//        this.eventsPart = eventsPart;
     }
 
     public String getEmail() {
@@ -103,5 +96,4 @@ public class CleanVolunteerDTO {
     public void setPfp_filepath(String pfp_filepath) {
         this.pfp_filepath = pfp_filepath;
     }
-
 }

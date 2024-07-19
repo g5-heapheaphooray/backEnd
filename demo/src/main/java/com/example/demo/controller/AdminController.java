@@ -1,16 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
-import com.example.demo.dto.models.CleanOrganisationDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.dto.models.UserResponseDTO;
 import com.example.demo.model.Admin;
 import com.example.demo.model.Organisation;
-import com.example.demo.model.Volunteer;
 import com.example.demo.service.AdminService;
 import com.example.demo.service.OrganisationService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +19,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.example.demo.model.User;
-import com.example.demo.service.UserService;
-import com.example.demo.service.VolunteerService;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000",maxAge = 3600, allowedHeaders = "*", methods = "*")
 @CrossOrigin
 @RequestMapping("/api/v1/admin")
 public class AdminController {
 
     private final AdminService adminService;
     private final OrganisationService organisationService;
-    private final VolunteerService volunteerService;
 
     @Autowired
-    public AdminController(AdminService adminService, OrganisationService organisationService, VolunteerService volunteerService) {
+    public AdminController(AdminService adminService, OrganisationService organisationService) {
         this.adminService = adminService;
         this.organisationService = organisationService;
-        this.volunteerService = volunteerService;
     }
 
     @GetMapping("/verify/{orgId}")

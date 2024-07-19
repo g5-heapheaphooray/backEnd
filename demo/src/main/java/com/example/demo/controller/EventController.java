@@ -2,17 +2,14 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateOppDTO;
 import com.example.demo.dto.EventsListDTO;
-import com.example.demo.dto.RegisterForEventDTO;
 import com.example.demo.dto.VolListDTO;
 import com.example.demo.dto.models.CleanEventDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.User;
-import com.example.demo.model.Volunteer;
 import com.example.demo.service.OrganisationService;
 import com.example.demo.service.UserService;
 
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.Event;
 import com.example.demo.service.EventService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -54,11 +48,6 @@ public class EventController {
         if (ce != null) {
             return new ResponseEntity<>(ce, HttpStatus.CREATED);
         }
-//        System.out.println(dto.getOrganisationEmail());
-//        System.out.println(dto);
-//        Organisation o = organisationService.getOrg(dto.getOrganisationEmail());
-//        Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
-//        Event newEvent = eventService.createEvent(e);
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
@@ -87,9 +76,7 @@ public class EventController {
         }
         CleanEventDTO res = eventService.getCleanEvent(event);
         for (String url : res.getPhotosFilepaths()) {
-            System.out.println(url);
         }
-        System.out.println(res.getPhotosFilepaths().size());
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
@@ -99,7 +86,6 @@ public class EventController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         if (user instanceof Organisation) {
-            // Event event = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), user.getEmail(), dto.getManpowerCount(), dto.getLocation(), dto.getDescription(), dto.getType());
             eventService.updateEvent(dto, eventId);
             return new ResponseEntity<>("event update sucessful", HttpStatus.OK);
         }
@@ -132,20 +118,6 @@ public class EventController {
         VolListDTO res = new VolListDTO(participants);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
-
-    // @GetMapping("/{eventId}/participants/attendance")
-    // @PreAuthorize("hasRole('ORGANISATION')")
-    // public ResponseEntity<VolListDTO> getEventAttendance(@PathVariable String eventId) {
-    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    //     User user = (User) authentication.getPrincipal();
-    //     Event e = eventService.getEvent(eventId);
-    //     if (e == null || !e.getOrganisation().getEmail().equals(user.getEmail())) {
-    //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    //     }
-    //     List<CleanVolunteerDTO> participants = eventService.getEventParticipants(eventId);
-    //     VolListDTO res = new VolListDTO(participants);
-    //     return new ResponseEntity<>(res, HttpStatus.OK);
-    // }
 
     @PostMapping("/{eventId}/participants/attendance")
     @PreAuthorize("hasRole('ORGANISATION')")

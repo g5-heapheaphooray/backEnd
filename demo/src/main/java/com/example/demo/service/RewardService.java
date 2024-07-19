@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -12,9 +11,7 @@ import java.util.Set;
 import com.example.demo.dto.RewardBarcodesListDTO;
 import com.example.demo.dto.models.CleanRewardsBarcodeDTO;
 import com.example.demo.model.RewardCategory;
-import com.example.demo.model.RewardMedia;
 import com.example.demo.model.Volunteer;
-import com.example.demo.repository.MediaRepository;
 import com.example.demo.repository.RewardCategoryRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -60,8 +57,6 @@ public class RewardService {
     public CleanRewardsCategoryDTO createRewardCategory(CreateRewardDTO r) {
         RewardCategory rc = new RewardCategory(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
         rewardCategoryRepository.save(rc);
-        // RewardMedia rm = mediaService.saveRewardImage(r.getMedia(), rc);
-//        Reward newReward = new Reward(r.getName(), r.getPointsNeeded(), r.getBarcodeSerialNo(), r.getType(), r.getDescription());
         return getCleanRewardCategory(rc);
     }
 
@@ -183,13 +178,11 @@ public class RewardService {
                 break;
             }
         }
-        // RewardBarcode reward = rewardBarcodeRepository.findById(rc.getNextAvailableIndex()).orElse(null);
         if (reward == null || reward.isRedeemed()) {
             return "Reward not available";
         }
         int vPoint = v.getPoints();
         Set<RewardBarcode> vRewards = v.getRedeemedRewards();
-        System.out.println(vRewards);
         if (vPoint >= rc.getPointsNeeded()) {
             reward.setVolunteer(v); // sets redeemed to true
             rewardBarcodeRepository.save(reward);
@@ -199,7 +192,6 @@ public class RewardService {
             v.setRedeemedRewards(vRewards);
             userRepository.save(v);
 
-            // rc.setNextAvailableIndex(rc.getNextAvailableIndex()+1);
             rewardCategoryRepository.save(rc);
 
             rc.setCount(rc.getCount() - 1);
@@ -212,16 +204,13 @@ public class RewardService {
     @Transactional()
     public RewardBarcode useRewardBarcode(int rewardId, Volunteer v) {
         RewardBarcode rb = rewardBarcodeRepository.findById(rewardId).orElse(null);
-        System.out.println(rb);
         Set<RewardBarcode> vRewards = v.getRedeemedRewards();
-        System.out.println(vRewards);
         if (rb == null) {
             return null;
         }
         for (RewardBarcode rewardBarcode : vRewards) {
             if (rewardBarcode.getId() == rb.getId()) {
                 vRewards.remove(rewardBarcode);
-                System.out.println(vRewards.size());
                 v.setRedeemedRewards(vRewards);
                 userRepository.save(v);
 
@@ -245,13 +234,4 @@ public class RewardService {
         RewardBarcodesListDTO res = new RewardBarcodesListDTO(crbList);
         return res;
     }
-
-//    public RewardBarcode viewRewardBarcode(int rewardId, Volunteer v) {
-//        RewardBarcode rb = rewardBarcodeRepository.findById(rewardId).orElse(null);
-//        Set<RewardBarcode> vRewards = v.getRedeemedRewards();
-//        if (vRewards.contains(rb)) {
-//            return rb;
-//        }
-//        return null;
-//    }
 }

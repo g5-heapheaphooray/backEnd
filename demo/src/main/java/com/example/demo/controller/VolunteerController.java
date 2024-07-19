@@ -18,7 +18,6 @@ import com.example.demo.service.VolunteerService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -34,17 +33,6 @@ public class VolunteerController {
         this.eventService = eventService;
     }
 
-//    @GetMapping("/find/{email}")
-//    public ResponseEntity<User> getUser(@PathVariable String email) {
-//        User user = userService.getUser(email);
-//        return new ResponseEntity<>(user, HttpStatus.OK);
-//    }
-
-//    @PutMapping("/updateHours/{id}")
-//    public ResponseEntity<Volunteer> updateHours(@PathVariable String id, @RequestBody double hours){
-//        User updatedUser = volunteerService.updateHours(id, hours);
-//        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-//    }
     @GetMapping("/registeredEvents")
     @PreAuthorize("hasRole('VOLUNTEER')")
     public ResponseEntity<EventsListDTO> getRegisteredEvents() {
@@ -74,9 +62,7 @@ public class VolunteerController {
     public ResponseEntity<String> registerEvent(@PathVariable int eventId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-//        System.out.println(payload.get("userId"));
         if (user instanceof Volunteer) {
-            //update volunteer's event list
             volunteerService.registerEvent(eventId, (Volunteer) user);
             return new ResponseEntity<>("event registration sucessful", HttpStatus.CREATED);
         }

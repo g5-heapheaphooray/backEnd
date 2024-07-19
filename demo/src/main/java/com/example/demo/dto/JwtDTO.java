@@ -1,7 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.User;
-
 public class JwtDTO {
     private String message;
     private String token;

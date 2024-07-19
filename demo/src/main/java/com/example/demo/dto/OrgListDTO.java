@@ -3,7 +3,6 @@ package com.example.demo.dto;
 import java.util.List;
 
 import com.example.demo.dto.models.CleanOrganisationDTO;
-import com.example.demo.model.Organisation;
 
 public class OrgListDTO {
     public List<CleanOrganisationDTO> orgs;

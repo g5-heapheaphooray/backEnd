@@ -4,7 +4,6 @@ import com.example.demo.dto.models.CleanEventDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.UserRepository;
-// import com.example.demo.repository.OrganisationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,15 +53,9 @@ public class EventService {
     public CleanEventDTO createEvent(CreateOppDTO dto, Organisation o) {
         Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(),
         dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
-        // System.out.println("creating event now");
-        // System.out.println(o.getUsername());
         int hours = (int) Duration.between(e.getStartTime(), e.getEndTime()).toHours();
         e.setPoints(hours * 10);
         o.getEventsOrg().add(e);
-        // System.out.println(o.getEventsOrg());
-        // o.addEventOrg(event);
-        // userRepository.save(o);
-        // System.out.println("hello creating event");
         return getCleanEvent(eventRepository.save(e));
     }
 
@@ -75,27 +68,17 @@ public class EventService {
         ems.addAll(e.getPhotos());
         Collections.sort(ems);
         List<String> emsFp = new ArrayList<>();
-        List<byte[]> emsBytes = new ArrayList<>();
-//        String cover = null;
         for (EventMedia em : ems) {
             try {
                 emsFp.add(mediaService.getObjectUrl(em.getFilepath()));
-//                if (em.isCover()) {
-//                    cover = mediaService.getObjectUrl(em.getFilepath());
-//                } else {
-//                    emsFp.add(mediaService.getObjectUrl(em.getFilepath()));
-//                }
-//                emsBytes.add(mediaService.getMedia(em.getFilepath()));
-
             } catch (Exception ex) {
             }
 
         }
-        CleanEventDTO clean = new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(),
+        return new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(),
                 e.getOrganisation().getEmail(),
                 e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(),
                 e.getType(), e.getAddress(), e.getSkills(), e.getCauses(), emsFp, e.getPoints());
-        return clean;
     }
 
     public Event deleteEvent(int eventId) {
@@ -146,18 +129,6 @@ public class EventService {
         return eventRepository.findByDateGreaterThanEqual(d);
     }
 
-    // public Event updateEventParticipants(String eventId, User user) {
-    // Event e = eventRepository.findById(eventId).orElse(null);
-
-    // if (e == null) {
-    // return null;
-    // }
-
-    // e.getParticipants().add(user);
-    // System.out.println(e.getParticipants());
-    // return eventRepository.save(e);
-    // }
-
     public List<CleanVolunteerDTO> getEventParticipants(int eventId) {
         Event e = eventRepository.findById(eventId).orElse(null);
         if (e == null) {
@@ -186,7 +157,6 @@ public class EventService {
         Set<User> currentParticipants = e.getParticipants();
         Set<User> participants = new HashSet<>();
         for (CleanVolunteerDTO vol : dto) {
-            System.out.println(vol.getEmail());
             User user = userRepository.findById(vol.getEmail()).orElse(null);
             if (user != null && currentParticipants.contains(user)) {
                 participants.add(user);
@@ -209,5 +179,4 @@ public class EventService {
         
         return newCleanVol;
     }
-
 }

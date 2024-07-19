@@ -2,12 +2,9 @@ package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.models.CleanOrganisationDTO;
-import com.example.demo.model.Media;
-import com.example.demo.model.Volunteer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +23,6 @@ public class OrganisationService {
         this.organisationRepository = organisationRepository;
         this.mediaService = mediaService;
     }
-
-//    public Organisation createOrganisation(Organisation organisation) {
-//        return organisationRepository.save(organisation);
-//    }
 
     public CleanOrganisationDTO getCleanOrg(Organisation o) {
         return new CleanOrganisationDTO(o.getEmail(), o.getFullName(), o.getComplainCount(), o.getContactNo(), o.getLocation(), o.getWebsite(), o.getDescription(), mediaService.getObjectUrl(o.getPfp().getFilepath()));

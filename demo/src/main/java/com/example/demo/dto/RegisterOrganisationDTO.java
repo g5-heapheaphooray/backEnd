@@ -1,12 +1,5 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Event;
-import jakarta.persistence.*;
-
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.List;
-
 public class RegisterOrganisationDTO {
     private String email;
     private String fullName;

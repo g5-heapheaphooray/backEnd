@@ -1,22 +1,17 @@
 package com.example.demo.dto;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-
-import com.example.demo.model.ComplaintMedia;
 
 public class CreateComplaintDTO {
     private String title;
     private String description;
     private LocalDateTime dateTime;
-    // private Set<ComplaintMedia> photos;
     private String status;
 
     public CreateComplaintDTO(String title, String description, String status) {
         this.title = title;
         this.description = description;
         dateTime = LocalDateTime.now();
-        // this.photos = photos;
         this.status = status;
     }
 
@@ -50,7 +45,5 @@ public class CreateComplaintDTO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    
+    }    
 }

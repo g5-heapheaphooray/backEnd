@@ -2,8 +2,6 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 
-//@Entity
-//@Table(name = "media")
 @MappedSuperclass
 public class Media {
     @Id
@@ -48,6 +46,4 @@ public class Media {
     public void setFilepath(String filepath) {
         this.filepath = filepath;
     }
-
-    
 }

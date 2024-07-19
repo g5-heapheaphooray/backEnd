@@ -18,7 +18,6 @@ public class CreateOppDTO {
     @JsonFormat(pattern="HH:mm")
     private LocalTime endTime;
 
-//    private String token; // retrieve from token
     private int manpowerCount;
     private String location;
     private String description;
@@ -32,7 +31,6 @@ public class CreateOppDTO {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
-//        this.organisationEmail = organisationEmail;
         this.manpowerCount = manpowerCount;
         this.location = location;
         this.description = description;

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +19,6 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    // private String id;
 
     @Column(name = "name")
     private String name;
@@ -36,9 +34,6 @@ public class Event {
     @Column(name = "end_time")
     @JsonFormat(pattern="HH:mm")
     private LocalTime endTime;
-
-//    @Column(name = "organisation_id")
-//    private String organisation;
 
     @ManyToOne
     @JoinColumn(name="organisation_id", nullable=false)
@@ -69,7 +64,6 @@ public class Event {
     @Column(name = "points")
     private int points;
 
-//    @Column(name = "photos")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private Set<EventMedia> photos;
 
@@ -92,7 +86,6 @@ public class Event {
     }
 
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, Organisation organisation, int neededManpowerCount, String location, String description, String type, String address, List<String> skills, List<String> causes){
-        // this.id = String.format("%s-%s", organisation.getEmail(), name);
         this.name = name;
         this.date = date;
         this.startTime = startTime;

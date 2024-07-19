@@ -1,7 +1,5 @@
 package com.example.demo.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class CreateRewardDTO {
     private String name;
     private int pointsNeeded;

@@ -2,11 +2,7 @@ package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import com.example.demo.dto.RegisterAdminDTO;
-import com.example.demo.dto.RegisterVolunteerDTO;
 import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.dto.models.UserResponseDTO;
 import com.example.demo.model.*;
@@ -20,27 +16,19 @@ public class AdminService {
 
     private final OrganisationRepository organisationRepository;
     private final UserRepository userRepository;
-    private final EventRepository eventRepository;
     private final VolunteerRepository volunteerRepository;
-    private final RoleRepository roleRepository;
     private final MediaService mediaService;
     private final UserService userService;
 
     @Autowired
-    public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, RoleRepository roleRepository,
+    public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, VolunteerRepository volunteerRepository,
                         MediaService mediaService, UserService userService) {
         this.organisationRepository = organisationRepository;
-        this.eventRepository = eventRepository;
         this.userRepository = userRepository;
         this.volunteerRepository = volunteerRepository;
-        this.roleRepository = roleRepository;
         this.mediaService = mediaService;
         this.userService = userService;
     }
-
-//    public Organisation createOrganisation(Organisation organisation) {
-//        return organisationRepository.save(organisation);
-//    }
 
     public Organisation updateVerified(String id) {
         Organisation o = organisationRepository.findById(id).orElse(null);
@@ -114,7 +102,4 @@ public class AdminService {
         }
         return userService.getCleanVolunteer(v);
     }
-
-
-
 }

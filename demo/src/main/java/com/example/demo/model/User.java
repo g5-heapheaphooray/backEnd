@@ -1,7 +1,5 @@
 package com.example.demo.model;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.*;
 
 import jakarta.persistence.*;
@@ -29,7 +27,6 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "complain_count")
-    // both volunteer and organisation will have but the limit diff ig
     private int complainCount;
 
 
@@ -48,25 +45,7 @@ public class User implements UserDetails {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "event_id") })
     private Set<Event> eventsPart;
-    // only applies to Organisation subclass
-    // if Volunteer subclass, this field should be null
 
-    // @ElementCollection(targetClass = Event.class, fetch = FetchType.EAGER)
-    // @CollectionTable(name = "events_org", joinColumns = @JoinColumn(name = "event_id"))
-    // @Column(name = "event_org", nullable = true)
-    // private List<Event> eventsOrg;
-    // only applies to Volunteer subclass
-    // if Organisation subclass, this field should be null
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "events_org",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "event_id"))
-//    private List<Event> eventsOrg;
-
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "organisation")
-//    @JoinColumn(name = "user_id")
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "organisation")
     private Set<Event> eventsOrg;
 
@@ -185,7 +164,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return !(this.locked);
+        return !this.locked;
     }
 
     @Override
@@ -209,15 +188,9 @@ public class User implements UserDetails {
     }
 
     public boolean addEventOrg(Event e) {
-        System.out.println(getEventsOrg());
-//        if (!isAccountNonLocked() || getEventsOrg() == null) {
-//            return false;
-//        }
         Set<Event> currentE = getEventsOrg();
         currentE.add(e);
         setEventsOrg(currentE);
-        System.out.println(currentE);
-        System.out.println(getEventsOrg());
         return true;
     }
 

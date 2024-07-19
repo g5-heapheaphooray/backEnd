@@ -34,10 +34,8 @@ public class ComplaintService {
     public CleanComplaintDTO getCleanComplaintDTO(Complaint c) {
         Set<ComplaintMedia> cms = c.getPhotos();
         List<String> cmsFp = new ArrayList<>();
-        List<byte[]> cmsBytes = new ArrayList<>();
         for (ComplaintMedia cm : cms) {
             try {
-//                cmsBytes.add(mediaService.getMedia(cm.getFilepath()));
                 cmsFp.add(mediaService.getObjectUrl(cm.getFilepath()));
             } catch (Exception ex) {
             }         

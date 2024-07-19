@@ -9,14 +9,8 @@ import com.example.demo.model.*;
 import com.example.demo.repository.EventRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.repository.VolunteerRepository;
-import com.example.demo.service.EventService;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
@@ -37,8 +30,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
-    private final EventService eventService;
-    private final VolunteerRepository volunteerRepository;
     private final MailService mailService;
     private final MediaService mediaService;
 
@@ -46,14 +37,12 @@ public class UserService {
     private String frontendSource;
 
     @Autowired
-    public UserService(UserRepository userRepository, EventRepository eventRepository, VolunteerRepository volunteerRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, EventService eventService, MailService mailService, MediaService mediaService) {
+    public UserService(UserRepository userRepository, EventRepository eventRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, RoleRepository roleRepository, MailService mailService, MediaService mediaService) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
-        this.volunteerRepository = volunteerRepository;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
-        this.eventService = eventService;
         this.mailService = mailService;
         this.mediaService = mediaService;
     }
@@ -113,30 +102,11 @@ public class UserService {
     }
 
     public User authenticateUser(String email, String password) {
-        System.out.println(email);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
 
         return userRepository.findById(email).orElse(null);
-//        User user = userRepository.findById(email).orElse(null);
-//        if (user != null) {
-//            String pw = user.getPassword();
-//            String hash = null;
-//            try {
-//                final MessageDigest digest = MessageDigest.getInstance("SHA3-256");
-//                final byte[] hashbytes = digest.digest(
-//                        password.getBytes(StandardCharsets.UTF_8));
-//                hash = bytesToHex(hashbytes);
-//            } catch (Exception e) {
-//
-//            }
-//            if (pw.equals(hash)) {
-//                return user;
-//            }
-//        }
-//
-//        return null;
     }
 
     public User getUser(String email) {
@@ -175,8 +145,6 @@ public class UserService {
         }
 
         if (user instanceof Volunteer) {
-            // delete all events_part
-            // eventRepository.deleteParticipant(id);
             for (Event event : user.getEventsPart()) {
                 event.getParticipants().remove(user); // Assuming `getParticipants` returns the list of users participating in the event
                 eventRepository.save(event); // Save the event entity after removing the user
@@ -211,28 +179,4 @@ public class UserService {
         userRepository.save(user);
         return "Password changed";
     }
-
-
-    // public boolean registerEvent(String eventid, String userid) {
-    //     Event event = eventRepository.findById(eventid).orElse(null);
-    //     User user = userRepository.findById(userid).orElse(null);
-    //     if (event != null && user != null) {
-    //         return event.addParticipant(user);
-    //     }
-    //     return false;
-    // }
-
-    // public User updateEventsParticipated(String eventid, String userid) {
-    //     Event event = eventRepository.findById(eventid).orElse(null);
-    //     User user = userRepository.findById(userid).orElse(null);
-    //     if (event == null || user == null) {
-    //         return null;
-    //     }
-
-    //     Set<Event> eventList = user.getEventsPart();
-    //     eventList.add(event);
-    //     user.setEventsPart(eventList);
-    //     return userRepository.save(user);
-    // }
-
 }

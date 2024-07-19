@@ -22,7 +22,6 @@ import com.example.demo.dto.ComplaintsListDTO;
 import com.example.demo.dto.CreateComplaintDTO;
 import com.example.demo.dto.models.CleanComplaintDTO;
 import com.example.demo.model.Admin;
-import com.example.demo.model.Complaint;
 import com.example.demo.model.User;
 import com.example.demo.service.ComplaintService;
 

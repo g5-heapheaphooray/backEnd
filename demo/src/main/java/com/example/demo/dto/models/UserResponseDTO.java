@@ -1,14 +1,10 @@
 package com.example.demo.dto.models;
 
-import com.example.demo.model.User;
-import jakarta.persistence.Column;
-
 import java.time.LocalDate;
 
 public class UserResponseDTO {
     private String email;
     private String fullName;
-    // both volunteer and organisation will have but the limit diff ig
     private int complainCount;
     private String contactNo;
     private char gender;

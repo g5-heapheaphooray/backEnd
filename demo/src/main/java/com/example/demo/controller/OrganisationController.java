@@ -13,15 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.User;
 import com.example.demo.service.OrganisationService;
-import com.example.demo.model.Event;
 import com.example.demo.service.EventService;
 import com.example.demo.dto.OrgListDTO;
 import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.EventsListDTO;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -36,12 +33,6 @@ public class OrganisationController {
         this.organisationService = organisationService;
         this.eventService = eventService;
     }
-
-//    @PostMapping("/create")
-//    public ResponseEntity<Organisation> createOrganisation(@RequestBody Organisation organisation) {
-//        Organisation newOrganisation = organisationService.createOrganisation(organisation);
-//        return new ResponseEntity<>(newOrganisation, HttpStatus.CREATED);
-//    }
 
     @PutMapping("/updateDetails")
     @PreAuthorize("hasRole('ORGANISATION')")

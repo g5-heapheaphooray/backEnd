@@ -1,42 +1,26 @@
 package com.example.demo.dto.models;
 
-import com.example.demo.model.EventMedia;
-import com.example.demo.model.Organisation;
-import com.example.demo.model.User;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
 public class CleanEventDTO {
     private int id;
     private String name;
     private LocalDate date;
     private LocalTime startTime;
-
     private LocalTime endTime;
-
     private String organisation_id;
-
-//    private List<User> participants;
-
     private int neededManpowerCount;
     private int currentManpowerCount;
     private String location;
     private String description;
-
     private String type;
-
     private String address;
     private List<String> skills;
     private List<String> causes;
     private List<String> photosFilepaths;
     private int points;
-//    private String coverPhotoFilepath;
 
     public CleanEventDTO(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, 
     List<String> skills, List<String> causes, List<String> photosFilepaths, int points) {
@@ -56,7 +40,6 @@ public class CleanEventDTO {
         this.causes = causes;
         this.photosFilepaths = photosFilepaths;
         this.points = points;
-//        this.coverPhotoFilepath = coverPhotoFilepath;
     }
 
     public int getId() {
@@ -178,14 +161,4 @@ public class CleanEventDTO {
     public void setPhotosFilepaths(List<String> photosFilepaths) {
         this.photosFilepaths = photosFilepaths;
     }
-
-//    public String getCoverPhotoFilepath() {
-//        return coverPhotoFilepath;
-//    }
-//
-//    public void setCoverPhotoFilepath(String coverPhotoFilepath) {
-//        this.coverPhotoFilepath = coverPhotoFilepath;
-//    }
-
-    
 }

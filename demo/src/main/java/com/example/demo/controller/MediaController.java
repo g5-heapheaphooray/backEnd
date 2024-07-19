@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.*;
-import com.example.demo.repository.MediaRepository;
 import com.example.demo.service.ComplaintService;
 import com.example.demo.service.EventService;
 import com.example.demo.service.MediaService;
@@ -42,32 +41,12 @@ class MediaController {
     public ResponseEntity<String> uploadPfp(@RequestPart("pfp") MultipartFile multipartImage) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        System.out.println(multipartImage.getOriginalFilename());
         PfpMedia m = mediaService.savePfpImage(multipartImage, user);
         if (m == null) {
             return new ResponseEntity<>("Image upload failed", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
-
-//    @GetMapping("/pfp/get")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<Object> getPfp() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-////        byte[] data = null;
-////        try {
-//////            System.out.println(user.getPfp().getFilepath());
-////            data = mediaService.getMedia(user.getPfp().getFilepath());
-////        } catch (Exception e) {
-////            return new ResponseEntity<>("idk", HttpStatus.NOT_FOUND);
-////        }
-////        if (data == null) {
-////            return new ResponseEntity<>("idk2", HttpStatus.NOT_FOUND);
-////        }
-//        String url = mediaService.getObjectUrl(user.getPfp().getFilepath());
-//        return new ResponseEntity<>(url, HttpStatus.OK);
-//    }
 
     @PostMapping(value = "/event-photos/upload/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ORGANISATION')")
@@ -79,7 +58,6 @@ class MediaController {
             return new ResponseEntity<>("Unauthorised", HttpStatus.UNAUTHORIZED);
         }
         Set<EventMedia> ems = new HashSet<>();
-        System.out.println(multipartImage.length);
         for (MultipartFile img : multipartImage) {
             EventMedia m = mediaService.saveEventImages(img, event);
             if (m == null) {
@@ -94,26 +72,9 @@ class MediaController {
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
-//    @GetMapping("/event-photos/get/{eventId}")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<Object> getEventPhotos(@PathVariable int eventId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-//        Event event = eventService.getEvent(eventId);
-//        Set<EventMedia> ems = event.getPhotos();
-//        List<String> res = new ArrayList<>();
-//        for (EventMedia em : ems) {
-//            String url = mediaService.getObjectUrl(em.getFilepath());
-//            res.add(url);
-//        }
-//        return new ResponseEntity<>(res, HttpStatus.OK);
-//    }
-
     @PostMapping(value = "/reward-category/reward-image/upload/{rewardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> uploadRewardImage(@RequestPart("reward-image") MultipartFile multipartImage, @PathVariable int rewardId) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
         RewardCategory rc = rewardService.getRewardCategory(rewardId);
         if (rc == null) {
             return new ResponseEntity<>("Reward category not found", HttpStatus.BAD_REQUEST);
@@ -125,24 +86,9 @@ class MediaController {
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
 
-//    @GetMapping("/reward-category/reward-image/get/{rewardId}")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<String> getRewardMedia(@PathVariable int rewardId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-//        RewardCategory rc = rewardService.getRewardCategory(rewardId);
-//        if (rc == null) {
-//            return new ResponseEntity<>("Reward category not found", HttpStatus.BAD_REQUEST);
-//        }
-//        String url = mediaService.getObjectUrl(user.getPfp().getFilepath());
-//        return new ResponseEntity<>(url, HttpStatus.OK);
-//    }
-
     @PostMapping(value = "/complaint/complaint-image/upload/{complaintId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ORGANISATION')")
     public ResponseEntity<String> uploadComplaintPhotos(@RequestPart("complaintPhotos") MultipartFile[] multipartImage, @PathVariable int complaintId) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
         Complaint c = complaintService.getUncleanComplaint(complaintId);
         Set<ComplaintMedia> cms = new HashSet<>();
         for (MultipartFile img : multipartImage) {
@@ -158,20 +104,4 @@ class MediaController {
         }
         return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
     }
-
-//    @GetMapping("/complaint-image/get/{complaintId}")
-//    @PreAuthorize("isAuthenticated()")
-//    public ResponseEntity<Object> getComplaintPhotos(@PathVariable int complaintId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        User user = (User) authentication.getPrincipal();
-//        Complaint c = complaintService.getUncleanComplaint(complaintId);
-//        Set<ComplaintMedia> cms = c.getPhotos();
-//        List<String> res = new ArrayList<>();
-//        for (ComplaintMedia cm : cms) {
-//            String url = mediaService.getObjectUrl(cm.getFilepath());
-//            res.add(url);
-//        }
-//        return new ResponseEntity<>(res, HttpStatus.OK);
-//    }
-    
 }

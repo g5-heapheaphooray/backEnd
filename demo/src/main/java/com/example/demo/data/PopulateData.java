@@ -23,7 +23,6 @@ import com.example.demo.service.RewardService;
 import com.example.demo.service.UserService;
 import com.example.demo.service.VolunteerService;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 
 import java.io.FileInputStream;
@@ -32,7 +31,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -130,8 +128,6 @@ public class PopulateData {
             }
         }
     }
-
-    // Attendance?
 
     // Create rewards
     public void createSampleRewards() {

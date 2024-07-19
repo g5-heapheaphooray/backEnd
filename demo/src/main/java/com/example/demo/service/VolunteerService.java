@@ -2,8 +2,6 @@ package com.example.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import com.example.demo.dto.RegisterVolunteerDTO;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.model.Event;
 import com.example.demo.model.Volunteer;
 import com.example.demo.repository.EventRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.VolunteerRepository;
 
 @Service
@@ -72,17 +69,6 @@ public class VolunteerService {
         return volunteerRepository.save(v);
     }
 
-    // public Volunteer updateEventsPart(String id, Event event){
-    //     Volunteer v = volunteerRepository.findById(id).orElse(null);
-    //     if(v == null){
-    //         return null;
-    //     }
-    //     List<Event> eventPart = v.getEventsPart();
-    //     eventPart.add(event);
-    //     v.setEventsPart(eventPart);
-    //     return volunteerRepository.save(v);
-    // }
-
     public List<Event> getRegisteredEvents(String id){
         Volunteer v = volunteerRepository.findById(id).orElse(null);
         if(v == null){
@@ -126,5 +112,4 @@ public class VolunteerService {
         eventRepository.save(event);
         return volunteerRepository.save(v);
     }
-
 }

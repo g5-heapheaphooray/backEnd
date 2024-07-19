@@ -1,10 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.model.Event;
-import jakarta.persistence.Column;
-
 import java.time.LocalDate;
-import java.util.List;
 
 public class RegisterVolunteerDTO {
     private String email;

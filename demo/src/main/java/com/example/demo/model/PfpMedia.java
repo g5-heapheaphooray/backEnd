@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "pfp_media")
 public class PfpMedia extends Media {
-//    @Column(name = "user")
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "pfp")
     private User user;
 
