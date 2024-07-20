@@ -13,7 +13,7 @@ public class Complaint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
@@ -33,7 +33,7 @@ public class Complaint {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "target_id", nullable = true)
     private User complainee;
 

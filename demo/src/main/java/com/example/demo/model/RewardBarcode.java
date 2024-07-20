@@ -23,7 +23,7 @@ public class RewardBarcode {
     @JoinColumn(name = "reward_cat_id", nullable = false)
     private RewardCategory rewardCategory;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "volunteer_id")
     private Volunteer volunteer;
 

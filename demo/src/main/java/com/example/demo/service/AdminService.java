@@ -7,6 +7,7 @@ import com.example.demo.dto.models.CleanVolunteerDTO;
 import com.example.demo.dto.models.UserResponseDTO;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.service.*;
@@ -19,15 +20,19 @@ public class AdminService {
     private final VolunteerRepository volunteerRepository;
     private final MediaService mediaService;
     private final UserService userService;
+    private final EventRepository eventRepository;
+    private final ComplaintRepository complaintRepository;
 
     @Autowired
     public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, VolunteerRepository volunteerRepository,
-                        MediaService mediaService, UserService userService) {
+                        MediaService mediaService, UserService userService, EventRepository eventRepository, ComplaintRepository complaintRepository) {
         this.organisationRepository = organisationRepository;
         this.userRepository = userRepository;
         this.volunteerRepository = volunteerRepository;
         this.mediaService = mediaService;
         this.userService = userService;
+        this.eventRepository = eventRepository;
+        this.complaintRepository = complaintRepository;
     }
 
     public Organisation updateVerified(String id) {
@@ -58,12 +63,21 @@ public class AdminService {
         return userRepository.save(u);
     }
 
-
+    @Transactional
     public User deleteUser(String id){
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
             return null;
         }
+
+        complaintRepository.deleteByUser(user);
+        complaintRepository.deleteByComplainee(user);
+
+        for (Event event : user.getEventsPart()) {
+            event.getParticipants().remove(user);
+            eventRepository.save(event);
+        }
+
         userRepository.delete(user);
         return user;
     }

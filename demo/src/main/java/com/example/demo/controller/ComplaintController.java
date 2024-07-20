@@ -82,8 +82,9 @@ public class ComplaintController {
     }
 
     @DeleteMapping("/delete/{complaintId}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CleanComplaintDTO> deleteComplaint(@PathVariable int complaintId) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         CleanComplaintDTO complaint = complaintService.getComplaint(complaintId);

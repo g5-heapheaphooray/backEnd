@@ -111,7 +111,19 @@ public class RewardService {
             return null;
         }
         try {
-            rewardBarcodeRepository.deleteRewardBarcodesByRewardCategory(reward);
+//            rewardBarcodeRepository.deleteRewardBarcodesByRewardCategory(reward);
+            Set<RewardBarcode> rbs = reward.getRewards();
+            for (RewardBarcode rb : rbs) {
+                if (rb.getVolunteer() != null) {
+                    Volunteer v = rb.getVolunteer();
+                    v.setPoints(v.getPoints() + reward.getPointsNeeded());
+                    Set<RewardBarcode> vrbs = v.getRedeemedRewards();
+                    vrbs.remove(rb);
+                    v.setRedeemedRewards(vrbs);
+                    userRepository.save(v);
+                }
+                rewardBarcodeRepository.delete(rb);
+            }
             rewardCategoryRepository.delete(reward);
         } catch (Exception e) {
             System.out.println(e.getMessage());

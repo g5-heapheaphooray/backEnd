@@ -70,6 +70,12 @@ public class User implements UserDetails {
     @Column(name = "verificiation_token_creation")
     private Date verificationTokenCreatedAt;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Complaint> complaintsCreated;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "complainee")
+    private Set<Complaint> complaintsReceived;
+
     public User(){
     }
 
@@ -82,6 +88,8 @@ public class User implements UserDetails {
         this.eventsOrg = eventsOrg;
         this.role = role;
         this.pfp =  new PfpMedia("default.png", pfpFp, this);
+        this.complaintsCreated = new HashSet<>();
+        this.complaintsReceived = new HashSet<>();
     }
 
 
@@ -226,5 +234,21 @@ public class User implements UserDetails {
             return false;
         }
         return true;
+    }
+
+    public Set<Complaint> getComplaintsCreated() {
+        return complaintsCreated;
+    }
+
+    public void setComplaintsCreated(Set<Complaint> complaintsCreated) {
+        this.complaintsCreated = complaintsCreated;
+    }
+
+    public Set<Complaint> getComplaintsReceived() {
+        return complaintsReceived;
+    }
+
+    public void setComplaintsReceived(Set<Complaint> complaintsReceived) {
+        this.complaintsReceived = complaintsReceived;
     }
 }

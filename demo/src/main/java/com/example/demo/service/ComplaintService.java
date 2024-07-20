@@ -59,6 +59,16 @@ public class ComplaintService {
 
         complaint = complaintRepository.save(complaint);
 
+        Set<Complaint> complaints = user.getComplaintsCreated();
+        complaints.add(complaint);
+        user.setComplaintsCreated(complaints);
+
+        if (complainee != null) {
+            Set<Complaint> complaintsR = complainee.getComplaintsReceived();
+            complaintsR.add(complaint);
+            complainee.setComplaintsReceived(complaintsR);
+        }
+
 
         String msg = """
 A new complaint has been made by %s with the following title:
@@ -75,6 +85,16 @@ and the following description:
         User complainee = userRepository.findById(c.getComplainee()).orElse(null);
         Complaint complaint = new Complaint(user, c.getDateTime(), c.getTitle(), c.getDescription(), c.getStatus(), complainee);
         complaint = complaintRepository.save(complaint);
+
+        Set<Complaint> complaints = user.getComplaintsCreated();
+        complaints.add(complaint);
+        user.setComplaintsCreated(complaints);
+
+        if (complainee != null) {
+            Set<Complaint> complaintsR = complainee.getComplaintsReceived();
+            complaintsR.add(complaint);
+            complainee.setComplaintsReceived(complaintsR);
+        }
     }
 
     public List<CleanComplaintDTO> getAllComplaints() {
@@ -117,6 +137,18 @@ and the following description:
             return null;
         }
         try {
+            User user = complaint.getUser();
+            Set<Complaint> complaints = user.getComplaintsCreated();
+            complaints.remove(complaint);
+            user.setComplaintsCreated(complaints);
+
+            User complainee = complaint.getComplainee();
+            if (complainee != null) {
+                Set<Complaint> complaintsR = complainee.getComplaintsReceived();
+                complaintsR.remove(complaint);
+                complainee.setComplaintsReceived(complaintsR);
+            }
+
             complaintRepository.delete(complaint);
         } catch (Exception e) {
             System.out.println(e.getMessage());
