@@ -11,6 +11,6 @@ public class Admin extends User{
 
     }
     public Admin(String fullName, String email, String contactNo, String password, Role role){
-        super(fullName, email, contactNo, password, new HashSet<>(), null, role);
+        super(fullName, email, contactNo, password, new HashSet<>(), null, role, "Profile-Media/vol-default.png");
     }
 }
