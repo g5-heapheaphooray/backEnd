@@ -4,16 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.HashSet;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "complaint")
@@ -42,17 +33,22 @@ public class Complaint {
     @Column(name = "status")
     private String status;
 
+    @ManyToOne
+    @JoinColumn(name = "target_id", nullable = true)
+    private User complainee;
+
     public Complaint() {
         photos = new HashSet<>();
     }
 
-    public Complaint(User user, LocalDateTime dateTime, String title, String description, String status) {
+    public Complaint(User user, LocalDateTime dateTime, String title, String description, String status, User complainee) {
         this.user = user;
         this.dateTime = dateTime;
         this.title = title;
         this.description = description;
         photos = new HashSet<>();
         this.status = status;
+        this.complainee = complainee;
     }
 
     public int getId() {
@@ -109,5 +105,13 @@ public class Complaint {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public User getComplainee() {
+        return complainee;
+    }
+
+    public void setComplainee(User complainee) {
+        this.complainee = complainee;
     }
 }

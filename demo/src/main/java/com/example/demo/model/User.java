@@ -73,7 +73,7 @@ public class User implements UserDetails {
     public User(){
     }
 
-    public User(String fullName, String email, String contactNo, String password, Set<Event> eventsPart, Set<Event> eventsOrg, Role role){
+    public User(String fullName, String email, String contactNo, String password, Set<Event> eventsPart, Set<Event> eventsOrg, Role role, String pfpFp){
         this.fullName = fullName;
         this.email = email;
         this.contactNo = contactNo;
@@ -81,7 +81,7 @@ public class User implements UserDetails {
         this.eventsPart = eventsPart;
         this.eventsOrg = eventsOrg;
         this.role = role;
-        this.pfp = new PfpMedia("default.png", "PFP/default.png", this);
+        this.pfp =  new PfpMedia("default.png", pfpFp, this);
     }
 
 

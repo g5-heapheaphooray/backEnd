@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.example.demo.dto.ComplaintStatusDTO;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import com.example.demo.repository.ComplaintRepository;
 @Service
 public class ComplaintService {
     private final ComplaintRepository complaintRepository;
+    private final UserRepository userRepository;
     private final MediaService mediaService;
     private final MailService mailService;
 
@@ -25,10 +28,11 @@ public class ComplaintService {
     private String gmailEmail;
 
     @Autowired
-    public ComplaintService(ComplaintRepository complaintRepository, MediaService mediaService, MailService mailService) {
+    public ComplaintService(ComplaintRepository complaintRepository, MediaService mediaService, MailService mailService, UserRepository userRepository) {
         this.complaintRepository = complaintRepository;
         this.mediaService = mediaService;
         this.mailService = mailService;
+        this.userRepository = userRepository;
     }
 
     public CleanComplaintDTO getCleanComplaintDTO(Complaint c) {
@@ -51,8 +55,11 @@ public class ComplaintService {
         complaint.setDescription(c.getDescription());
         complaint.setDateTime(c.getDateTime());
         complaint.setStatus(c.getStatus());
+        User complainee = userRepository.findById(c.getComplainee()).orElse(null);
+        complaint.setComplainee(complainee);
 
         complaint = complaintRepository.save(complaint);
+
 
         String msg = """
 A new complaint has been made by %s with the following title:
@@ -66,7 +73,8 @@ and the following description:
     }
 
     public void createComplaintNoMail(CreateComplaintDTO c, User user) {
-        Complaint complaint = new Complaint(user, c.getDateTime(), c.getTitle(), c.getDescription(), c.getStatus());
+        User complainee = userRepository.findById(c.getComplainee()).orElse(null);
+        Complaint complaint = new Complaint(user, c.getDateTime(), c.getTitle(), c.getDescription(), c.getStatus(), complainee);
         complaint = complaintRepository.save(complaint);
     }
 
@@ -119,12 +127,23 @@ and the following description:
         return getCleanComplaintDTO(complaint);
     }
 
-    public CleanComplaintDTO resolveComplaint(int complaintId) {
+    public CleanComplaintDTO resolveComplaint(int complaintId, ComplaintStatusDTO dto) {
         Complaint complaint = complaintRepository.findById(complaintId).orElse(null);
         if (complaint == null) {
             return null;
         }
-        complaint.setStatus("resolved");
+        String status = dto.getStatus();
+        complaint.setStatus(status);
+
+        User complainee = complaint.getComplainee();
+        if (complainee != null && status.equals("resolved")) {
+            complainee.setComplainCount(complainee.getComplainCount() + 1);
+            if (complainee.getComplainCount() > 3) {
+                complainee.setLocked(true);
+            }
+            userRepository.save(complainee);
+        }
+
         return getCleanComplaintDTO(complaintRepository.save(complaint));
     }
 

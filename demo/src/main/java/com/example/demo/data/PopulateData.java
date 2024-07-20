@@ -128,7 +128,7 @@ public class PopulateData {
                 causesSet.addAll(List.of(causes[rand.nextInt(causes.length)], causes[rand.nextInt(causes.length)]));
                 skillsSet.addAll(List.of(skills[rand.nextInt(skills.length)], skills[rand.nextInt(skills.length)]));
                 CreateOppDTO oppDTO = new CreateOppDTO(eventName, LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", new ArrayList<>(skillsSet), new ArrayList<>(causesSet));
-                eventService.createEvent(oppDTO, org);
+                eventService.createDummyEvent(oppDTO, org);
             }
         }
 
@@ -163,7 +163,7 @@ public class PopulateData {
         List<User> users = userRepository.findAll();
         for (int i = 1; i <= NUM_OF_COMPLAINTS; i++) {
             String status = statuses[rand.nextInt(statuses.length)];
-            CreateComplaintDTO complaintDTO = new CreateComplaintDTO("Complaint" + i, "description", status);
+            CreateComplaintDTO complaintDTO = new CreateComplaintDTO("Complaint" + i, "description", users.get(i).getEmail(), status);
             User chosenUser = users.get(rand.nextInt(NUM_OF_USERS));
             complaintService.createComplaintNoMail(complaintDTO, chosenUser);
         }
@@ -182,16 +182,14 @@ public class PopulateData {
         User org = userService.createVerifiedOrganisation(volDTO);
 
         CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("art", "befriending"), List.of("arts", "elderly"));
-        CleanEventDTO cleanEvent = eventService.createEvent(oppDTO, (Organisation) org);
-        Event event = eventService.getEvent(cleanEvent.getId());
+        Event event = eventService.createDummyEvent(oppDTO, (Organisation) org);
         vol.getEventsPart().add(event);
         event.incCurrentManpowerCount();
 
         CreateRewardDTO rewardDTO = new CreateRewardDTO("Reward", 10, "type", "description", 6);
-        CleanRewardsCategoryDTO cleanRc = rewardService.createDummyRewardCategory(rewardDTO);
-        RewardCategory rc = rewardService.getRewardCategory(cleanRc.getId());
+        RewardCategory rc = rewardService.createDummyRewardCategory(rewardDTO);
 
-        CreateComplaintDTO complaintDTO = new CreateComplaintDTO("Complaint", "description", "Pending");
+        CreateComplaintDTO complaintDTO = new CreateComplaintDTO("Complaint", "description","org@mail.com","Pending");
         complaintService.createComplaintNoMail(complaintDTO, vol);
 
         try {

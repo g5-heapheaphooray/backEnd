@@ -59,6 +59,18 @@ public class EventService {
         return getCleanEvent(eventRepository.save(e));
     }
 
+    public Event createDummyEvent(CreateOppDTO dto, Organisation o) {
+        Event e = new Event(dto.getName(), dto.getDate(), dto.getStartTime(), dto.getEndTime(), o, dto.getManpowerCount(),
+                dto.getLocation(), dto.getDescription(), dto.getType(), dto.getAddress(), dto.getSkills(), dto.getCauses());
+        int hours = (int) Duration.between(e.getStartTime(), e.getEndTime()).toHours();
+        e.setPoints(hours * 10);
+        o.getEventsOrg().add(e);
+        Set<EventMedia> photos = new HashSet<>();
+        photos.add(new EventMedia("default.png", "Event-Media/default.png", e));
+        e.setPhotos(photos);
+        return eventRepository.save(e);
+    }
+
     public Event getEvent(int eventId) {
         return eventRepository.findById(eventId).orElse(null);
     }

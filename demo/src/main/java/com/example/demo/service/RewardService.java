@@ -11,6 +11,7 @@ import java.util.Set;
 import com.example.demo.dto.RewardBarcodesListDTO;
 import com.example.demo.dto.models.CleanRewardsBarcodeDTO;
 import com.example.demo.model.RewardCategory;
+import com.example.demo.model.RewardMedia;
 import com.example.demo.model.Volunteer;
 import com.example.demo.repository.RewardCategoryRepository;
 import com.example.demo.repository.UserRepository;
@@ -58,6 +59,12 @@ public class RewardService {
         RewardCategory rc = new RewardCategory(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
         rewardCategoryRepository.save(rc);
         return getCleanRewardCategory(rc);
+    }
+
+    public RewardCategory createDummyRewardCategory(CreateRewardDTO r) {
+        RewardCategory rc = new RewardCategory(r.getName(), r.getPointsNeeded(), r.getType(), r.getDescription());
+        rc.setRewardMedia(new RewardMedia("default.png", "Reward-Media/default.png", rc));
+        return rewardCategoryRepository.save(rc);
     }
 
 

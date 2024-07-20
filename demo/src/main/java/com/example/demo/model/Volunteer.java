@@ -28,7 +28,7 @@ public class Volunteer extends User {
     public Volunteer() {}
 
     public Volunteer(String fullName, char gender, LocalDate dob, String email, String contactNo, String password, Role role){
-        super(fullName, email, contactNo, password, new HashSet<>(), null, role);
+        super(fullName, email, contactNo, password, new HashSet<>(), null, role,  "Profile-Media/vol-default.png");
         this.gender = gender;
         this.dob = dob;
         this.redeemedRewards = new HashSet<>();

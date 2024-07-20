@@ -27,7 +27,7 @@ public class Organisation extends User {
     }
 
     public Organisation(String email, String name, String password, String contactNo, String location, String website, String description, Role role){
-        super(name, email, contactNo, password, null, new HashSet<>(), role);
+        super(name, email, contactNo, password, null, new HashSet<>(), role, "Profile-Media/org-default.png");
         this.location = location;
         this.website = website;
         this.description = description;

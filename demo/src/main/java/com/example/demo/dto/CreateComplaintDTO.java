@@ -5,12 +5,14 @@ import java.time.LocalDateTime;
 public class CreateComplaintDTO {
     private String title;
     private String description;
+    private String complainee;
     private LocalDateTime dateTime;
     private String status;
 
-    public CreateComplaintDTO(String title, String description, String status) {
+    public CreateComplaintDTO(String title, String description, String complainee, String status) {
         this.title = title;
         this.description = description;
+        this.complainee = complainee;
         dateTime = LocalDateTime.now();
         this.status = status;
     }
@@ -29,6 +31,14 @@ public class CreateComplaintDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getComplainee() {
+        return complainee;
+    }
+
+    public void setComplainee() {
+        this.complainee = complainee;
     }
 
     public LocalDateTime getDateTime() {
