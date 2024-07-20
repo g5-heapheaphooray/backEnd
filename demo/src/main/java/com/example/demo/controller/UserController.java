@@ -65,7 +65,7 @@ public class UserController {
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        User u = userService.updatePassword(user.getPassword(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+        User u = userService.updatePassword(user, changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
         Object res = null;
         if (u instanceof Volunteer v) {
             res = userService.getCleanVolunteer(v);

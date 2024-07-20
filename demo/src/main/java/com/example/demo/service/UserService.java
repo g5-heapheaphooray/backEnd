@@ -114,17 +114,16 @@ public class UserService {
 
     }
 
-    public User updatePassword(String id, String currentPassword, String newPassword){
-        User updatedUser = userRepository.findById(id).orElse(null);
-        if(updatedUser == null){
+    public User updatePassword(User u, String currentPassword, String newPassword){
+        if (u == null){
             return null;
         }
-        User verifiedUser = authenticateUser(id, currentPassword);
+        User verifiedUser = authenticateUser(u.getEmail(), currentPassword);
         if (verifiedUser == null) {
             return null;
         }
-        updatedUser.setPassword(newPassword);
-        return userRepository.save(updatedUser);
+        u.setPassword(passwordEncoder.encode(newPassword));
+        return userRepository.save(u);
 
     }
 

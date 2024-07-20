@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import com.example.demo.dto.ComplaintStatusDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -94,9 +93,9 @@ public class ComplaintController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/resolve/{complaintId}")
+    @GetMapping("/resolve/{complaintId}/{status}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CleanComplaintDTO> resolveComplaint(@PathVariable int complaintId, @RequestBody ComplaintStatusDTO dto) {
-        return new ResponseEntity<>(complaintService.resolveComplaint(complaintId, dto), HttpStatus.OK);
+    public ResponseEntity<CleanComplaintDTO> resolveComplaint(@PathVariable int complaintId, @PathVariable String status) {
+        return new ResponseEntity<>(complaintService.resolveComplaint(complaintId, status), HttpStatus.OK);
     }
 }

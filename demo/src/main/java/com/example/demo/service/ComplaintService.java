@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.example.demo.dto.ComplaintStatusDTO;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -127,16 +126,15 @@ and the following description:
         return getCleanComplaintDTO(complaint);
     }
 
-    public CleanComplaintDTO resolveComplaint(int complaintId, ComplaintStatusDTO dto) {
+    public CleanComplaintDTO resolveComplaint(int complaintId, String status) {
         Complaint complaint = complaintRepository.findById(complaintId).orElse(null);
         if (complaint == null) {
             return null;
         }
-        String status = dto.getStatus();
         complaint.setStatus(status);
 
         User complainee = complaint.getComplainee();
-        if (complainee != null && status.equals("resolved")) {
+        if (complainee != null && status.equals("Resolved")) {
             complainee.setComplainCount(complainee.getComplainCount() + 1);
             if (complainee.getComplainCount() > 3) {
                 complainee.setLocked(true);

@@ -112,6 +112,8 @@ public class PopulateData {
         "emcee", "entrepreneurship", "eventManagement", "facilitation", "firstAid", 
         "GraphicDesign", "translation", "music", "photography", "reading", "signLanguage", 
         "socialMedia", "softwareDevelopment", "sports", "tutor", "videography", "webDesign", "other" };
+        String[] locations = {"all", "online", "on-site"};
+        String[] types = {"all", "ad-hoc", "short", "long"};
 
         for (Organisation org : orgs) {
             int randNum = rand.nextInt(NUM_OF_EVENTS);
@@ -122,7 +124,7 @@ public class PopulateData {
                 Set<String> skillsSet = new HashSet<String>();
                 causesSet.addAll(List.of(causes[rand.nextInt(causes.length)], causes[rand.nextInt(causes.length)]));
                 skillsSet.addAll(List.of(skills[rand.nextInt(skills.length)], skills[rand.nextInt(skills.length)]));
-                CreateOppDTO oppDTO = new CreateOppDTO(eventName, LocalDate.now().plusDays(rand.nextInt(365) - 365/2), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", new ArrayList<>(skillsSet), new ArrayList<>(causesSet));
+                CreateOppDTO oppDTO = new CreateOppDTO(eventName, LocalDate.now().plusDays(rand.nextInt(365) - 365/2), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, locations[rand.nextInt(locations.length)], "description", types[rand.nextInt(types.length)], "address", new ArrayList<>(skillsSet), new ArrayList<>(causesSet));
                 eventService.createDummyEvent(oppDTO, org);
             }
         }
@@ -176,7 +178,7 @@ public class PopulateData {
         RegisterOrganisationDTO volDTO = new RegisterOrganisationDTO("org@mail.com", "Organisation", "123", "12345678", "location", "website", "description");
         User org = userService.createVerifiedOrganisation(volDTO);
 
-        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now().plusDays(3), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("art", "befriending"), List.of("arts", "elderly"));
+        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now().plusDays(3), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "all", "description", "all", "address", List.of("art", "befriending"), List.of("arts", "elderly"));
         Event event = eventService.createDummyEvent(oppDTO, (Organisation) org);
         vol.getEventsPart().add(event);
         event.incCurrentManpowerCount();
