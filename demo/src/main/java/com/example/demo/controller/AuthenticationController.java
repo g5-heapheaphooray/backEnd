@@ -57,6 +57,7 @@ public class AuthenticationController {
         System.out.println("wruu");
         System.out.println("helppppp");
         System.out.println("pls i beg u");
+        System.out.println("kms");
         User user = userService.authenticateUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
         if (user != null) {
             String jwtToken = jwtService.generateToken(user);
