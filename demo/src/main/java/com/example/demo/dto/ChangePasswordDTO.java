@@ -1,25 +1,15 @@
 package com.example.demo.dto;
 
 public class ChangePasswordDTO {
-    private String email;
     private String oldPassword;
     private String newPassword;
 
-    public ChangePasswordDTO(String email, String oldPassword, String newPassword) {
-        this.email = email;
+    public ChangePasswordDTO(String oldPassword, String newPassword) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
     }
 
     public ChangePasswordDTO() {}
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getOldPassword() {
         return oldPassword;

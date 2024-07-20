@@ -61,12 +61,15 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Object> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
-        User user = userService.updatePassword(changePasswordDTO.getEmail(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        User u = userService.updatePassword(user.getPassword(), changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
         Object res = null;
-        if (user instanceof Volunteer v) {
+        if (u instanceof Volunteer v) {
             res = userService.getCleanVolunteer(v);
-        } else if (user instanceof Organisation o) {
+        } else if (u instanceof Organisation o) {
             res = userService.getCleanOrganisation(o);
         }
         return new ResponseEntity<>(res, HttpStatus.OK);
