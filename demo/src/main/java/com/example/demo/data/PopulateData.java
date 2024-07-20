@@ -6,8 +6,6 @@ import com.example.demo.dto.CreateRewardDTO;
 import com.example.demo.dto.RegisterAdminDTO;
 import com.example.demo.dto.RegisterOrganisationDTO;
 import com.example.demo.dto.RegisterVolunteerDTO;
-import com.example.demo.dto.models.CleanEventDTO;
-import com.example.demo.dto.models.CleanRewardsCategoryDTO;
 import com.example.demo.model.Event;
 import com.example.demo.model.Organisation;
 import com.example.demo.model.RewardCategory;
@@ -23,7 +21,6 @@ import com.example.demo.service.RewardService;
 import com.example.demo.service.UserService;
 import com.example.demo.service.VolunteerService;
 
-import io.jsonwebtoken.impl.lang.Services;
 import jakarta.transaction.Transactional;
 
 import java.io.FileInputStream;
@@ -35,8 +32,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import javax.print.attribute.standard.MediaSize.Other;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -127,7 +122,7 @@ public class PopulateData {
                 Set<String> skillsSet = new HashSet<String>();
                 causesSet.addAll(List.of(causes[rand.nextInt(causes.length)], causes[rand.nextInt(causes.length)]));
                 skillsSet.addAll(List.of(skills[rand.nextInt(skills.length)], skills[rand.nextInt(skills.length)]));
-                CreateOppDTO oppDTO = new CreateOppDTO(eventName, LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", new ArrayList<>(skillsSet), new ArrayList<>(causesSet));
+                CreateOppDTO oppDTO = new CreateOppDTO(eventName, LocalDate.now().plusDays(rand.nextInt(365) - 365/2), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", new ArrayList<>(skillsSet), new ArrayList<>(causesSet));
                 eventService.createDummyEvent(oppDTO, org);
             }
         }
@@ -181,7 +176,7 @@ public class PopulateData {
         RegisterOrganisationDTO volDTO = new RegisterOrganisationDTO("org@mail.com", "Organisation", "123", "12345678", "location", "website", "description");
         User org = userService.createVerifiedOrganisation(volDTO);
 
-        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("art", "befriending"), List.of("arts", "elderly"));
+        CreateOppDTO oppDTO = new CreateOppDTO("Event", LocalDate.now().plusDays(3), LocalTime.of(10, 0), LocalTime.of(12, 0), 10, "location", "description", "type", "address", List.of("art", "befriending"), List.of("arts", "elderly"));
         Event event = eventService.createDummyEvent(oppDTO, (Organisation) org);
         vol.getEventsPart().add(event);
         event.incCurrentManpowerCount();
