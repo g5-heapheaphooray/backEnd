@@ -81,6 +81,8 @@ public class Event {
     )
     private List<String> causes;
 
+    @Column(name = "attendance")
+    private boolean attendance;
 
     public Event(){
     }
@@ -100,6 +102,7 @@ public class Event {
         this.skills = skills;
         this.causes = causes;
         this.photos = new HashSet<>();
+        this.attendance = false;
     }
 
     public int getId() {
@@ -246,6 +249,14 @@ public class Event {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public boolean getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(boolean attendance) {
+        this.attendance = attendance;
     }
 
     @Override
