@@ -90,7 +90,7 @@ public class EventService {
         return new CleanEventDTO(e.getId(), e.getName(), e.getDate(), e.getStartTime(), e.getEndTime(),
                 e.getOrganisation().getEmail(),
                 e.getNeededManpowerCount(), e.getCurrentManpowerCount(), e.getLocation(), e.getDescription(),
-                e.getType(), e.getAddress(), e.getSkills(), e.getCauses(), emsFp, e.getPoints());
+                e.getType(), e.getAddress(), e.getSkills(), e.getCauses(), emsFp, e.getPoints(), e.getAttendance());
     }
 
     public Event deleteEvent(int eventId) {
@@ -164,6 +164,8 @@ public class EventService {
         if (e == null) {
             return new ArrayList<>();
         }
+
+        e.setAttendance(true);
 
         List<CleanVolunteerDTO> newCleanVol = new ArrayList<>(dto);
         Set<User> currentParticipants = e.getParticipants();

@@ -21,9 +21,10 @@ public class CleanEventDTO {
     private List<String> causes;
     private List<String> photosFilepaths;
     private int points;
+    private boolean attendance;
 
     public CleanEventDTO(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String organisation_id, int neededManpowerCount, int currentManpowerCount, String location, String description, String type, String address, 
-    List<String> skills, List<String> causes, List<String> photosFilepaths, int points) {
+    List<String> skills, List<String> causes, List<String> photosFilepaths, int points, boolean attendance) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -40,6 +41,7 @@ public class CleanEventDTO {
         this.causes = causes;
         this.photosFilepaths = photosFilepaths;
         this.points = points;
+        this.attendance = attendance;
     }
 
     public int getId() {
@@ -160,5 +162,13 @@ public class CleanEventDTO {
 
     public void setPhotosFilepaths(List<String> photosFilepaths) {
         this.photosFilepaths = photosFilepaths;
+    }
+
+    public boolean getAttendance() {
+        return attendance;
+    }
+
+    public void setAttendance(boolean attendance) {
+        this.attendance = attendance;
     }
 }
