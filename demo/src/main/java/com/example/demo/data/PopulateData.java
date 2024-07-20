@@ -153,7 +153,7 @@ public class PopulateData {
         System.out.println("Creating sample rewards");
         for (int i = 1; i <= NUM_OF_REWARDS; i++) {
             CreateRewardDTO rewardDTO = new CreateRewardDTO("Reward" + i, 10, "type", "description", 100);
-            rewardService.createRewardCategory(rewardDTO);
+            rewardService.createDummyRewardCategory(rewardDTO);
         }
     }
 
@@ -188,7 +188,7 @@ public class PopulateData {
         event.incCurrentManpowerCount();
 
         CreateRewardDTO rewardDTO = new CreateRewardDTO("Reward", 10, "type", "description", 6);
-        CleanRewardsCategoryDTO cleanRc = rewardService.createRewardCategory(rewardDTO);
+        CleanRewardsCategoryDTO cleanRc = rewardService.createDummyRewardCategory(rewardDTO);
         RewardCategory rc = rewardService.getRewardCategory(cleanRc.getId());
 
         CreateComplaintDTO complaintDTO = new CreateComplaintDTO("Complaint", "description", "Pending");
