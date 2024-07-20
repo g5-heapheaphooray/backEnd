@@ -55,6 +55,7 @@ public class AuthenticationController {
     public ResponseEntity<Object> loginUser(@RequestBody AuthenticationDTO authenticationDTO) {
         System.out.println("hello new new new");
         System.out.println("wruu");
+        System.out.println("helppppp");
         User user = userService.authenticateUser(authenticationDTO.getEmail(), authenticationDTO.getPassword());
         if (user != null) {
             String jwtToken = jwtService.generateToken(user);
