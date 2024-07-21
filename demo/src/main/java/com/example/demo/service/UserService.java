@@ -161,7 +161,7 @@ public class UserService {
         String token = UUID.randomUUID().toString();
         user.setVerificationToken(token);
         userRepository.save(user);
-        String content = "http://" + frontendSource + "/reset-password/"+token;
+        String content = "Please reset your password at http://" + frontendSource + "/reset-password/"+token;
         mailService.sendMail(email, "Reset Password", content);
         return "Email sent";
     }

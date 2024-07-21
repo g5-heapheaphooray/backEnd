@@ -22,10 +22,11 @@ public class AdminService {
     private final UserService userService;
     private final EventRepository eventRepository;
     private final ComplaintRepository complaintRepository;
+    private final MailService mailService;
 
     @Autowired
     public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, VolunteerRepository volunteerRepository,
-                        MediaService mediaService, UserService userService, EventRepository eventRepository, ComplaintRepository complaintRepository) {
+                        MediaService mediaService, UserService userService, EventRepository eventRepository, ComplaintRepository complaintRepository,  MailService mailService) {
         this.organisationRepository = organisationRepository;
         this.userRepository = userRepository;
         this.volunteerRepository = volunteerRepository;
@@ -33,6 +34,7 @@ public class AdminService {
         this.userService = userService;
         this.eventRepository = eventRepository;
         this.complaintRepository = complaintRepository;
+        this.mailService = mailService;
     }
 
     public Organisation updateVerified(String id) {
@@ -41,7 +43,8 @@ public class AdminService {
             return null;
         }
         o.setVerified(true);
-
+        String msg = "Your account has been verified! You may proceed to login at http://" + frontendSource + "/login";
+        mailService.sendMail(o.getEmail(), "Account Verified", msg);
         return organisationRepository.save(o);
     }
 
