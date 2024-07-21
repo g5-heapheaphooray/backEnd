@@ -37,6 +37,7 @@ We hope to create a platform where people can find volunteering and donation opp
 * [![Spring boot][spring boot-logo]][spring boot-url]
 * [![Maven Apache][maven-logo]][maven-url]
 * [![MySQL][mysql-logo]][mysql-url]
+* [![Huawei Cloud][Huawei-logo]][huawei-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -100,3 +101,5 @@ We hope to create a platform where people can find volunteering and donation opp
 [maven-url]: https://maven.apache.org/
 [mysql-logo]: https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white
 [mysql-url]: https://www.mysql.com/
+[Huawei-logo]: https://img.shields.io/badge/Huawei-%23FF0000.svg?style=for-the-badge&logo=huawei&logoColor=white
+[Huawei-url]: https://www.huaweicloud.com/intl/en-us/
