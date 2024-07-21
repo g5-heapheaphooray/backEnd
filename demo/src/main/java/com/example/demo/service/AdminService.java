@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.service.*;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class AdminService {
@@ -23,6 +24,8 @@ public class AdminService {
     private final EventRepository eventRepository;
     private final ComplaintRepository complaintRepository;
     private final MailService mailService;
+    @Value("${frontend.source}")
+    private String frontendSource;
 
     @Autowired
     public AdminService(OrganisationRepository organisationRepository, UserRepository userRepository, VolunteerRepository volunteerRepository,
